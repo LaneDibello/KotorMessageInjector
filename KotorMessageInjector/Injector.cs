@@ -8,7 +8,7 @@ namespace KotorMessageInjector
         private const uint MESSAGE_SPACE = 0x400; // 1 kb
         private const uint SHELLCODE_SPACE = 0x100; // 256 b
 
-        private IntPtr processHandle;
+        public IntPtr processHandle;
         private IntPtr remoteMessageData;
         private IntPtr remoteShellcode;
 
