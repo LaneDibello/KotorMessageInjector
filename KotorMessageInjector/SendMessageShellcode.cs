@@ -26,15 +26,10 @@ namespace KotorMessageInjector
             0x8B, 0x00,                   // mov eax, [eax]
             0x05, 0x4C, 0x01, 0x00, 0x00, // add eax, 0x14c         | 18
             0x8B, 0xC8,                   // mov ecx, eax ; ECX now holds the this pointer
+        };
 
-            // Push parameters (in reverse order)
-            0x68, 0x00, 0x00, 0x00, 0x00, // push messageDataLength | 25
-            0x68, 0x00, 0x00, 0x00, 0x00, // push messageData       | 30
-            0x6A, 0x00,                   // push messagePart2      | 35
-            0x6A, 0x00,                   // push messageType      | 37
-
-            // Call the function
-            0xB8, 0x00, 0x00, 0x00, 0x00, // mov eax, (send func)   | 39
+        private List<byte> footer = new List<byte>
+        {
             0xFF, 0xD0,                   // call eax
 
             // Cleanup and return
@@ -46,6 +41,7 @@ namespace KotorMessageInjector
 
         public SendMessageShellcode(Message msg, IntPtr remoteMessageData)
         {
+            SendFunctions sendFunction;
             switch (msg.source)
             {
                 case Message.MessageSources.PLAYER_TO_SERVER:
@@ -67,90 +63,37 @@ namespace KotorMessageInjector
                 default:
                     throw new MessageNotInitializedException($"Unknown Message Source {msg.source}");
             }
-            messageType = (byte)msg.typePlayer; // Will need to be more complicated to support sysadmin messaging
-            messageSubtype = msg.subtype;
-            messageData = (uint)remoteMessageData;
-            messageDataLength = msg.length;
+            addStackPush4Bytes(msg.length);
+            addStackPush4Bytes((uint)remoteMessageData);
+            addStackPush1Byte(msg.subtype);
+            addStackPush1Byte((byte)msg.typePlayer); // Will need to be more complicated to support sysadmin messaging
+            if (!sourceIsClient) addStackPush4Bytes(0);
+            addMovEAX4Bytes((uint)sendFunction);
+            shellcode.AddRange(footer);
         }
 
-        private SendFunctions sendFunction
+        private void addStackPush4Bytes(uint value)
         {
-            get
-            {
-                uint addr = (uint)shellcode[40] |
-                           ((uint)shellcode[41] << 8) |
-                           ((uint)shellcode[42] << 16) |
-                           ((uint)shellcode[43] << 24);
-                return (SendFunctions)addr;
-            }
-            set
-            {
-                uint addr = (uint)value;
-                shellcode[40] = (byte)(addr & 0xFF);
-                shellcode[41] = (byte)((addr >> 8) & 0xFF);
-                shellcode[42] = (byte)((addr >> 16) & 0xFF);
-                shellcode[43] = (byte)((addr >> 24) & 0xFF);
-            }
+            shellcode.Add(0x68);
+            shellcode.Add((byte)(value & 0xFF));
+            shellcode.Add((byte)((value >> 8) & 0xFF));
+            shellcode.Add((byte)((value >> 16) & 0xFF));
+            shellcode.Add((byte)((value >> 24) & 0xFF));
         }
 
-        private uint messageDataLength
+        private void addStackPush1Byte(byte value)
         {
-            get
-            {
-                return (uint)shellcode[26] |
-                           ((uint)shellcode[27] << 8) |
-                           ((uint)shellcode[28] << 16) |
-                           ((uint)shellcode[29] << 24);
-            }
-            set
-            {
-                shellcode[26] = (byte)(value & 0xFF);
-                shellcode[27] = (byte)((value >> 8) & 0xFF);
-                shellcode[28] = (byte)((value >> 16) & 0xFF);
-                shellcode[29] = (byte)((value >> 24) & 0xFF);
-            }
+            shellcode.Add(0x6A);
+            shellcode.Add(value);
         }
 
-        private uint messageData
+        private void addMovEAX4Bytes(uint value)
         {
-            get
-            {
-                return (uint)shellcode[31] |
-                           ((uint)shellcode[32] << 8) |
-                           ((uint)shellcode[33] << 16) |
-                           ((uint)shellcode[34] << 24);
-            }
-            set
-            {
-                shellcode[31] = (byte)(value & 0xFF);
-                shellcode[32] = (byte)((value >> 8) & 0xFF);
-                shellcode[33] = (byte)((value >> 16) & 0xFF);
-                shellcode[34] = (byte)((value >> 24) & 0xFF);
-            }
-        }
-
-        private byte messageType
-        {
-            get
-            {
-                return shellcode[38];
-            }
-            set
-            {
-                shellcode[38] = value; 
-            }
-        }
-
-        private byte messageSubtype
-        {
-            get
-            {
-                return shellcode[36];
-            }
-            set
-            {
-                shellcode[36] = value;
-            }
+            shellcode.Add(0xB8);
+            shellcode.Add((byte)(value & 0xFF));
+            shellcode.Add((byte)((value >> 8) & 0xFF));
+            shellcode.Add((byte)((value >> 16) & 0xFF));
+            shellcode.Add((byte)((value >> 24) & 0xFF));
         }
 
         private bool sourceIsClient
