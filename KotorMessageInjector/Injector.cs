@@ -35,6 +35,8 @@ namespace KotorMessageInjector
                 ProcessAPI.MEM_COMMIT | ProcessAPI.MEM_RESERVE,
                 ProcessAPI.PAGE_EXECUTE_READWRITE
             );
+
+            KotorHelpers.reverseLoadBar(processHandle);
         }
 
         ~Injector() 
