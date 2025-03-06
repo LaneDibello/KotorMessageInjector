@@ -332,33 +332,11 @@ namespace KotorMessageInjector
 
         public void writeCExoString(string s, IntPtr processHandle) 
         {
-            while (s.Length + 1 + remoteMemIndex > remoteMemSize)
-            {
-                allocRemoteMem(processHandle, remoteMemSize * 2);
-            }
-
-            UIntPtr outBytes;
-
-            //Write C-String
-            uint cstrVirtAddr = (uint)remoteMemory + remoteMemIndex;
-            List<byte> byteString = new List<byte>(Encoding.ASCII.GetBytes(s)) { 0 };
-            ProcessAPI.WriteProcessMemory(processHandle, (IntPtr)cstrVirtAddr, byteString.ToArray(), (uint)(byteString.Count), out outBytes);
-            remoteMemIndex += (uint)byteString.Count;
-
             writeInt(s.Length);
-            writeUint(cstrVirtAddr);
-
-            //Write CExoString
-            //uint virtAddr = (uint)remoteMemory + remoteMemIndex;
-            //byte[] stringLen = BitConverter.GetBytes(s.Length);
-            //byte[] stringAddr = BitConverter.GetBytes(cstrVirtAddr);
-            //List<byte> exoString = new List<byte>();
-            //exoString.AddRange(stringAddr);
-            //exoString.AddRange(stringLen);
-            //ProcessAPI.WriteProcessMemory(processHandle, (IntPtr)virtAddr, exoString.ToArray(), (uint)(exoString.Count), out outBytes);
-            //remoteMemIndex += (uint)exoString.Count;
-
-            //writeUint(virtAddr);
+            for (int i = 0; i < s.Length; i++)
+            {
+                writeByte((byte)s[i]);
+            }
         }
 
         #endregion
