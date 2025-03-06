@@ -15,6 +15,11 @@ namespace KotorMessageInjector
     {
         public MessageOfWrongSourceException(string message) : base(message) { }
     }
+
+    class MessageBadAllocationException : Exception
+    {
+        public MessageBadAllocationException(string message) : base(message) { }
+    }
     #endregion
 
     public class Message
@@ -87,6 +92,10 @@ namespace KotorMessageInjector
 
         private List<byte> raw;
 
+        private IntPtr remoteMemory = (IntPtr)null;
+        private uint remoteMemSize = 0;
+        private uint remoteMemIndex = 0;
+
         #region constructors
         public Message()
         {
@@ -105,6 +114,38 @@ namespace KotorMessageInjector
                 (byte)type, 
                 subtype 
             };
+        }
+
+        public void allocRemoteMem(IntPtr processHandle, uint size)
+        {
+            if (size == 0) size = 0x100;
+            if (size <= remoteMemSize)
+            {
+                throw new MessageBadAllocationException($"Allocation size {size} must be greater than existing remote size {remoteMemSize}");
+            }
+            
+            UIntPtr outBytes;
+            byte[] mem = new byte[remoteMemSize];
+            if (remoteMemSize > 0)
+            {
+                ProcessAPI.ReadProcessMemory(processHandle, remoteMemory, mem, remoteMemSize, out outBytes);
+                ProcessAPI.VirtualFreeEx(processHandle, remoteMemory, 0, ProcessAPI.MEM_RELEASE);
+            }
+
+            remoteMemory = ProcessAPI.VirtualAllocEx(
+                processHandle,
+                (IntPtr)null,
+                size,
+                ProcessAPI.MEM_COMMIT | ProcessAPI.MEM_RESERVE,
+                ProcessAPI.PAGE_READWRITE
+            );
+
+            if(remoteMemSize > 0)
+            {
+                ProcessAPI.WriteProcessMemory(processHandle, remoteMemory, mem, remoteMemSize, out outBytes);
+            }
+
+            remoteMemSize = size;
         }
         #endregion
 
@@ -270,7 +311,7 @@ namespace KotorMessageInjector
 
         public void writeBool(bool value)
         {
-            raw.Add(value ? (byte)1 : (byte)0);
+            writeUint(value ? (byte)1 : (byte)0);
         }
 
         public void writeCResRef(string resref)
@@ -289,7 +330,36 @@ namespace KotorMessageInjector
             }
         }
 
-        // TODO: Add support for VOID* and CExoString
+        public void writeCExoString(string s, IntPtr processHandle) 
+        {
+            while (s.Length + 1 + remoteMemIndex > remoteMemSize)
+            {
+                allocRemoteMem(processHandle, remoteMemSize * 2);
+            }
+
+            UIntPtr outBytes;
+
+            //Write C-String
+            uint cstrVirtAddr = (uint)remoteMemory + remoteMemIndex;
+            List<byte> byteString = new List<byte>(Encoding.ASCII.GetBytes(s)) { 0 };
+            ProcessAPI.WriteProcessMemory(processHandle, (IntPtr)cstrVirtAddr, byteString.ToArray(), (uint)(byteString.Count), out outBytes);
+            remoteMemIndex += (uint)byteString.Count;
+
+            writeInt(s.Length);
+            writeUint(cstrVirtAddr);
+
+            //Write CExoString
+            //uint virtAddr = (uint)remoteMemory + remoteMemIndex;
+            //byte[] stringLen = BitConverter.GetBytes(s.Length);
+            //byte[] stringAddr = BitConverter.GetBytes(cstrVirtAddr);
+            //List<byte> exoString = new List<byte>();
+            //exoString.AddRange(stringAddr);
+            //exoString.AddRange(stringLen);
+            //ProcessAPI.WriteProcessMemory(processHandle, (IntPtr)virtAddr, exoString.ToArray(), (uint)(exoString.Count), out outBytes);
+            //remoteMemIndex += (uint)exoString.Count;
+
+            //writeUint(virtAddr);
+        }
 
         #endregion
     }
