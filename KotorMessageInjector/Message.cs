@@ -92,10 +92,6 @@ namespace KotorMessageInjector
 
         private List<byte> raw;
 
-        private IntPtr remoteMemory = (IntPtr)null;
-        private uint remoteMemSize = 0;
-        private uint remoteMemIndex = 0;
-
         #region constructors
         public Message()
         {
@@ -114,38 +110,6 @@ namespace KotorMessageInjector
                 (byte)type, 
                 subtype 
             };
-        }
-
-        public void allocRemoteMem(IntPtr processHandle, uint size)
-        {
-            if (size == 0) size = 0x100;
-            if (size <= remoteMemSize)
-            {
-                throw new MessageBadAllocationException($"Allocation size {size} must be greater than existing remote size {remoteMemSize}");
-            }
-            
-            UIntPtr outBytes;
-            byte[] mem = new byte[remoteMemSize];
-            if (remoteMemSize > 0)
-            {
-                ProcessAPI.ReadProcessMemory(processHandle, remoteMemory, mem, remoteMemSize, out outBytes);
-                ProcessAPI.VirtualFreeEx(processHandle, remoteMemory, 0, ProcessAPI.MEM_RELEASE);
-            }
-
-            remoteMemory = ProcessAPI.VirtualAllocEx(
-                processHandle,
-                (IntPtr)null,
-                size,
-                ProcessAPI.MEM_COMMIT | ProcessAPI.MEM_RESERVE,
-                ProcessAPI.PAGE_READWRITE
-            );
-
-            if(remoteMemSize > 0)
-            {
-                ProcessAPI.WriteProcessMemory(processHandle, remoteMemory, mem, remoteMemSize, out outBytes);
-            }
-
-            remoteMemSize = size;
         }
         #endregion
 
@@ -336,6 +300,14 @@ namespace KotorMessageInjector
             for (int i = 0; i < s.Length; i++)
             {
                 writeByte((byte)s[i]);
+            }
+        }
+
+        public void writeVoid(byte[] bytes)
+        {
+            foreach (byte b in bytes)
+            {
+                writeByte(b);
             }
         }
 

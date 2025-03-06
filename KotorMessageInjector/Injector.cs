@@ -37,6 +37,13 @@ namespace KotorMessageInjector
             );
         }
 
+        ~Injector() 
+        {
+            ProcessAPI.VirtualFreeEx(processHandle, remoteMessageData, 0, ProcessAPI.MEM_RELEASE);
+            ProcessAPI.VirtualFreeEx(processHandle, remoteShellcode, 0, ProcessAPI.MEM_RELEASE);
+            ProcessAPI.CloseHandle(processHandle);
+        }
+
         public Injector(string procName) : this(ProcessAPI.GetProcessId(procName)) { }
 
         public void sendMessage (Message msg)

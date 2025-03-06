@@ -31,14 +31,14 @@ namespace testApp
             //msg.writeBool(false);
 
             Message msg = new Message(Message.PlayerMessageTypes.CHEAT, 8);
-            msg.writeCExoString("k_cht_n_cand", i.processHandle);
+            msg.writeCExoString("k_trg_transfail", i.processHandle);
 
 
             Console.WriteLine($"Sending Message:\n{msg}");
             
             i.sendMessage(msg);
             
-            Console.ReadKey();
+            //Console.ReadKey();
         }
     }
 }
