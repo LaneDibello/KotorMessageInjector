@@ -294,7 +294,7 @@ namespace KotorMessageInjector
             }
         }
 
-        public void writeCExoString(string s, IntPtr processHandle) 
+        public void writeCExoString(string s) 
         {
             writeInt(s.Length);
             for (int i = 0; i < s.Length; i++)
