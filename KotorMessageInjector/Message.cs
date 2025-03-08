@@ -311,6 +311,20 @@ namespace KotorMessageInjector
             }
         }
 
+        // Write a custom localized string
+        public void writeCExoLocString(string s)
+        {
+            writeBool(false); // isStrRef
+            writeCExoString(s);
+        }
+        // Write a localized string using a TLK table reference
+        public void writeCExoLocString(uint strref, byte language = 0)
+        {
+            writeBool(true); // isStrRef
+            writeByte(language); // Language ID
+            writeUint(strref);
+        }
+
         #endregion
     }
 }

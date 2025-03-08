@@ -3,7 +3,7 @@ using System.Runtime.InteropServices;
 
 namespace KotorMessageInjector
 {
-    static class ProcessAPI
+    public static class ProcessAPI
     {
         // Process Access Rights
         public const int PROCESS_CREATE_THREAD = 0x0002;
@@ -75,6 +75,11 @@ namespace KotorMessageInjector
                 CloseHandle(snapshot);
             }
             return processId;
+        }
+
+        public static IntPtr OpenProcessByName(string name)
+        {
+            return OpenProcess(PROCESS_ALL_ACCESS, false, GetProcessId(name));
         }
 
 
