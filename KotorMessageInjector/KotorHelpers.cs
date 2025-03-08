@@ -6,6 +6,7 @@ namespace KotorMessageInjector
     public static class KotorHelpers
     {
         private static IntPtr KOTOR_1_APPMANAGER = (IntPtr)0x007a39fc;
+        private static IntPtr KOTOR_1_DEACTIVATE_RENDER_WINDOW = (IntPtr)0x00401d90;
 
         public static class CLIENT_OBJECT_UPDATE_FLAGS
         {
@@ -39,6 +40,12 @@ namespace KotorMessageInjector
             public const byte STORE = 14;
             public const byte OBJECT_f = 15;
             public const byte SOUND = 16; 
+        }
+        
+        public static void disableClickOutPausing(IntPtr processHandle)
+        {
+            UIntPtr outPtr;
+            WriteProcessMemory(processHandle, KOTOR_1_DEACTIVATE_RENDER_WINDOW, new byte[] { 0xc3 }, 1, out outPtr);
         }
         
         private static uint getClientInternal(IntPtr processHandle)

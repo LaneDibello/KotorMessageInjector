@@ -273,6 +273,13 @@ namespace KotorMessageInjector
             }
         }
 
+        public void writeVector(float x, float y, float z)
+        {
+            writeFloat(x);
+            writeFloat(y);
+            writeFloat(z);
+        }
+
         public void writeBool(bool value)
         {
             writeUint(value ? (byte)1 : (byte)0);
