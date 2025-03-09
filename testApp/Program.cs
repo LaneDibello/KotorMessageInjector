@@ -20,10 +20,10 @@ namespace testApp
 
             Injector i = new Injector(pHandle);
 
-            //uint playerServerId = getPlayerServerID(pHandle);
-            //uint playerClientId = getPlayerClientID(pHandle);
-            //uint lookingAtServerId = getLookingAtServerID(pHandle);
-            //uint lookingAtClientId = getLookingAtClientID(pHandle);
+            uint playerServerId = getPlayerServerID(pHandle);
+            uint playerClientId = getPlayerClientID(pHandle);
+            uint lookingAtServerId = getLookingAtServerID(pHandle);
+            uint lookingAtClientId = getLookingAtClientID(pHandle);
 
             ////Game keeps running even when you click out
             //disableClickOutPausing(pHandle);
@@ -36,13 +36,13 @@ namespace testApp
             //msg.writeByte(GAME_OBJECT_TYPES.CREATURE);
             //msg.writeUint(playerClientId);
             //msg.writeUint(CLIENT_OBJECT_UPDATE_FLAGS.POSITION);
-            //msg.writeFloat(180f);
-            //msg.writeFloat(100f);
+            //msg.writeFloat(30f);
+            //msg.writeFloat(-38f);
             //msg.writeFloat(0.0f);
 
-            //// Swap/Recruit Creatures
-            //msg = new Message(PlayerMessageTypes.GAME_OBJ_UPDATE, 2, false);
-            //msg.writeUint(lookingAtClientId);
+            //// Swap / Recruit Creatures
+            ////msg = new Message(PlayerMessageTypes.GAME_OBJ_UPDATE, 2, false);
+            //// msg.writeUint(lookingAtClientId);
 
             ////Heal
             //msg = new Message(PlayerMessageTypes.CHEAT, 2);
@@ -56,19 +56,16 @@ namespace testApp
             //msg = new Message(PlayerMessageTypes.GAME_OBJ_UPDATE, 2, false);
             //msg.writeUint(lookingAtClientId);
 
-            //// Update door properties
-            //msg = new Message(PlayerMessageTypes.GAME_OBJ_UPDATE, 1, false);
-            //msg.writeByte(0x55);
-            //msg.writeByte(GAME_OBJECT_TYPES.DOOR);
-            //msg.writeUint(lookingAtClientId);
-            //msg.writeUint(CLIENT_OBJECT_UPDATE_FLAGS.OBJECT_INTERACTION | CLIENT_OBJECT_UPDATE_FLAGS.POSITION);
-            //msg.writeFloat(188f);
-            //msg.writeFloat(80f);
-            //msg.writeFloat(0f);
-            //msg.writeBool(false); // field 0x114 | Hostile
-            //msg.writeBool(true); // Do update?
-            //msg.writeBool(false); // field 0x108 | Bash/Security
-            //msg.writeBool(false); // field 0x104 | no Bash
+            // Update door properties
+            msg = new Message(PlayerMessageTypes.GAME_OBJ_UPDATE, 1, false);
+            msg.writeByte(0x55);
+            msg.writeByte(GAME_OBJECT_TYPES.DOOR);
+            msg.writeUint(lookingAtClientId);
+            msg.writeUint(CLIENT_OBJECT_UPDATE_FLAGS.OBJECT_INTERACTION);
+            msg.writeBool(true); // field 0x114 | Hostile
+            msg.writeBool(true); // Do update?
+            msg.writeBool(true); // field 0x108 | Bash/Security
+            msg.writeBool(false); // field 0x104 | no Bash
 
             //// Update placeable Properties
             //msg = new Message(PlayerMessageTypes.GAME_OBJ_UPDATE, 1, false);
@@ -91,7 +88,7 @@ namespace testApp
             //msg = new Message(PlayerMessageTypes.CHEAT, 0x7);
             //setServerDebugMode(true, pHandle);
             //msg.writeUint(playerServerId);
-            //msg.writeUint(lookingAtClientId);
+            //msg.writeUint(lookingAtServerId);
 
             //// Play Creature Sound effect
             //msg = new Message(PlayerMessageTypes.VOICE_CHAT, 1, false);
@@ -106,10 +103,10 @@ namespace testApp
             //// Disable Level Up temporarily
             //msg = new Message(PlayerMessageTypes.LEVEL_UP, 1, false);
 
-            // Free Cam
-            // You can adjust the speed of the camera with the float at 0x007455c8
-            msg = new Message(PlayerMessageTypes.CAMERA, 2, false);
-            msg.writeByte(7); // Mode 7 is Free Cam
+            //// Free Cam
+            //// You can adjust the speed of the camera with the float at 0x007455c8
+            //msg = new Message(PlayerMessageTypes.CAMERA, 2, false);
+            //msg.writeByte(7); // Mode 7 is Free Cam
 
 
             Console.WriteLine($"Sending Message:\n{msg}");

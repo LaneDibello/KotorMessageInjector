@@ -10,15 +10,26 @@ namespace KotorMessageInjector
 
     public static class KotorHelpers
     {
+        private const uint KOTOR_OFFSET_SERVER_DEBUG_MODE = 0x1006c;
+        private const uint KOTOR_OFFSET_CLIENT_PLAYER_ID = 0x20;
+        private const uint KOTOR_OFFSET_CLIENT = 0x4;
+        private const uint KOTOR_OFFSET_SERVER = 0x8;
+        private const uint KOTOR_OFFSET_INTERNAL = 0x4;
+        private const uint KOTOR_OFFSET_LOADBAR = 0x278;
+        private const uint KOTOR_OFFSET_LAST_TARGET = 0x2B4;
+
+
         private static IntPtr KOTOR_1_APPMANAGER = (IntPtr)0x007a39fc;
         private static IntPtr KOTOR_1_DEACTIVATE_RENDER_WINDOW = (IntPtr)0x00401d90; 
         private const uint KOTOR_1_GOG_MODULE_SIZE = 4640768;
         private const uint KOTOR_1_STEAM_MODULE_SIZE = 4993024;
+        private const uint KOTOR_1_LOAD_DIRECTION = 0xc8;
 
         private static IntPtr KOTOR_2_APPMANAGER = (IntPtr)0x00a11c04;
         private static IntPtr KOTOR_2_STEAM_APPMANAGER = (IntPtr)0x00a1b4a4;
         private const uint KOTOR_2_STEAM_MODULE_SIZE = 7049216;
         private const uint KOTOR_2_GOG_MODULE_SIZE = 7012352;
+        private const uint KOTOR_2_LOAD_DIRECTION = 0xd0;
 
         public static class CLIENT_OBJECT_UPDATE_FLAGS
         {
@@ -109,14 +120,16 @@ namespace KotorMessageInjector
         {
             byte[] outBytes = new byte[4];
             UIntPtr outPtr;
+            bool isSteam;
+            int gameVersion = getGameVersion(processHandle, out isSteam);
 
-            ReadProcessMemory(processHandle, KOTOR_1_APPMANAGER, outBytes, 4, out outPtr);
+            ReadProcessMemory(processHandle, getGameAppmanager(gameVersion, isSteam), outBytes, 4, out outPtr);
             uint appmanager = BitConverter.ToUInt32(outBytes, 0);
 
-            ReadProcessMemory(processHandle, (IntPtr)(appmanager + 4), outBytes, 4, out outPtr);
+            ReadProcessMemory(processHandle, (IntPtr)(appmanager + KOTOR_OFFSET_CLIENT), outBytes, 4, out outPtr);
             uint client = BitConverter.ToUInt32(outBytes, 0);
 
-            ReadProcessMemory(processHandle, (IntPtr)(client + 4), outBytes, 4, out outPtr);
+            ReadProcessMemory(processHandle, (IntPtr)(client + KOTOR_OFFSET_INTERNAL), outBytes, 4, out outPtr);
             return BitConverter.ToUInt32(outBytes, 0);
         }
 
@@ -124,14 +137,16 @@ namespace KotorMessageInjector
         {
             byte[] outBytes = new byte[4];
             UIntPtr outPtr;
+            bool isSteam;
+            int gameVersion = getGameVersion(processHandle, out isSteam);
 
-            ReadProcessMemory(processHandle, KOTOR_1_APPMANAGER, outBytes, 4, out outPtr);
+            ReadProcessMemory(processHandle, getGameAppmanager(gameVersion, isSteam), outBytes, 4, out outPtr);
             uint appmanager = BitConverter.ToUInt32(outBytes, 0);
 
-            ReadProcessMemory(processHandle, (IntPtr)(appmanager + 8), outBytes, 4, out outPtr);
+            ReadProcessMemory(processHandle, (IntPtr)(appmanager + KOTOR_OFFSET_SERVER), outBytes, 4, out outPtr);
             uint server = BitConverter.ToUInt32(outBytes, 0);
 
-            ReadProcessMemory(processHandle, (IntPtr)(server + 4), outBytes, 4, out outPtr);
+            ReadProcessMemory(processHandle, (IntPtr)(server + KOTOR_OFFSET_INTERNAL), outBytes, 4, out outPtr);
             return BitConverter.ToUInt32(outBytes, 0);
         }
 
@@ -143,7 +158,7 @@ namespace KotorMessageInjector
 
             uint serverInternal = getServerInternal(processHandle);
 
-            WriteProcessMemory(processHandle, (IntPtr)(serverInternal + 0x1006c), inBytes, 4, out outPtr);
+            WriteProcessMemory(processHandle, (IntPtr)(serverInternal + KOTOR_OFFSET_SERVER_DEBUG_MODE), inBytes, 4, out outPtr);
         }
 
         public static uint getPlayerClientID(IntPtr processHandle)
@@ -153,7 +168,7 @@ namespace KotorMessageInjector
 
             uint clientInternal = getClientInternal(processHandle);
 
-            ReadProcessMemory(processHandle, (IntPtr)(clientInternal + 0x20), outBytes, 4, out outPtr);
+            ReadProcessMemory(processHandle, (IntPtr)(clientInternal + KOTOR_OFFSET_CLIENT_PLAYER_ID), outBytes, 4, out outPtr);
             return BitConverter.ToUInt32(outBytes, 0);
         }
 
@@ -187,7 +202,7 @@ namespace KotorMessageInjector
 
             uint clientInternal = getClientInternal(processHandle);
 
-            ReadProcessMemory(processHandle, (IntPtr)(clientInternal + 0x2B4), outBytes, 4, out outPtr);
+            ReadProcessMemory(processHandle, (IntPtr)(clientInternal + KOTOR_OFFSET_LAST_TARGET), outBytes, 4, out outPtr);
             return BitConverter.ToUInt32(outBytes, 0);
         }
 
@@ -200,18 +215,21 @@ namespace KotorMessageInjector
         {
             byte[] outBytes = new byte[4];
             UIntPtr outPtr;
+            bool isSteam;
+            int gameVersion = getGameVersion(processHandle, out isSteam);
+            uint loadDirection = gameVersion == 1 ? KOTOR_1_LOAD_DIRECTION : KOTOR_2_LOAD_DIRECTION;
 
             uint clientInternal = getClientInternal(processHandle);
 
-            ReadProcessMemory(processHandle, (IntPtr)(clientInternal + 0x278), outBytes, 4, out outPtr);
+            ReadProcessMemory(processHandle, (IntPtr)(clientInternal + KOTOR_OFFSET_LOADBAR), outBytes, 4, out outPtr);
             uint loadScreen = BitConverter.ToUInt32(outBytes, 0);
 
-            ReadProcessMemory(processHandle, (IntPtr)(loadScreen + 0xc8), outBytes, 4, out outPtr);
+            ReadProcessMemory(processHandle, (IntPtr)(loadScreen + loadDirection), outBytes, 4, out outPtr);
             uint loadBar = BitConverter.ToUInt32(outBytes, 0);
 
             loadBar &= ~1u;
 
-            writeUint(loadBar, (IntPtr)(loadScreen + 0xc8), processHandle);
+            writeUint(loadBar, (IntPtr)(loadScreen + loadDirection), processHandle);
         }
 
         public static void writeUint(uint value, IntPtr addr, IntPtr processHandle)
