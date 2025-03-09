@@ -1,6 +1,6 @@
 
 # Knights of the Old Republic Message Injector
-This class library privdes a .Net interace allowing for the injection of `CSWMessage` events within either KotOR game. This is done by hooking onto the process with Windows API building out a message (using reverse engineered schema) and injecting this message into the process by allocating remote memory to store it. This message is then sent by allocating and writing some brief assembly that will call the relevant "send message" function submitting our message. This is assembly is run by spawning a remote thread within the process.
+This class library privdes a .Net interace allowing for the injection of `CSWMessage` events within either KotOR game. This is done by hooking onto the process with Windows API, building out a message (using reverse engineered schema) and injecting this message into the process by allocating remote memory to store it. This message is then sent by allocating and writing some brief assembly that will call the relevant "send message" function submitting our message. This is assembly is run by spawning a remote thread within the process.
 
 This Library contains serveral classes, listed below.
 
