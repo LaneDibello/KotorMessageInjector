@@ -9,16 +9,24 @@ namespace testApp
     {
         static void Main(string[] args)
         {
-            IntPtr pHandle = ProcessAPI.OpenProcessByName("swkotor.exe");
+            IntPtr pHandle = ProcessAPI.OpenProcessByName("swkotor2.exe");
+
+            uint size = ProcessAPI.GetModuleSize(pHandle);
+            Console.WriteLine($"Module Size = {size}");
+
+            bool isSteam;
+            int version = getGameVersion(pHandle, out isSteam);
+            Console.WriteLine($"Game Version: KotOR{version} {(isSteam ? "STEAM" : "")}");
 
             Injector i = new Injector(pHandle);
 
-            uint playerServerId = getPlayerServerID(pHandle);
-            uint playerClientId = getPlayerClientID(pHandle);
-            uint lookingAtServerId = getLookingAtServerID(pHandle);
-            uint lookingAtClientId = getLookingAtClientID(pHandle);
+            //uint playerServerId = getPlayerServerID(pHandle);
+            //uint playerClientId = getPlayerClientID(pHandle);
+            //uint lookingAtServerId = getLookingAtServerID(pHandle);
+            //uint lookingAtClientId = getLookingAtClientID(pHandle);
 
-            disableClickOutPausing(pHandle);
+            ////Game keeps running even when you click out
+            //disableClickOutPausing(pHandle);
 
             Message msg;
 
@@ -41,7 +49,7 @@ namespace testApp
 
             ////Run Scripts
             //msg = new Message(PlayerMessageTypes.CHEAT, 8);
-            //setServerDebugMode(true, pHandle);
+            //setServerDebugMode(true, pHandle); // Debug mode must be on to run scripts
             //msg.writeCExoString("k_trg_transfail1");
 
             //// Take Control/Add to party
@@ -88,7 +96,7 @@ namespace testApp
             //// Play Creature Sound effect
             //msg = new Message(PlayerMessageTypes.VOICE_CHAT, 1, false);
             //msg.writeUint(playerClientId);
-            //msg.writeByte(7 ); // Sound Set Index
+            //msg.writeByte(7); // Sound Set Index
 
             //// Peak Container Contents (Crashes the game if you aren't loking at a placeable)
             //msg = new Message(PlayerMessageTypes.GUI_CONTAINER, 1, false);
@@ -98,17 +106,18 @@ namespace testApp
             //// Disable Level Up temporarily
             //msg = new Message(PlayerMessageTypes.LEVEL_UP, 1, false);
 
-            //// Free Cam
-            //msg = new Message(PlayerMessageTypes.CAMERA, 2, false);
-            //msg.writeByte(7); // Mode 7 is Free Cam
+            // Free Cam
+            // You can adjust the speed of the camera with the float at 0x007455c8
+            msg = new Message(PlayerMessageTypes.CAMERA, 2, false);
+            msg.writeByte(7); // Mode 7 is Free Cam
 
 
             Console.WriteLine($"Sending Message:\n{msg}");
 
             //Thread.Sleep(2000);
-            
+
             i.sendMessage(msg);
-            
+
             //Console.ReadKey();
         }
     }

@@ -3,10 +3,22 @@ using static KotorMessageInjector.ProcessAPI;
 
 namespace KotorMessageInjector
 {
+    public class KotorVersionNotFoundException : Exception
+    {
+        public KotorVersionNotFoundException(string message) : base(message) { }
+    }
+
     public static class KotorHelpers
     {
         private static IntPtr KOTOR_1_APPMANAGER = (IntPtr)0x007a39fc;
-        private static IntPtr KOTOR_1_DEACTIVATE_RENDER_WINDOW = (IntPtr)0x00401d90;
+        private static IntPtr KOTOR_1_DEACTIVATE_RENDER_WINDOW = (IntPtr)0x00401d90; 
+        private const uint KOTOR_1_GOG_MODULE_SIZE = 4640768;
+        private const uint KOTOR_1_STEAM_MODULE_SIZE = 4993024;
+
+        private static IntPtr KOTOR_2_APPMANAGER = (IntPtr)0x00a11c04;
+        private static IntPtr KOTOR_2_STEAM_APPMANAGER = (IntPtr)0x00a1b4a4;
+        private const uint KOTOR_2_STEAM_MODULE_SIZE = 7049216;
+        private const uint KOTOR_2_GOG_MODULE_SIZE = 7012352;
 
         public static class CLIENT_OBJECT_UPDATE_FLAGS
         {
@@ -40,6 +52,51 @@ namespace KotorMessageInjector
             public const byte STORE = 14;
             public const byte OBJECT_f = 15;
             public const byte SOUND = 16; 
+        }
+        
+        public static IntPtr getGameAppmanager(int gameVersion, bool isSteam)
+        {
+            if (gameVersion == 1)
+            {
+                return KOTOR_1_APPMANAGER;
+            }
+            else if (gameVersion == 2)
+            {
+                if (isSteam)
+                {
+                    return KOTOR_2_STEAM_APPMANAGER;
+                }
+                else
+                {
+                    return KOTOR_2_APPMANAGER;
+                }
+            }
+            else
+            {
+                throw new ArgumentException($"Cannot find App Manager for kotor version: {gameVersion}");
+            }
+        }
+
+        public static int getGameVersion(IntPtr processHandle, out bool isSteam)
+        {
+            uint moduleSize = GetModuleSize(processHandle);
+            switch(moduleSize)
+            {
+                case KOTOR_1_GOG_MODULE_SIZE:
+                    isSteam = false;
+                    return 1;
+                case KOTOR_1_STEAM_MODULE_SIZE:
+                    isSteam = true;
+                    return 1;
+                case KOTOR_2_GOG_MODULE_SIZE:
+                    isSteam = false;
+                    return 2;
+                case KOTOR_2_STEAM_MODULE_SIZE:
+                    isSteam = true;
+                    return 2;
+                default:
+                    throw new KotorVersionNotFoundException($"Could not find kotor version with module size: {moduleSize}");
+            }
         }
         
         public static void disableClickOutPausing(IntPtr processHandle)

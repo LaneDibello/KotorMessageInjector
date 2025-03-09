@@ -48,10 +48,14 @@ namespace KotorMessageInjector
 
         public void sendMessage (Message msg)
         {
+            // Resolve Game version
+            bool isSteam;
+            int gameVersion = KotorHelpers.getGameVersion(processHandle, out isSteam);
+
             // Write out Message and shellcode
             UIntPtr bytesWritten;
             WriteProcessMemory(processHandle, remoteMessageData, msg.message, msg.length, out bytesWritten);
-            SendMessageShellcode shellcode = new SendMessageShellcode(msg, remoteMessageData);
+            SendMessageShellcode shellcode = new SendMessageShellcode(msg, remoteMessageData, gameVersion, isSteam);
             WriteProcessMemory(processHandle, remoteShellcode, shellcode.code, shellcode.length, out bytesWritten);
 
             //Send Message

@@ -47,6 +47,17 @@ namespace KotorMessageInjector
         }
 
         /// <summary>
+        /// Structure that contains the module information
+        /// </summary>
+        [StructLayout(LayoutKind.Sequential)]
+        public struct MODULEINFO
+        {
+            public IntPtr lpBaseOfDll;
+            public uint SizeOfImage;
+            public IntPtr EntryPoint;
+        }
+
+        /// <summary>
         /// Finds a process ID by its name (case-insensitive).
         /// </summary>
         /// <param name="processName">The name of the process to find (e.g., "notepad.exe").</param>
@@ -80,6 +91,32 @@ namespace KotorMessageInjector
         public static IntPtr OpenProcessByName(string name)
         {
             return OpenProcess(PROCESS_ALL_ACCESS, false, GetProcessId(name));
+        }
+
+        /// <summary>
+        /// Gets the size of the main module of a process.
+        /// </summary>
+        /// <param name="processHandle">A handle to the process with appropriate access rights.</param>
+        /// <returns>The size of the main module in bytes, or 0 if failed.</returns>
+        public static uint GetModuleSize(IntPtr processHandle)
+        {
+            IntPtr[] modules = new IntPtr[20];
+            uint bytesNeeded;
+            MODULEINFO moduleInfo;
+
+            if (!EnumProcessModules(processHandle, modules, (uint)(modules.Length * IntPtr.Size), out bytesNeeded))
+            {
+                // You could optionally use Marshal.GetLastWin32Error() for diagnostics
+                return 0;
+            }
+
+            // modules[0] is always the main module (the .exe file)
+            if (!GetModuleInformation(processHandle, modules[0], out moduleInfo, (uint)Marshal.SizeOf(typeof(MODULEINFO))))
+            {
+                return 0;
+            }
+
+            return moduleInfo.SizeOfImage;
         }
 
 
@@ -246,5 +283,36 @@ namespace KotorMessageInjector
             IntPtr lpParameter,
             uint dwCreationFlags,
             out uint lpThreadId);
+
+        /// <summary>
+        /// Retrieves a handle for each module in the specified process.
+        /// </summary>
+        /// <param name="hProcess">A handle to the process.</param>
+        /// <param name="hModules">An array that receives the list of module handles.</param>
+        /// <param name="cb">The size of the hModules array, in bytes.</param>
+        /// <param name="lpcbNeeded">The number of bytes required to store all module handles in the hModules array.</param>
+        /// <returns>If the function succeeds, the return value is nonzero.</returns>
+        [DllImport("psapi.dll", SetLastError = true)]
+        public static extern bool EnumProcessModules(
+            IntPtr hProcess,
+            [MarshalAs(UnmanagedType.LPArray, SizeParamIndex = 2)]
+            [Out] IntPtr[] hModules,
+            uint cb,
+            [Out] out uint lpcbNeeded);
+
+        /// <summary>
+        /// Retrieves information about the specified module in the specified process.
+        /// </summary>
+        /// <param name="hProcess">A handle to the process.</param>
+        /// <param name="hModule">A handle to the module.</param>
+        /// <param name="lpmodinfo">A pointer to the MODULEINFO structure that receives information about the module.</param>
+        /// <param name="cb">The size of the MODULEINFO structure, in bytes.</param>
+        /// <returns>If the function succeeds, the return value is nonzero.</returns>
+        [DllImport("psapi.dll", SetLastError = true)]
+        public static extern bool GetModuleInformation(
+            IntPtr hProcess,
+            IntPtr hModule,
+            out MODULEINFO lpmodinfo,
+            uint cb);
     }
 }
