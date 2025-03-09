@@ -98,11 +98,21 @@ namespace KotorMessageInjector
             raw = new List<byte>() { 0, 0, 0 };
         }
 
+        /// <summary>
+        /// Constructs a Message with `MessageSources` source
+        /// </summary>
+        /// <param name="source">The source of the Message</param>
         public Message(MessageSources source)
         {
             raw = new List<byte>() { (byte)source, 0, 0 };
         }
 
+        /// <summary>
+        /// Constructs a player message witht eh following type and subtype
+        /// </summary>
+        /// <param name="type">The type of player message to be sent</param>
+        /// <param name="subtype">The subtype of this message</param>
+        /// <param name="playerToServer">True if this Message source is PLAYER_TO_SERVER, false for SERVER_TO_PLAYER</param>
         public Message(PlayerMessageTypes type, byte subtype, bool playerToServer = true)
         {
             raw = new List<byte>() { 
@@ -272,7 +282,12 @@ namespace KotorMessageInjector
                 raw.Add(bytes[0]);
             }
         }
-
+        /// <summary>
+        /// Writes 3 floats, x, y, z to the message contents
+        /// </summary>
+        /// <param name="x"></param>
+        /// <param name="y"></param>
+        /// <param name="z"></param>
         public void writeVector(float x, float y, float z)
         {
             writeFloat(x);
@@ -285,6 +300,10 @@ namespace KotorMessageInjector
             writeUint(value ? (byte)1 : (byte)0);
         }
 
+        /// <summary>
+        /// Write a Bioware Aurora Style Resource Reference to the message contents
+        /// </summary>
+        /// <param name="resref">A 16 character or less reference to some KotOR file/resource</param>
         public void writeCResRef(string resref)
         {
             // 16 character resource reference
@@ -301,6 +320,10 @@ namespace KotorMessageInjector
             }
         }
 
+        /// <summary>
+        /// Write a Bioware Aurora Style string to the message contents
+        /// </summary>
+        /// <param name="s">The string to be written</param>
         public void writeCExoString(string s) 
         {
             writeInt(s.Length);
@@ -310,6 +333,10 @@ namespace KotorMessageInjector
             }
         }
 
+        /// <summary>
+        /// Write arbitrary bytes to message contents
+        /// </summary>
+        /// <param name="bytes">The bytes to be written</param>
         public void writeVoid(byte[] bytes)
         {
             foreach (byte b in bytes)
@@ -318,13 +345,21 @@ namespace KotorMessageInjector
             }
         }
 
-        // Write a custom localized string
+        /// <summary>
+        /// Write a Bioware Aurora Style custom localized string to message contents
+        /// </summary>
+        /// <param name="s">The custom string to be written</param>
         public void writeCExoLocString(string s)
         {
             writeBool(false); // isStrRef
             writeCExoString(s);
         }
-        // Write a localized string using a TLK table reference
+
+        /// <summary>
+        /// Write a localized string using a TLK table reference
+        /// </summary>
+        /// <param name="strref">A numeral reference to a particular string on the TLK table</param>
+        /// <param name="language">The language to use (0 for English)</param>
         public void writeCExoLocString(uint strref, byte language = 0)
         {
             writeBool(true); // isStrRef
