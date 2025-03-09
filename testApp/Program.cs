@@ -103,10 +103,10 @@ namespace testApp
             //// Disable Level Up temporarily
             //msg = new Message(PlayerMessageTypes.LEVEL_UP, 1, false);
 
-            //// Free Cam
-            //// You can adjust the speed of the camera with the float at 0x007455c8
-            //msg = new Message(PlayerMessageTypes.CAMERA, 2, false);
-            //msg.writeByte(7); // Mode 7 is Free Cam
+            // Free Cam
+            // You can adjust the speed of the camera with the float at 0x007455c8
+            msg = new Message(PlayerMessageTypes.CAMERA, 2, false);
+            msg.writeByte(7); // Mode 7 is Free Cam
 
 
             Console.WriteLine($"Sending Message:\n{msg}");
