@@ -88,6 +88,12 @@ namespace KotorMessageInjector
             return processId;
         }
 
+        
+        /// <summary>
+        /// Opens a running 32-bit process by name, i.e. "swkotor.exe"
+        /// </summary>
+        /// <param name="name">The name of the process</param>
+        /// <returns>A IntPtr Handle to the process</returns>
         public static IntPtr OpenProcessByName(string name)
         {
             return OpenProcess(PROCESS_ALL_ACCESS, false, GetProcessId(name));
