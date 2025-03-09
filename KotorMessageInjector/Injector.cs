@@ -12,6 +12,10 @@ namespace KotorMessageInjector
         private IntPtr remoteMessageData;
         private IntPtr remoteShellcode;
 
+        /// <summary>
+        /// Creates an instance of Injector targetting the process opened by processHandle
+        /// </summary>
+        /// <param name="processHandle">An open 32-bit Windows Process</param>
         public Injector(IntPtr processHandle)
         {
             this.processHandle = processHandle;
@@ -37,8 +41,15 @@ namespace KotorMessageInjector
             KotorHelpers.reverseLoadBar(processHandle);
         }
 
+        /// <summary>
+        /// Creates an instance of Injector targetting the process named procName
+        /// </summary>
+        /// <param name="procName">The name of the process to be opened and injected to</param>
         public Injector(string procName) : this(OpenProcessByName(procName)) { }
 
+        /// <summary>
+        /// Necessary for freeing the remote memory, and preventing dangling handles
+        /// </summary>
         ~Injector() 
         {
             VirtualFreeEx(processHandle, remoteMessageData, 0, MEM_RELEASE);
@@ -46,6 +57,10 @@ namespace KotorMessageInjector
             CloseHandle(processHandle);
         }
 
+        /// <summary>
+        /// Constructs and sends a message to the attached KotOR Process
+        /// </summary>
+        /// <param name="msg">The message to be sent to the KotOR Message Handler</param>
         public void sendMessage (Message msg)
         {
             // Resolve Game version
