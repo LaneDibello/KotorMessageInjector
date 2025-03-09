@@ -26,7 +26,7 @@ IntPtr remoteMemory = ProcessAPI.VirtualAllocEx
 (
     processHandle,
     (IntPtr)null,
-    ProcessAPI.SHELLCODE_SPACE,
+    0x1000,
     ProcessAPI.MEM_COMMIT | ProcessAPI.MEM_RESERVE,
     ProcessAPI.PAGE_READWRITE
 );
