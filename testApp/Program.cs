@@ -56,16 +56,16 @@ namespace testApp
             //msg = new Message(PlayerMessageTypes.GAME_OBJ_UPDATE, 2, false);
             //msg.writeUint(lookingAtClientId);
 
-            // Update door properties
-            msg = new Message(PlayerMessageTypes.GAME_OBJ_UPDATE, 1, false);
-            msg.writeByte(0x55);
-            msg.writeByte(GAME_OBJECT_TYPES.DOOR);
-            msg.writeUint(lookingAtClientId);
-            msg.writeUint(CLIENT_OBJECT_UPDATE_FLAGS.OBJECT_INTERACTION);
-            msg.writeBool(true); // field 0x114 | Hostile
-            msg.writeBool(true); // Do update?
-            msg.writeBool(true); // field 0x108 | Bash/Security
-            msg.writeBool(false); // field 0x104 | no Bash
+            //// Update door properties
+            //msg = new Message(PlayerMessageTypes.GAME_OBJ_UPDATE, 1, false);
+            //msg.writeByte(0x55);
+            //msg.writeByte(GAME_OBJECT_TYPES.DOOR);
+            //msg.writeUint(lookingAtClientId);
+            //msg.writeUint(CLIENT_OBJECT_UPDATE_FLAGS.OBJECT_INTERACTION);
+            //msg.writeBool(true); // field 0x114 | Hostile
+            //msg.writeBool(true); // Do update?
+            //msg.writeBool(true); // field 0x108 | Bash/Security
+            //msg.writeBool(false); // field 0x104 | no Bash
 
             //// Update placeable Properties
             //msg = new Message(PlayerMessageTypes.GAME_OBJ_UPDATE, 1, false);
