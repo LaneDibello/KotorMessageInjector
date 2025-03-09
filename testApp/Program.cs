@@ -40,9 +40,9 @@ namespace testApp
             //msg.writeFloat(-38f);
             //msg.writeFloat(0.0f);
 
-            //// Swap / Recruit Creatures
-            ////msg = new Message(PlayerMessageTypes.GAME_OBJ_UPDATE, 2, false);
-            //// msg.writeUint(lookingAtClientId);
+            ////Swap / Recruit Creatures
+            //msg = new Message(PlayerMessageTypes.GAME_OBJ_UPDATE, 2, false);
+            //msg.writeUint(lookingAtClientId);
 
             ////Heal
             //msg = new Message(PlayerMessageTypes.CHEAT, 2);
