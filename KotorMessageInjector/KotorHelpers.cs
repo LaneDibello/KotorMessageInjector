@@ -211,6 +211,30 @@ namespace KotorMessageInjector
             return clientToServerId(getLookingAtClientID(processHandle));
         }
 
+        public static uint getClientModule(IntPtr processHandle)
+        {
+            byte[] outBytes = new byte[4];
+            UIntPtr outPtr;
+
+            uint clientInternal = getClientInternal(processHandle);
+
+            // TODO: convert offset to constant
+            ReadProcessMemory(processHandle, (IntPtr)(clientInternal + 0x18), outBytes, 4, out outPtr);
+            return BitConverter.ToUInt32(outBytes, 0);
+        }
+
+        public static uint getClientArea(IntPtr processHandle)
+        {
+            byte[] outBytes = new byte[4];
+            UIntPtr outPtr;
+
+            uint module = getClientModule(processHandle);
+
+            // TODO: convert offset to constant
+            ReadProcessMemory(processHandle, (IntPtr)(module + 0x48), outBytes, 4, out outPtr);
+            return BitConverter.ToUInt32(outBytes, 0);
+        }
+
         public static void reverseLoadBar(IntPtr processHandle)
         {
             byte[] outBytes = new byte[4];
