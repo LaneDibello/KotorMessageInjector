@@ -1,5 +1,6 @@
 ﻿using System;
 using static KotorMessageInjector.ProcessAPI;
+using System.Collections.Generic;
 
 namespace KotorMessageInjector
 {
@@ -24,12 +25,14 @@ namespace KotorMessageInjector
         private const uint KOTOR_1_GOG_MODULE_SIZE = 4640768;
         private const uint KOTOR_1_STEAM_MODULE_SIZE = 4993024;
         private const uint KOTOR_1_LOAD_DIRECTION = 0xc8;
+        private const uint KOTOR_1_OFFSET_PARTY_TABLE = 0x1b770;
 
         private static IntPtr KOTOR_2_APPMANAGER = (IntPtr)0x00a11c04;
         private static IntPtr KOTOR_2_STEAM_APPMANAGER = (IntPtr)0x00a1b4a4;
         private const uint KOTOR_2_STEAM_MODULE_SIZE = 7049216;
         private const uint KOTOR_2_GOG_MODULE_SIZE = 7012352;
         private const uint KOTOR_2_LOAD_DIRECTION = 0xd0;
+        private const uint KOTOR_2_GOG_OFFSET_PARTY_TABLE = 0x1f0b4;
 
         public static class CLIENT_OBJECT_UPDATE_FLAGS
         {
@@ -65,6 +68,25 @@ namespace KotorMessageInjector
             public const byte SOUND = 16; 
         }
         
+        public static IntPtr getRunningKotor()
+        {
+            IntPtr pHandle = OpenProcessByName("swkotor.exe");
+
+            if (pHandle != (IntPtr)0)
+            {
+                return pHandle;
+            }
+
+            pHandle = OpenProcessByName("swkotor2.exe");
+
+            if (pHandle != (IntPtr)0)
+            {
+                return pHandle;
+            }
+
+            throw new KotorVersionNotFoundException($"Could not find a running instance of kotor");
+        }
+        
         public static IntPtr getGameAppmanager(int gameVersion, bool isSteam)
         {
             if (gameVersion == 1)
@@ -85,6 +107,32 @@ namespace KotorMessageInjector
             else
             {
                 throw new ArgumentException($"Cannot find App Manager for kotor version: {gameVersion}");
+            }
+        }
+
+        public static Dictionary<string, uint> getFunctionLibrary(IntPtr processHandle)
+        {
+            bool isSteam;
+            int version = getGameVersion(processHandle, out isSteam);
+
+            if (version == 1)
+            {
+                return RemoteFunctionLibrary.kotor1Functions;
+            }
+            else if (version == 2)
+            {
+                if (isSteam)
+                {
+                    return RemoteFunctionLibrary.kotor2SteamFunctions;
+                }
+                else
+                {
+                    return RemoteFunctionLibrary.kotor2Functions;
+                }
+            }
+            else
+            {
+                throw new ArgumentException($"Cannot find App Manager for kotor version: {version}");
             }
         }
 
@@ -109,7 +157,14 @@ namespace KotorMessageInjector
                     throw new KotorVersionNotFoundException($"Could not find kotor version with module size: {moduleSize}");
             }
         }
-        
+
+        public static int getGameVersion(IntPtr processHandle)
+        {
+            bool isSteam;
+            return getGameVersion(processHandle, out isSteam);
+        }
+
+
         public static void disableClickOutPausing(IntPtr processHandle)
         {
             UIntPtr outPtr;
@@ -174,10 +229,17 @@ namespace KotorMessageInjector
         public static uint getServerPartyTable(IntPtr processHandle)
         {
             byte[] outBytes = new byte[4];
-            UIntPtr outPtr;
+            bool isSteam;
+            int version = getGameVersion(processHandle, out isSteam);
 
-            // TODO: convert offset to constant
-            return getServerInternal(processHandle) + 0x1b770;
+            if (version == 1)
+            {
+                return getServerInternal(processHandle) + KOTOR_1_OFFSET_PARTY_TABLE;
+            }
+            else
+            {
+                return getServerInternal(processHandle) + KOTOR_2_GOG_OFFSET_PARTY_TABLE;
+            }
         }
 
         public static void setNPCAvail(IntPtr processHandle, int id)
