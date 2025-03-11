@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using static KotorMessageInjector.Message;
 
 namespace KotorMessageInjector
 {
@@ -16,6 +17,11 @@ namespace KotorMessageInjector
             K2_SERVER_TO_PLAYER   = 0x007dd770,
             K2_SYSADMIN_TO_SERVER = 0x00000000, //Not yet supported
             K2_SERVER_TO_SYSADMIN = 0x00000000, //More RE to be done here
+
+            K2_STEAM_PLAYER_TO_SERVER = 0x0087a350,
+            K2_STEAM_SERVER_TO_PLAYER = 0x00647050,
+            K2_STEAM_SYSADMIN_TO_SERVER = 0x00000000, //Not yet supported
+            K2_STEAM_SERVER_TO_SYSADMIN = 0x00000000, //More RE to be done here
         }
 
         private static List<byte> header = new List<byte>{
@@ -55,23 +61,19 @@ namespace KotorMessageInjector
             this.isSteam = isSteam;
             setAppManager((uint)KotorHelpers.getGameAppmanager(gameVersion, isSteam));
 
-            SendFunctions sendFunction;
+            SendFunctions sendFunction = getSendFunction(msg.source);
             switch (msg.source)
             {
-                case Message.MessageSources.PLAYER_TO_SERVER:
-                    sendFunction = gameVersion == 1 ? SendFunctions.K1_PLAYER_TO_SERVER : SendFunctions.K2_PLAYER_TO_SERVER;
+                case MessageSources.PLAYER_TO_SERVER:
                     sourceIsClient = true;
                     break;
-                case Message.MessageSources.SERVER_TO_PLAYER:
-                    sendFunction = gameVersion == 1 ? SendFunctions.K1_SERVER_TO_PLAYER : SendFunctions.K2_SERVER_TO_PLAYER;
+                case MessageSources.SERVER_TO_PLAYER:
                     sourceIsClient = false;
                     break;
-                case Message.MessageSources.SYSADMIN_TO_SERVER:
-                    sendFunction = gameVersion == 1 ? SendFunctions.K1_SYSADMIN_TO_SERVER : SendFunctions.K2_SYSADMIN_TO_SERVER;
+                case MessageSources.SYSADMIN_TO_SERVER:
                     sourceIsClient = true;
                     break;
-                case Message.MessageSources.SERVER_TO_SYSADMIN:
-                    sendFunction = gameVersion == 1 ? SendFunctions.K1_SERVER_TO_SYSADMIN : SendFunctions.K2_SERVER_TO_SYSADMIN;
+                case MessageSources.SERVER_TO_SYSADMIN:
                     sourceIsClient = false;
                     break;
                 default:
@@ -87,6 +89,65 @@ namespace KotorMessageInjector
             movEAX4Bytes((uint)sendFunction);
             shellcode.AddRange(footer);
         }
+        private SendFunctions getSendFunction(MessageSources source)
+        {
+            if (gameVersion == 1)
+            {
+                switch (source)
+                {
+                    case MessageSources.PLAYER_TO_SERVER:
+                        return SendFunctions.K1_PLAYER_TO_SERVER;
+                    case MessageSources.SERVER_TO_PLAYER:
+                        return SendFunctions.K1_SERVER_TO_PLAYER;
+                    case MessageSources.SYSADMIN_TO_SERVER:
+                        return SendFunctions.K1_SYSADMIN_TO_SERVER;
+                    case MessageSources.SERVER_TO_SYSADMIN:
+                        return SendFunctions.K1_SERVER_TO_SYSADMIN;
+                    default:
+                        throw new MessageNotInitializedException($"Unknown Message Source {source}");
+                }
+            }
+            else if (gameVersion == 2)
+            {
+                if (isSteam)
+                {
+                    switch (source)
+                    {
+                        case MessageSources.PLAYER_TO_SERVER:
+                            return SendFunctions.K2_STEAM_PLAYER_TO_SERVER;
+                        case MessageSources.SERVER_TO_PLAYER:
+                            return SendFunctions.K2_STEAM_SERVER_TO_PLAYER;
+                        case MessageSources.SYSADMIN_TO_SERVER:
+                            return SendFunctions.K2_STEAM_SYSADMIN_TO_SERVER;
+                        case MessageSources.SERVER_TO_SYSADMIN:
+                            return SendFunctions.K2_STEAM_SERVER_TO_SYSADMIN;
+                        default:
+                            throw new MessageNotInitializedException($"Unknown Message Source {source}");
+                    }
+                }
+                else
+                {
+                    switch (source)
+                    {
+                        case MessageSources.PLAYER_TO_SERVER:
+                            return SendFunctions.K2_PLAYER_TO_SERVER;
+                        case MessageSources.SERVER_TO_PLAYER:
+                            return SendFunctions.K2_SERVER_TO_PLAYER;
+                        case MessageSources.SYSADMIN_TO_SERVER:
+                            return SendFunctions.K2_SYSADMIN_TO_SERVER;
+                        case MessageSources.SERVER_TO_SYSADMIN:
+                            return SendFunctions.K2_SERVER_TO_SYSADMIN;
+                        default:
+                            throw new MessageNotInitializedException($"Unknown Message Source {source}");
+                    }
+                }
+            }
+            else
+            {
+                throw new ArgumentException($"Unknown Kotor version {gameVersion}");
+            }
+        }
+        
         private void setAppManager(uint value)
         {
             shellcode[4] = (byte)(value & 0xFF);

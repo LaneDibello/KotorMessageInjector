@@ -10,7 +10,7 @@ namespace testApp
     {
         static void Main(string[] args)
         {
-            IntPtr pHandle = ProcessAPI.OpenProcessByName("swkotor.exe");
+            IntPtr pHandle = ProcessAPI.OpenProcessByName("swkotor2.exe");
 
             uint size = ProcessAPI.GetModuleSize(pHandle);
             Console.WriteLine($"Module Size = {size}");
@@ -38,8 +38,8 @@ namespace testApp
             //msg.writeByte(GAME_OBJECT_TYPES.CREATURE);
             //msg.writeUint(playerClientId);
             //msg.writeUint(CLIENT_OBJECT_UPDATE_FLAGS.POSITION);
-            //msg.writeFloat(0f);
-            //msg.writeFloat(0f);
+            //msg.writeFloat(112f);
+            //msg.writeFloat(97f);
             //msg.writeFloat(0.0f);
 
             ////Swap / Recruit Creatures
@@ -52,7 +52,7 @@ namespace testApp
             ////Run Scripts
             //msg = new Message(PlayerMessageTypes.CHEAT, 8);
             //setServerDebugMode(true, pHandle); // Debug mode must be on to run scripts
-            //msg.writeCExoString("k_trg_transfail1");
+            //msg.writeCExoString("k_trg_transfail");
 
             //// Take Control/Add to party
             //msg = new Message(PlayerMessageTypes.GAME_OBJ_UPDATE, 2, false);
@@ -105,10 +105,10 @@ namespace testApp
             //// Disable Level Up temporarily
             //msg = new Message(PlayerMessageTypes.LEVEL_UP, 1, false);
 
-            //// Free Cam
-            //// You can adjust the speed of the camera with the float at 0x007455c8
-            //msg = new Message(PlayerMessageTypes.CAMERA, 2, false);
-            //msg.writeByte(7); // Mode 7 is Free Cam
+            // Free Cam
+            // You can adjust the speed of the camera with the float at 0x007455c8
+            msg = new Message(PlayerMessageTypes.CAMERA, 2, false);
+            msg.writeByte(7); // Mode 7 is Free Cam
 
             //msg = new Message(PlayerMessageTypes.GAME_OBJ_UPDATE, 1);
             //msg.writeByte(0x43); // Summon Creature
@@ -129,11 +129,11 @@ namespace testApp
             //msg.writeFloat(0f);
             //msg.writeUshort(0);
 
-            //Console.WriteLine($"Sending Message:\n{msg}");
+            Console.WriteLine($"Sending Message:\n{msg}");
 
             //Thread.Sleep(2000);
 
-            //i.sendMessage(msg);
+            i.sendMessage(msg);
 
             ////Get Pointer to Object looking at
             //RemoteFunction rf = new RemoteFunction(0x004b1700);
@@ -151,7 +151,7 @@ namespace testApp
             //uint retval = i.runFunction(rf);
             //Console.WriteLine($"Returned: {retval}");
 
-            spawnCreature(pHandle, "g_rancor01", 112.5f, 97.5f, 0.0f);
+            //spawnCreature(pHandle, "g_rancor01", 112.5f, 97.5f, 0.0f);
 
             //Console.ReadKey();
         }
