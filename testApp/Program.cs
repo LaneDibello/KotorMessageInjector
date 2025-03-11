@@ -28,7 +28,7 @@ namespace testApp
             uint partyTable = getServerPartyTable(pHandle);
 
             ////Game keeps running even when you click outs
-            disableClickOutPausing(pHandle);
+            //disableClickOutPausing(pHandle);
 
             Message msg;
 
