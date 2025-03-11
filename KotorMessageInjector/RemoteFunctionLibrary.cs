@@ -35,12 +35,15 @@ namespace KotorMessageInjector
 
         public static Dictionary<string, uint> kotor2SteamFunctions = new Dictionary<string, uint>()
         {
-            {"operator_new", 0x00000000},
-            {"CSWSCreature::CSWSCreature", 0x00000000},
-            {"CSWSCreature::LoadFromTemplate", 0x00000000},
-            {"CServerExoAppInternal::GetModule", 0x00000000},
-            {"CSWSModule::GetArea", 0x00000000},
-            {"CSWSCreature::AddToArea", 0x00000000},
+            {"operator_new", 0x00919723},
+            {"CSWSCreature::CSWSCreature", 0x00561f30},
+            {"CSWSCreature::LoadFromTemplate", 0x00572a70},
+            {"CServerExoAppInternal::GetModule", 0x0052f4c0},
+            {"CSWSModule::GetArea", 0x00557ef0},
+            {"CSWSCreature::AddToArea", 0x00568bd0},
+            {"CSWPartyTable::AddNPC", 0x005fa600},
+            {"CServerExoApp::SetMoveToModuleString", 0x0051bea0},
+            {"CServerExoApp::SetMoveToModulePending", 0x0051be50}
         };
     }
 }

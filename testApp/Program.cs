@@ -41,10 +41,10 @@ namespace testApp
             //uint retval = Examples.addParty(pHandle, "c_hutt", 2);
             //Console.WriteLine($"Returned: {retval}");
 
-            //Examples.spawnCreature(pHandle, "p_kreia", 33f, -31f, 0.0f);
+            Examples.spawnCreature(pHandle, "p_kreia", 33f, -31f, 0.0f);
             //i.sendMessage(Examples.freeCam());
 
-            //Examples.warp(pHandle, "danm13");
+            //Examples.warp(pHandle, "301NAR");
 
             //Console.ReadKey();
         }
