@@ -218,10 +218,30 @@ namespace testApp
             rf.addParam(om.createCExoString(module));
             i.runFunction(rf);
             
-            rf = new RemoteFunction(funcLibrary["CServerExoApp::SetMoveToModulePending"], false); //SetMoveToModulePending
+            rf = new RemoteFunction(funcLibrary["CServerExoApp::SetMoveToModulePending"], false);
             rf.setThis(server);
             rf.addParam(1);
             i.runFunction(rf);
+        }
+
+        public static void changeFaction(IntPtr pHandle, uint target, int faction)
+        {
+            Injector i = new Injector(pHandle);
+
+            Dictionary<string, uint> funcLibrary = getFunctionLibrary(pHandle);
+
+            uint facManager = getFactionManager(pHandle);
+
+            RemoteFunction rf_getFac = new RemoteFunction(funcLibrary["CFactionManager::GetFaction"]);
+            rf_getFac.setThis(facManager);
+            rf_getFac.addParam(faction);
+            uint fac = i.runFunction(rf_getFac);
+
+            RemoteFunction rf_addMember = new RemoteFunction(funcLibrary["CSWSFaction::AddMember"], false);
+            rf_addMember.setThis(fac);
+            rf_addMember.addParam(target);
+            rf_addMember.addParam(0);
+            i.runFunction(rf_addMember);
         }
 
         #endregion

@@ -16,7 +16,9 @@ namespace KotorMessageInjector
             {"CSWSCreature::AddToArea", 0x004fa100},
             {"CSWPartyTable::AddNPC", 0x005645f0},
             {"CServerExoApp::SetMoveToModuleString", 0x004aecd0},
-            {"CServerExoApp::SetMoveToModulePending", 0x004aecc0}
+            {"CServerExoApp::SetMoveToModulePending", 0x004aecc0},
+            {"CFactionManager::GetFaction", 0x0052b3b0},
+            {"CSWSFaction::AddMember", 0x005bfa70}
 
         };
 
@@ -30,7 +32,9 @@ namespace KotorMessageInjector
             {"CSWSCreature::AddToArea", 0x00681800},
             {"CSWPartyTable::AddNPC", 0x00700170},
             {"CServerExoApp::SetMoveToModuleString", 0x0064b8c0},
-            {"CServerExoApp::SetMoveToModulePending", 0x0064b870}
+            {"CServerExoApp::SetMoveToModulePending", 0x0064b870},
+            {"CFactionManager::GetFaction", 0x00000000},
+            {"CSWSFaction::AddMember", 0x00000000},
         };
 
         public static Dictionary<string, uint> kotor2SteamFunctions = new Dictionary<string, uint>()
@@ -43,7 +47,9 @@ namespace KotorMessageInjector
             {"CSWSCreature::AddToArea", 0x00568bd0},
             {"CSWPartyTable::AddNPC", 0x005fa600},
             {"CServerExoApp::SetMoveToModuleString", 0x0051bea0},
-            {"CServerExoApp::SetMoveToModulePending", 0x0051be50}
+            {"CServerExoApp::SetMoveToModulePending", 0x0051be50},
+            {"CFactionManager::GetFaction", 0x00000000},
+            {"CSWSFaction::AddMember", 0x00000000},
         };
     }
 }

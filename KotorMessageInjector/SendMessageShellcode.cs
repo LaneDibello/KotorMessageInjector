@@ -6,6 +6,7 @@ namespace KotorMessageInjector
 {
     class SendMessageShellcode : Shellcode
     {
+        // TODO: Move into RemoteFunctionLibrary
         enum SendFunctions : uint
         {
             K1_PLAYER_TO_SERVER   = 0x00677410,

@@ -27,8 +27,8 @@ namespace testApp
             uint lookingAtClientId = getLookingAtClientID(pHandle);
             uint partyTable = getServerPartyTable(pHandle);
 
-            ////Game keeps running even when you click out
-            //disableClickOutPausing(pHandle);
+            ////Game keeps running even when you click outs
+            disableClickOutPausing(pHandle);
 
             Message msg;
 
@@ -41,10 +41,12 @@ namespace testApp
             //uint retval = Examples.addParty(pHandle, "c_hutt", 2);
             //Console.WriteLine($"Returned: {retval}");
 
-            Examples.spawnCreature(pHandle, "p_kreia", 33f, -31f, 0.0f);
+            //Examples.spawnCreature(pHandle, "p_kreia", 33f, -31f, 0.0f);
             //i.sendMessage(Examples.freeCam());
 
             //Examples.warp(pHandle, "301NAR");
+
+            Examples.changeFaction(pHandle, lookingAtServerId, 1);
 
             //Console.ReadKey();
         }

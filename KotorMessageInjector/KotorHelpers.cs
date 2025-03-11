@@ -18,6 +18,10 @@ namespace KotorMessageInjector
         private const uint KOTOR_OFFSET_INTERNAL = 0x4;
         private const uint KOTOR_OFFSET_LOADBAR = 0x278;
         private const uint KOTOR_OFFSET_LAST_TARGET = 0x2B4;
+        private const uint KOTOR_OFFSET_MODULE = 0x18;
+        private const uint KOTOR_OFFSET_AREA = 0x48;
+        private const uint KOTOR_OFFSET_FACTION_MANAGER = 0x10054;
+
 
 
         private static IntPtr KOTOR_1_APPMANAGER = (IntPtr)0x007a39fc;
@@ -263,6 +267,17 @@ namespace KotorMessageInjector
             WriteProcessMemory(processHandle, (IntPtr)(serverInternal + KOTOR_OFFSET_SERVER_DEBUG_MODE), inBytes, 4, out outPtr);
         }
 
+        public static uint getFactionManager(IntPtr processHandle)
+        {
+            byte[] outBytes = new byte[4];
+            UIntPtr outPtr;
+
+            uint serverInternal = getServerInternal(processHandle);
+
+            ReadProcessMemory(processHandle, (IntPtr)(serverInternal + KOTOR_OFFSET_FACTION_MANAGER), outBytes, 4, out outPtr);
+            return BitConverter.ToUInt32(outBytes, 0);
+        }
+
         public static uint getPlayerClientID(IntPtr processHandle)
         {
             byte[] outBytes = new byte[4];
@@ -320,8 +335,7 @@ namespace KotorMessageInjector
 
             uint clientInternal = getClientInternal(processHandle);
 
-            // TODO: convert offset to constant
-            ReadProcessMemory(processHandle, (IntPtr)(clientInternal + 0x18), outBytes, 4, out outPtr);
+            ReadProcessMemory(processHandle, (IntPtr)(clientInternal + KOTOR_OFFSET_MODULE), outBytes, 4, out outPtr);
             return BitConverter.ToUInt32(outBytes, 0);
         }
 
@@ -332,8 +346,7 @@ namespace KotorMessageInjector
 
             uint module = getClientModule(processHandle);
 
-            // TODO: convert offset to constant
-            ReadProcessMemory(processHandle, (IntPtr)(module + 0x48), outBytes, 4, out outPtr);
+            ReadProcessMemory(processHandle, (IntPtr)(module + KOTOR_OFFSET_AREA), outBytes, 4, out outPtr);
             return BitConverter.ToUInt32(outBytes, 0);
         }
 
