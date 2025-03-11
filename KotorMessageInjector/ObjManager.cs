@@ -67,5 +67,33 @@ namespace KotorMessageInjector
             return dataPointer;
         }
 
+        public uint createCResRef(string s)
+        {
+            uint dataPointer = (uint)remoteIndex;
+
+            List<byte> data = new List<byte>();
+            // 16 character resource reference
+            for (int i = 0; i < 16; i++)
+            {
+                if (i >= s.Length)
+                {
+                    data.Add(0x0);
+                }
+                else
+                {
+                    data.Add((byte)s[i]);
+                }
+            }
+
+            remoteSize += (uint)data.Count;
+            checkForOverflow();
+
+            UIntPtr bytesWritten;
+            WriteProcessMemory(processHandle, remoteIndex, data.ToArray(), (uint)data.Count, out bytesWritten);
+            remoteIndex += data.Count;
+
+            return dataPointer;
+        }
+
     }
 }

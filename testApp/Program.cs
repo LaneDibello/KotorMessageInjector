@@ -135,12 +135,14 @@ namespace testApp
 
             //i.sendMessage(msg);
 
+            ////Get Pointer to Object looking at
             //RemoteFunction rf = new RemoteFunction(0x004b1700);
             //rf.setThis(getServerInternal(pHandle));
             //rf.addParam(lookingAtServerId);
             //uint retval = i.runFunction(rf);
             //Console.WriteLine($"Returned: {retval}");
 
+            ////Adds the rancor to your available parety members in slot 4
             //ObjManager om = new(pHandle);
             //RemoteFunction rf = new RemoteFunction(0x005645f0);
             //rf.setThis(partyTable);
@@ -149,8 +151,49 @@ namespace testApp
             //uint retval = i.runFunction(rf);
             //Console.WriteLine($"Returned: {retval}");
 
+            spawnCreature(pHandle, "g_rancor01", 112.5f, 97.5f, 0.0f);
 
             //Console.ReadKey();
+        }
+
+        static void spawnCreature(IntPtr pHandle, string resref, float x, float y, float z)
+        {
+            Injector i = new Injector(pHandle);
+            
+            ObjManager om = new(pHandle);
+            RemoteFunction rf_new = new RemoteFunction(0x006fa7e6); // Operator New
+            rf_new.addParam(0xac8);
+            uint creatureBuffer = i.runFunction(rf_new);
+
+            RemoteFunction rf_serverCreature = new RemoteFunction(0x004f7a10); // CSWSCreature
+            rf_serverCreature.setThis(creatureBuffer);
+            rf_serverCreature.addParam((uint)0x7f000000);
+            rf_serverCreature.addParam(0);
+            creatureBuffer = i.runFunction(rf_serverCreature);
+
+            RemoteFunction rf_loadTemplate = new RemoteFunction(0x005026d0); // LoadFromTemplate
+            rf_loadTemplate.setThis(creatureBuffer);
+            rf_loadTemplate.addParam(om.createCResRef(resref));
+            rf_loadTemplate.addParam(0);
+            uint result = i.runFunction(rf_loadTemplate);
+
+            RemoteFunction rf_module = new RemoteFunction(0x004b14f0); // GetModule
+            rf_module.setThis(getServerInternal(pHandle));
+            uint module = i.runFunction(rf_module);
+
+            RemoteFunction rf_area = new RemoteFunction(0x004c30f0); // GetArea
+            rf_area.setThis(module);
+            uint area = i.runFunction(rf_area);
+
+            RemoteFunction rf_addToArea = new RemoteFunction(0x004fa100, false); // AddToArea
+            rf_addToArea.setThis(creatureBuffer);
+            rf_addToArea.addParam(area);
+            rf_addToArea.addParam(x);
+            rf_addToArea.addParam(y);
+            rf_addToArea.addParam(z);
+            rf_addToArea.addParam(1);
+            rf_addToArea.addParam(1);
+            i.runFunction(rf_addToArea);
         }
     }
 }
