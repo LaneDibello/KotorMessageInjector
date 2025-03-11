@@ -6,7 +6,7 @@ namespace KotorMessageInjector
 {
     class Shellcode
     {
-        protected List<byte> shellcode;
+        protected List<byte> shellcode = new List<byte>();
 
         // Move immediate values into registers
         protected void movEAX4Bytes(uint value)
@@ -309,7 +309,7 @@ namespace KotorMessageInjector
         // Control flow
         protected void callEAX()
         {
-            shellcode.Add(0x0f); // Call Register
+            shellcode.Add(0xff); // Call Register
             shellcode.Add(0xD0); // EAX
         }
 

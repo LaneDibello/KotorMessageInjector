@@ -84,5 +84,44 @@ namespace KotorMessageInjector
             CloseHandle(thread);
         }
 
+        public uint runFunction(RemoteFunction func)
+        {
+            // Build Function Call
+            RunFunctionShellcode shellcode = new RunFunctionShellcode(func.functionAddress);
+            shellcode.setECX(func.thisPointer);
+            if (func.shouldReturn)
+            {
+                shellcode.setReturnStorage(remoteMessageData);
+            }
+            foreach (var (param, size) in func.parameters)
+            {
+                shellcode.addParam(param, size);
+            }
+            UIntPtr bytesWritten;
+            byte[] code = shellcode.generateShellcode();
+            WriteProcessMemory(processHandle, remoteShellcode, code, (uint)code.Length, out bytesWritten);
+
+            // Run Thread
+            uint threadId;
+            IntPtr thread = CreateRemoteThread(processHandle, (IntPtr)0, 0, remoteShellcode, (IntPtr)0, 0, out threadId);
+
+            //Wait for thread to finish
+            WaitForSingleObject(thread, INFINITE);
+
+            //Clean up
+            CloseHandle(thread);
+
+            // Return
+            if (func.shouldReturn)
+            {
+                byte[] outBytes = new byte[4];
+                UIntPtr bytesRead;
+                ReadProcessMemory(processHandle, remoteMessageData, outBytes, 4, out bytesRead);
+                return BitConverter.ToUInt32(outBytes, 0);
+            }
+
+            return 0;
+        }
+
     }
 }

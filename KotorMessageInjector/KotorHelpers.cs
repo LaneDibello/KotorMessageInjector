@@ -116,7 +116,7 @@ namespace KotorMessageInjector
             WriteProcessMemory(processHandle, KOTOR_1_DEACTIVATE_RENDER_WINDOW, new byte[] { 0xc3 }, 1, out outPtr);
         }
         
-        private static uint getClientInternal(IntPtr processHandle)
+        public static uint getClientInternal(IntPtr processHandle)
         {
             byte[] outBytes = new byte[4];
             UIntPtr outPtr;
@@ -133,7 +133,7 @@ namespace KotorMessageInjector
             return BitConverter.ToUInt32(outBytes, 0);
         }
 
-        private static uint getServerInternal(IntPtr processHandle)
+        public static uint getServerInternal(IntPtr processHandle)
         {
             byte[] outBytes = new byte[4];
             UIntPtr outPtr;
@@ -150,6 +150,25 @@ namespace KotorMessageInjector
             return BitConverter.ToUInt32(outBytes, 0);
         }
 
+        public static uint getServerPartyTable(IntPtr processHandle)
+        {
+            byte[] outBytes = new byte[4];
+            UIntPtr outPtr;
+
+            // TODO: convert offset to constant
+            return getServerInternal(processHandle) + 0x1b770;
+        }
+
+        public static void setNPCAvail(IntPtr processHandle, int id)
+        {
+            byte[] inBytes = new byte[4] { 0x1, 0x0, 0x0, 0x0};
+            UIntPtr outPtr;
+
+            uint partyTable = getServerPartyTable(processHandle);
+
+            // TODO: convert offset to constant
+            WriteProcessMemory(processHandle, (IntPtr)(partyTable + 0x30 + (4 * id)), inBytes, 4, out outPtr);
+        }
 
         public static void setServerDebugMode(bool debugOn, IntPtr processHandle)
         {

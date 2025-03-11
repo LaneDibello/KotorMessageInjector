@@ -1,4 +1,5 @@
 ﻿using KotorMessageInjector;
+using System.Runtime.Serialization;
 using static KotorMessageInjector.KotorHelpers;
 using static KotorMessageInjector.Message;
 
@@ -9,7 +10,7 @@ namespace testApp
     {
         static void Main(string[] args)
         {
-            IntPtr pHandle = ProcessAPI.OpenProcessByName("swkotor2.exe");
+            IntPtr pHandle = ProcessAPI.OpenProcessByName("swkotor.exe");
 
             uint size = ProcessAPI.GetModuleSize(pHandle);
             Console.WriteLine($"Module Size = {size}");
@@ -24,6 +25,7 @@ namespace testApp
             uint playerClientId = getPlayerClientID(pHandle);
             uint lookingAtServerId = getLookingAtServerID(pHandle);
             uint lookingAtClientId = getLookingAtClientID(pHandle);
+            uint partyTable = getServerPartyTable(pHandle);
 
             ////Game keeps running even when you click out
             //disableClickOutPausing(pHandle);
@@ -36,8 +38,8 @@ namespace testApp
             //msg.writeByte(GAME_OBJECT_TYPES.CREATURE);
             //msg.writeUint(playerClientId);
             //msg.writeUint(CLIENT_OBJECT_UPDATE_FLAGS.POSITION);
-            //msg.writeFloat(30f);
-            //msg.writeFloat(-38f);
+            //msg.writeFloat(0f);
+            //msg.writeFloat(0f);
             //msg.writeFloat(0.0f);
 
             ////Swap / Recruit Creatures
@@ -103,17 +105,50 @@ namespace testApp
             //// Disable Level Up temporarily
             //msg = new Message(PlayerMessageTypes.LEVEL_UP, 1, false);
 
-            // Free Cam
-            // You can adjust the speed of the camera with the float at 0x007455c8
-            msg = new Message(PlayerMessageTypes.CAMERA, 2, false);
-            msg.writeByte(7); // Mode 7 is Free Cam
+            //// Free Cam
+            //// You can adjust the speed of the camera with the float at 0x007455c8
+            //msg = new Message(PlayerMessageTypes.CAMERA, 2, false);
+            //msg.writeByte(7); // Mode 7 is Free Cam
 
+            //msg = new Message(PlayerMessageTypes.GAME_OBJ_UPDATE, 1);
+            //msg.writeByte(0x43); // Summon Creature
+            //msg.writeUint(0x7f000000); //New Creature ID?
+            //msg.writeVector(0f, 0f, 0f); // Spawn position?
+            //msg.writeCExoString("c_kinrath");
 
-            Console.WriteLine($"Sending Message:\n{msg}");
+            //msg = new Message(PlayerMessageTypes.GAME_OBJ_UPDATE, 1, false);
+            //msg.writeByte(0x41); // Add Object
+            //msg.writeByte(GAME_OBJECT_TYPES.CREATURE);
+            //msg.writeUint(serverToClientId(211));
+            //msg.writeByte(0);
+            //msg.writeFloat(107f);
+            //msg.writeFloat(125f);
+            //msg.writeFloat(0f);
+            //msg.writeFloat(0f);
+            //msg.writeFloat(0f);
+            //msg.writeFloat(0f);
+            //msg.writeUshort(0);
+
+            //Console.WriteLine($"Sending Message:\n{msg}");
 
             //Thread.Sleep(2000);
 
-            i.sendMessage(msg);
+            //i.sendMessage(msg);
+
+            //RemoteFunction rf = new RemoteFunction(0x004b1700);
+            //rf.setThis(getServerInternal(pHandle));
+            //rf.addParam(lookingAtServerId);
+            //uint retval = i.runFunction(rf);
+            //Console.WriteLine($"Returned: {retval}");
+
+            //ObjManager om = new(pHandle);
+            //RemoteFunction rf = new RemoteFunction(0x005645f0);
+            //rf.setThis(partyTable);
+            //rf.addParam((uint)4);
+            //rf.addParam(om.createCExoString("g_rancor01"));
+            //uint retval = i.runFunction(rf);
+            //Console.WriteLine($"Returned: {retval}");
+
 
             //Console.ReadKey();
         }

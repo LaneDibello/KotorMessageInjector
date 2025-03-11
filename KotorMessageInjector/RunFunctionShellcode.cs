@@ -32,7 +32,7 @@ namespace KotorMessageInjector
 
             // Push parameters onto the stack
             uint paramCount = (uint)parameters.Count;
-            for (int i = 0; i < parameters.Count; i++)
+            for (int i = 0; i < paramCount; i++)
             {
                 paramEntry pe = parameters.Pop();
                 if (pe.size == 4)
@@ -83,6 +83,7 @@ namespace KotorMessageInjector
         public RunFunctionShellcode(uint function)
         {
             functionAdress = function;
+            parameters = new Stack<paramEntry>();
         }
 
         public void setECX(uint ecx)
@@ -95,38 +96,11 @@ namespace KotorMessageInjector
             returnStorage = (uint)address;
         }
 
-        public void addParam(uint param)
+        public void addParam(uint param, uint size)
         {
             paramEntry pe;
             pe.param = param;
-            pe.size = 4;
-
-            parameters.Push(pe);
-        }
-
-        public void addParam(float param)
-        {
-            paramEntry pe;
-            pe.param = BitConverter.ToUInt32(BitConverter.GetBytes(param), 0);
-            pe.size = 4;
-
-            parameters.Push(pe);
-        }
-
-        public void addParam(ushort param)
-        {
-            paramEntry pe;
-            pe.param = param;
-            pe.size = 2;
-
-            parameters.Push(pe);
-        }
-
-        public void addParam(byte param)
-        {
-            paramEntry pe;
-            pe.param = param;
-            pe.size = 1;
+            pe.size = size;
 
             parameters.Push(pe);
         }
