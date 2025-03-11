@@ -10,7 +10,7 @@ namespace testApp
     {
         static void Main(string[] args)
         {
-            IntPtr pHandle = ProcessAPI.OpenProcessByName("swkotor2.exe");
+            IntPtr pHandle = ProcessAPI.OpenProcessByName("swkotor.exe");
 
             uint size = ProcessAPI.GetModuleSize(pHandle);
             Console.WriteLine($"Module Size = {size}");
@@ -105,10 +105,10 @@ namespace testApp
             //// Disable Level Up temporarily
             //msg = new Message(PlayerMessageTypes.LEVEL_UP, 1, false);
 
-            // Free Cam
-            // You can adjust the speed of the camera with the float at 0x007455c8
-            msg = new Message(PlayerMessageTypes.CAMERA, 2, false);
-            msg.writeByte(7); // Mode 7 is Free Cam
+            //// Free Cam
+            //// You can adjust the speed of the camera with the float at 0x007455c8
+            //msg = new Message(PlayerMessageTypes.CAMERA, 2, false);
+            //msg.writeByte(7); // Mode 7 is Free Cam
 
             //msg = new Message(PlayerMessageTypes.GAME_OBJ_UPDATE, 1);
             //msg.writeByte(0x43); // Summon Creature
@@ -129,11 +129,11 @@ namespace testApp
             //msg.writeFloat(0f);
             //msg.writeUshort(0);
 
-            Console.WriteLine($"Sending Message:\n{msg}");
+            //Console.WriteLine($"Sending Message:\n{msg}");
 
             //Thread.Sleep(2000);
 
-            i.sendMessage(msg);
+            //i.sendMessage(msg);
 
             ////Get Pointer to Object looking at
             //RemoteFunction rf = new RemoteFunction(0x004b1700);
@@ -152,6 +152,18 @@ namespace testApp
             //Console.WriteLine($"Returned: {retval}");
 
             //spawnCreature(pHandle, "g_rancor01", 112.5f, 97.5f, 0.0f);
+
+            //// Kotor 1 Warp to module
+            //ObjManager om = new(pHandle);
+            //uint server = getServer(pHandle);
+            //RemoteFunction rf = new RemoteFunction(0x004aecd0, false); //SetMoveToModuleString
+            //rf.setThis(server);
+            //rf.addParam(om.createCExoString("danm13"));
+            //i.runFunction(rf);
+            //rf = new RemoteFunction(0x004aecc0, false); //SetMoveToModulePending
+            //rf.setThis(server);
+            //rf.addParam(1);
+            //i.runFunction(rf);
 
             //Console.ReadKey();
         }

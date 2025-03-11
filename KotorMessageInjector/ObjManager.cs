@@ -95,5 +95,23 @@ namespace KotorMessageInjector
             return dataPointer;
         }
 
+        public uint createCStr(string s)
+        {
+            uint dataPointer = (uint)remoteIndex;
+
+            List<byte> data = new List<byte>();
+            data.AddRange(Encoding.ASCII.GetBytes(s));
+            data.Add(0); //null terminator
+
+            remoteSize += (uint)data.Count;
+            checkForOverflow();
+
+            UIntPtr bytesWritten;
+            WriteProcessMemory(processHandle, remoteIndex, data.ToArray(), (uint)data.Count, out bytesWritten);
+            remoteIndex += data.Count;
+
+            return dataPointer;
+        }
+
     }
 }
