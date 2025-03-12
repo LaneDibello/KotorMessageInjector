@@ -1,6 +1,7 @@
 ﻿using KotorMessageInjector;
 using static KotorMessageInjector.Message;
 using static KotorMessageInjector.KotorHelpers;
+using static System.Formats.Asn1.AsnWriter;
 
 namespace testApp
 {
@@ -242,6 +243,73 @@ namespace testApp
             rf_addMember.addParam(target);
             rf_addMember.addParam(0);
             i.runFunction(rf_addMember);
+        }
+
+        public static uint drawModel
+        (
+            IntPtr pHandle,
+            string model,
+            float scale,
+            float x, float y, float z
+            //float r = 0f, float g = 0f, float b = 0f
+        )
+        {
+            ObjManager om = new ObjManager(pHandle);
+            uint scene = getCurrentScene(pHandle);
+
+            Injector i = new Injector(pHandle);
+
+            Dictionary<string, uint> funcLibrary = getFunctionLibrary(pHandle);
+
+            RemoteFunction rf = new RemoteFunction(funcLibrary["NewCAurObject"]);
+            rf.addParam(om.createCStr(model));
+            rf.addParam(om.createCStr(""));
+            rf.addParam(0);
+            rf.addParam(0);
+            uint gob = i.runFunction(rf);
+
+            rf = new RemoteFunction(funcLibrary["Gob::SetPosition"], false);
+            rf.setThis(gob);
+            rf.addParam(om.createVector(0, 0, 0));
+            rf.addParam(x);
+            rf.addParam(y);
+            rf.addParam(z);
+            i.runFunction(rf);
+
+            //rf = new RemoteFunction(funcLibrary["Gob::SetColorShifting"], false);
+            //rf.setThis(gob);
+            //rf.addParam(r);
+            //rf.addParam(g);
+            //rf.addParam(b);
+            //rf.addParam(1f);
+            //rf.addParam(0);
+            //i.runFunction(rf);
+
+            rf = new RemoteFunction(funcLibrary["Gob::TurnOffShadows"], false);
+            rf.setThis(gob);
+            i.runFunction(rf);
+
+            //rf = new RemoteFunction(funcLibrary["Gob::SetIllumination"], false);
+            //rf.setThis(gob);
+            //rf.addParam(r);
+            //rf.addParam(g);
+            //rf.addParam(b);
+            //rf.addParam(0);
+            //i.runFunction(rf);
+
+            rf = new RemoteFunction(funcLibrary["Gob::SetObjectScale"], false);
+            rf.setThis(gob);
+            rf.addParam(scale);
+            rf.addParam(false);
+            i.runFunction(rf);
+
+            rf = new RemoteFunction(funcLibrary["Gob::AttachToScene"], false);
+            rf.setThis(gob);
+            rf.addParam(scene);
+            i.runFunction(rf);
+
+
+            return gob;
         }
 
         #endregion

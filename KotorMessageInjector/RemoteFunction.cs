@@ -55,7 +55,7 @@ namespace KotorMessageInjector
         }
         public void addParam(bool value)
         {
-            parameters.Add((ToUInt32(GetBytes(value), 0), 4));
+            parameters.Add((ToUInt32(GetBytes(value ? 1 : 0), 0), 4));
         }
         public void addParam(short value)
         {

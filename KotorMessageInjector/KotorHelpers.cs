@@ -21,7 +21,7 @@ namespace KotorMessageInjector
         private const uint KOTOR_OFFSET_MODULE = 0x18;
         private const uint KOTOR_OFFSET_AREA = 0x48;
         private const uint KOTOR_OFFSET_FACTION_MANAGER = 0x10054;
-
+        private const uint KOTOR_OFFSET_SCENE = 0x184;
 
 
         private static IntPtr KOTOR_1_APPMANAGER = (IntPtr)0x007a39fc;
@@ -30,6 +30,7 @@ namespace KotorMessageInjector
         private const uint KOTOR_1_STEAM_MODULE_SIZE = 4993024;
         private const uint KOTOR_1_LOAD_DIRECTION = 0xc8;
         private const uint KOTOR_1_OFFSET_PARTY_TABLE = 0x1b770;
+        private const uint KOTOR_1_CURRENT_SCENE = 0x007b92a0;
 
         private static IntPtr KOTOR_2_APPMANAGER = (IntPtr)0x00a11c04;
         private static IntPtr KOTOR_2_STEAM_APPMANAGER = (IntPtr)0x00a1b4a4;
@@ -168,6 +169,19 @@ namespace KotorMessageInjector
             return getGameVersion(processHandle, out isSteam);
         }
 
+        public static uint getCurrentScene(IntPtr processHandle)
+        {
+            byte[] outBytes = new byte[4];
+            UIntPtr outPtr;
+
+            bool isSteam;
+            int version = getGameVersion(processHandle, out isSteam);
+
+            uint area = getClientArea(processHandle);
+
+            ReadProcessMemory(processHandle, (IntPtr)(area + KOTOR_OFFSET_SCENE), outBytes, 4, out outPtr);
+            return BitConverter.ToUInt32(outBytes, 0);
+        }
 
         public static void disableClickOutPausing(IntPtr processHandle)
         {

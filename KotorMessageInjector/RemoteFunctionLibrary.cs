@@ -18,7 +18,20 @@ namespace KotorMessageInjector
             {"CServerExoApp::SetMoveToModuleString", 0x004aecd0},
             {"CServerExoApp::SetMoveToModulePending", 0x004aecc0},
             {"CFactionManager::GetFaction", 0x0052b3b0},
-            {"CSWSFaction::AddMember", 0x005bfa70}
+            {"CSWSFaction::AddMember", 0x005bfa70},
+
+            {"NewCAurObject", 0x00449cc0},
+            {"Scene::AddObject", 0x00458bd0},
+            {"Gob::SetPosition", 0x0043f0c0},
+            {"Gob::SetScene", 0x0043f200},
+            {"Gob::AttachToScene", 0x0044f7c0},
+
+            {"Gob::SetColorShifting", 0x0043ee50},
+            {"Gob::EnableAlwaysRender", 0x0043e860},
+            {"Gob::SetObjectScale", 0x00444d90},
+            {"Gob::ReplaceTexture", 0x00446520},
+            {"Gob::TurnOffShadows", 0x00449a50},
+            {"Gob::SetIllumination", 0x0043eea0},
 
         };
 

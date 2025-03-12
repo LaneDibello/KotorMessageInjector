@@ -113,5 +113,24 @@ namespace KotorMessageInjector
             return dataPointer;
         }
 
+        public uint createVector(float x, float y, float z)
+        {
+            uint dataPointer = (uint)remoteIndex;
+
+            List<byte> data = new List<byte>();
+            data.AddRange(GetBytes(x));
+            data.AddRange(GetBytes(y));
+            data.AddRange(GetBytes(z));
+
+            remoteSize += (uint)data.Count;
+            checkForOverflow();
+
+            UIntPtr bytesWritten;
+            WriteProcessMemory(processHandle, remoteIndex, data.ToArray(), (uint)data.Count, out bytesWritten);
+            remoteIndex += data.Count;
+
+            return dataPointer;
+        }
+
     }
 }

@@ -46,7 +46,24 @@ namespace testApp
 
             //Examples.warp(pHandle, "301NAR");
 
-            Examples.changeFaction(pHandle, lookingAtServerId, 1);
+            //Examples.changeFaction(pHandle, lookingAtServerId, 1);
+
+
+
+            //Good candidates:
+            // gi_waypoint01 - 04
+            // fx_flame01
+            // gi_sound_pos
+            // plc_marker
+            // or_cone01
+            // plc_sign
+
+            Examples.drawModel
+            (
+                pHandle, "gi_waypoint02", 2f, 
+                112.5f, 154.0f, 0f
+            );
+
 
             //Console.ReadKey();
         }
