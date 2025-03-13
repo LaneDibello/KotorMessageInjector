@@ -320,5 +320,20 @@ namespace KotorMessageInjector
             IntPtr hModule,
             out MODULEINFO lpmodinfo,
             uint cb);
+
+        /// <summary>
+        /// Retrieves the calling thread's last-error code value.
+        /// </summary>
+        /// <returns>The return value is the calling thread's last-error code.</returns>
+        [DllImport("kernel32.dll", SetLastError = true)]
+        public static extern uint GetLastError();
+
+        [DllImport("kernel32.dll", SetLastError = true)]
+        public static extern bool VirtualProtectEx(
+            IntPtr hProcess,
+            IntPtr lpAddress,
+            uint dwSize,
+            uint flNewProtect,
+            out uint lpflOldProtect);
     }
 }
