@@ -48,7 +48,13 @@ namespace testApp
 
             //Examples.changeFaction(pHandle, lookingAtServerId, 1);
 
-
+            // DLZ Marker Example
+            uint gob = Examples.drawModel
+            (
+                pHandle, "gi_sound_pos", 0.1f,
+                114.890533f, 122.25f, 0f
+            );
+            Examples.colorizeModel(pHandle, gob, 1f, 1f, 1f);
 
             //Good candidates:
             // gi_waypoint01 - 04
@@ -58,11 +64,80 @@ namespace testApp
             // or_cone01
             // plc_sign
 
-            Examples.drawModel
-            (
-                pHandle, "gi_waypoint02", 2f, 
-                112.5f, 154.0f, 0f
-            );
+            //string model = "plc_marker";
+            //float scale = 10.0f;
+
+            //uint gob = Examples.drawModel
+            //(
+            //    pHandle, model, scale, 
+            //    112.5f, 154.0f, 0f
+            //);
+
+            //Examples.colorizeModel(pHandle, gob, 1f, 0f, 0f);
+
+            //gob = Examples.drawModel
+            //(
+            //    pHandle, model, scale,
+            //    112.5f, 159.0f, 0f
+            //);
+
+            //Examples.colorizeModel(pHandle, gob, 0f, 1f, 0f);
+
+            //gob = Examples.drawModel
+            //(
+            //    pHandle, model, scale,
+            //    112.5f, 164.0f, 0f
+            //);
+
+            //Examples.colorizeModel(pHandle, gob, 0f, 0f, 1f);
+
+            //gob = Examples.drawModel
+            //(
+            //    pHandle, model, scale,
+            //    112.5f, 169.0f, 0f
+            //);
+
+            //Examples.colorizeModel(pHandle, gob, 0f, 0f, 0f);
+
+            //gob = Examples.drawModel
+            //(
+            //    pHandle, model, scale,
+            //    112.5f, 174.0f, 0f
+            //);
+
+            //Examples.colorizeModel(pHandle, gob, 1f, 1f, 1f);
+
+            //gob = Examples.drawModel
+            //(
+            //    pHandle, model, scale,
+            //    112.5f, 179.0f, 0f
+            //);
+
+            //Examples.colorizeModel(pHandle, gob, 0.25f, 0.25f, 0.25f);
+
+            //gob = Examples.drawModel
+            //(
+            //    pHandle, model, scale,
+            //    112.5f, 184.0f, 0f
+            //);
+
+            //Examples.colorizeModel(pHandle, gob, 1f, 1f, 0f);
+
+            //gob = Examples.drawModel
+            //(
+            //    pHandle, model, scale,
+            //    112.5f, 189.0f, 0f
+            //);
+
+            //Examples.colorizeModel(pHandle, gob, 0f, 1f, 1f);
+
+            //gob = Examples.drawModel
+            //(
+            //    pHandle, model, scale,
+            //    112.5f, 194.0f, 0f
+            //);
+
+            //Examples.colorizeModel(pHandle, gob, 1f, 0f, 1f);
 
 
             //Console.ReadKey();

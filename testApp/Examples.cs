@@ -251,7 +251,6 @@ namespace testApp
             string model,
             float scale,
             float x, float y, float z
-            //float r = 0f, float g = 0f, float b = 0f
         )
         {
             ObjManager om = new ObjManager(pHandle);
@@ -276,26 +275,9 @@ namespace testApp
             rf.addParam(z);
             i.runFunction(rf);
 
-            //rf = new RemoteFunction(funcLibrary["Gob::SetColorShifting"], false);
-            //rf.setThis(gob);
-            //rf.addParam(r);
-            //rf.addParam(g);
-            //rf.addParam(b);
-            //rf.addParam(1f);
-            //rf.addParam(0);
-            //i.runFunction(rf);
-
             rf = new RemoteFunction(funcLibrary["Gob::TurnOffShadows"], false);
             rf.setThis(gob);
             i.runFunction(rf);
-
-            //rf = new RemoteFunction(funcLibrary["Gob::SetIllumination"], false);
-            //rf.setThis(gob);
-            //rf.addParam(r);
-            //rf.addParam(g);
-            //rf.addParam(b);
-            //rf.addParam(0);
-            //i.runFunction(rf);
 
             rf = new RemoteFunction(funcLibrary["Gob::SetObjectScale"], false);
             rf.setThis(gob);
@@ -310,6 +292,42 @@ namespace testApp
 
 
             return gob;
+        }
+
+        public static (float, float, float) normalize(float x, float y, float z)
+        {
+            double magnitude = Math.Sqrt(x * x + y * y + z * z);
+            if (magnitude < 1) return (x, y, z);
+            float xOut = (float)(x / magnitude);
+            float yOut = (float)(y / magnitude);
+            float zOut = (float)(z / magnitude);
+            return (xOut, yOut, zOut);
+        }
+
+        public static void colorizeModel(IntPtr pHandle, uint gob, float r, float g, float b, float alpha = 1f)
+        {
+            Injector i = new Injector(pHandle);
+
+            Dictionary<string, uint> funcLibrary = getFunctionLibrary(pHandle);
+
+            (r, g, b) = normalize(r, g, b);
+
+            RemoteFunction rf = new RemoteFunction(funcLibrary["Gob::SetColorShifting"], false);
+            rf.setThis(gob);
+            rf.addParam(r);
+            rf.addParam(g);
+            rf.addParam(b);
+            rf.addParam(alpha);
+            rf.addParam(0);
+            i.runFunction(rf);
+
+            rf = new RemoteFunction(funcLibrary["Gob::SetIllumination"], false);
+            rf.setThis(gob);
+            rf.addParam(r);
+            rf.addParam(g);
+            rf.addParam(b);
+            rf.addParam(0);
+            i.runFunction(rf);
         }
 
         #endregion
