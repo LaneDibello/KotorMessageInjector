@@ -75,15 +75,11 @@ namespace KotorMessageInjector
             {"CSWSFaction::AddMember", 0x005bfa70},
 
             {"NewCAurObject", 0x00449cc0},
-            {"Scene::AddObject", 0x00458bd0},
             {"Gob::SetPosition", 0x0043f0c0},
-            {"Gob::SetScene", 0x0043f200},
+            {"Gob::SetOrientation", 0x0043f0f0},
             {"Gob::AttachToScene", 0x0044f7c0},
-
             {"Gob::SetColorShifting", 0x0043ee50},
-            {"Gob::EnableAlwaysRender", 0x0043e860},
             {"Gob::SetObjectScale", 0x00444d90},
-            {"Gob::ReplaceTexture", 0x00446520},
             {"Gob::TurnOffShadows", 0x00449a50},
             {"Gob::SetIllumination", 0x0043eea0},
         };
@@ -116,6 +112,15 @@ namespace KotorMessageInjector
             {"CServerExoApp::SetMoveToModulePending", 0x0064b870},
             {"CFactionManager::GetFaction", 0x007ef020},
             {"CSWSFaction::AddMember", 0x007e4850},
+
+            {"NewCAurObject", 0x008548b0},
+            {"Gob::SetPosition", 0x00853a20},
+            {"Gob::SetOrientation", 0x00853a70},
+            {"Gob::AttachToScene", 0x0085f680},
+            {"Gob::SetColorShifting", 0x0084ed30},
+            {"Gob::SetObjectScale", 0x00855830},
+            {"Gob::TurnOffShadows", 0x0084be30},
+            {"Gob::SetIllumination", 0x0084ed90},
         };
 
         public static Dictionary<Function, uint> k2SteamFunctions = new Dictionary<Function, uint>()
@@ -146,6 +151,15 @@ namespace KotorMessageInjector
             {"CServerExoApp::SetMoveToModulePending", 0x0051be50},
             {"CFactionManager::GetFaction", 0x00664490},
             {"CSWSFaction::AddMember", 0x006d3330},
+
+            {"NewCAurObject", 0x00462320},
+            {"Gob::SetPosition", 0x00461490},
+            {"Gob::SetOrientation", 0x004614e0},
+            {"Gob::AttachToScene", 0x0046d440},
+            {"Gob::SetColorShifting", 0x0045c750},
+            {"Gob::SetObjectScale", 0x00463340},
+            {"Gob::TurnOffShadows", 0x00459850},
+            {"Gob::SetIllumination", 0x0045c7b0},
         };
     }
 }

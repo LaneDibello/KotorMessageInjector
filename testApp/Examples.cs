@@ -250,7 +250,8 @@ namespace testApp
             IntPtr pHandle,
             string model,
             float scale,
-            float x, float y, float z
+            float x, float y, float z,
+            bool disableShadows = false
         )
         {
             ObjManager om = new ObjManager(pHandle);
@@ -275,9 +276,12 @@ namespace testApp
             rf.addParam(z);
             i.runFunction(rf);
 
-            rf = new RemoteFunction(funcLibrary["Gob::TurnOffShadows"], false);
-            rf.setThis(gob);
-            i.runFunction(rf);
+            if (disableShadows)
+            {
+                rf = new RemoteFunction(funcLibrary["Gob::TurnOffShadows"], false);
+                rf.setThis(gob);
+                i.runFunction(rf);
+            }
 
             rf = new RemoteFunction(funcLibrary["Gob::SetObjectScale"], false);
             rf.setThis(gob);
@@ -289,7 +293,6 @@ namespace testApp
             rf.setThis(gob);
             rf.addParam(scene);
             i.runFunction(rf);
-
 
             return gob;
         }
