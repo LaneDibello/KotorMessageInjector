@@ -33,45 +33,55 @@ namespace KotorMessageInjector
             return sb.ToString();
         }
 
-        public void setThis(uint value)
+        public RemoteFunction setThis(uint value)
         {
             thisPointer = value;
+            return this;
         }
-        public void addParam(int value)
+        public RemoteFunction addParam(int value)
         {
             parameters.Add((ToUInt32(GetBytes(value), 0), 4));
+            return this;
         }
-        public void addParam(uint value)
+        public RemoteFunction addParam(uint value)
         {
             parameters.Add((ToUInt32(GetBytes(value), 0), 4));
+            return this;
         }
-        public void addParam(float value)
+        public RemoteFunction addParam(float value)
         {
             parameters.Add((ToUInt32(GetBytes(value), 0), 4));
+            return this;
         }
-        public void addParam(IntPtr value)
+        public RemoteFunction addParam(IntPtr value)
         {
             parameters.Add((ToUInt32(GetBytes((uint)value), 0), 4));
+            return this;
         }
-        public void addParam(bool value)
+        public RemoteFunction addParam(bool value)
         {
             parameters.Add((ToUInt32(GetBytes(value ? 1 : 0), 0), 4));
+            return this;
         }
-        public void addParam(short value)
+        public RemoteFunction addParam(short value)
         {
             parameters.Add((ToUInt32(GetBytes(value), 0), 2));
+            return this;
         }
-        public void addParam(ushort value)
+        public RemoteFunction addParam(ushort value)
         {
             parameters.Add((ToUInt32(GetBytes(value), 0), 2));
+            return this;
         }
-        public void addParam(byte value)
+        public RemoteFunction addParam(byte value)
         {
             parameters.Add((ToUInt32(GetBytes(value), 0), 1));
+            return this;
         }
-        public void addParam(char value)
+        public RemoteFunction addParam(char value)
         {
             parameters.Add((ToUInt32(GetBytes(value), 0), 1));
+            return this;
         }
     }
 }

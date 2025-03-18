@@ -8,7 +8,7 @@ namespace KotorMessageInjector
         private const uint MESSAGE_SPACE = 0x400; // 1 kb
         private const uint SHELLCODE_SPACE = 0x100; // 256 b
 
-        private IntPtr processHandle;
+        internal IntPtr processHandle;
         private IntPtr remoteMessageData;
         private IntPtr remoteShellcode;
 
@@ -50,7 +50,7 @@ namespace KotorMessageInjector
         /// <summary>
         /// Necessary for freeing the remote memory, and preventing dangling handles
         /// </summary>
-        ~Injector() 
+        ~Injector()
         {
             VirtualFreeEx(processHandle, remoteMessageData, 0, MEM_RELEASE);
             VirtualFreeEx(processHandle, remoteShellcode, 0, MEM_RELEASE);
@@ -61,7 +61,7 @@ namespace KotorMessageInjector
         /// Constructs and sends a message to the attached KotOR Process
         /// </summary>
         /// <param name="msg">The message to be sent to the KotOR Message Handler</param>
-        public void sendMessage (Message msg)
+        public void sendMessage(Message msg)
         {
             // Resolve Game version
             bool isSteam;
