@@ -30,22 +30,22 @@ namespace testApp
             ////Game keeps running even when you click outs
             //disableClickOutPausing(pHandle);
 
-            Message msg;
+            //Message msg;
 
-            msg = Examples.freeCam();
+            //msg = Examples.freeCam();
 
-            Console.WriteLine($"Sending Message:\n{msg}");
+            //Console.WriteLine($"Sending Message:\n{msg}");
 
-            i.sendMessage(msg);
+            //i.sendMessage(msg);
 
-            IntPtr targetAddress = (IntPtr)0x00989ee0; // Kotor 2 steam
+            //IntPtr targetAddress = (IntPtr)0x00989ee0; // Kotor 2 steam
 
-            uint oldProtect;
-            ProcessAPI.VirtualProtectEx(pHandle, targetAddress, 8, ProcessAPI.PAGE_READWRITE, out oldProtect);
+            //uint oldProtect;
+            //ProcessAPI.VirtualProtectEx(pHandle, targetAddress, 8, ProcessAPI.PAGE_READWRITE, out oldProtect);
 
-            ProcessAPI.WriteProcessMemory(pHandle, targetAddress, BitConverter.GetBytes(100.0), 8, out UIntPtr _);
+            //ProcessAPI.WriteProcessMemory(pHandle, targetAddress, BitConverter.GetBytes(100.0), 8, out UIntPtr _);
 
-            ProcessAPI.VirtualProtectEx(pHandle, targetAddress, 8, oldProtect, out uint _);
+            //ProcessAPI.VirtualProtectEx(pHandle, targetAddress, 8, oldProtect, out uint _);
 
             //uint retval = Examples.addParty(pHandle, "c_hutt", 2);
             //Console.WriteLine($"Returned: {retval}");
@@ -148,8 +148,15 @@ namespace testApp
 
             //Examples.colorizeModel(pHandle, gob, 1f, 0f, 1f);
 
+            // Exchange DLZ Marker Example
+            uint gob = Examples.drawModel
+            (
+                pHandle, "gi_sound_pos", 1f,
+                -12.720751f, -19.1f, 0f
+            );
+            //Examples.colorizeModel(pHandle, gob, 1f, 1f, 1f);
 
-            Console.ReadKey();
+            //Console.ReadKey();
         }
     }
 }
