@@ -151,10 +151,10 @@ namespace testApp
             // Exchange DLZ Marker Example
             uint gob = Examples.drawModel
             (
-                pHandle, "gi_sound_pos", 1f,
-                -12.720751f, -19.1f, 0f
+                pHandle, "gi_sound_pos", 0.1f,
+                -12.720751f, -19.7f, 0f
             );
-            //Examples.colorizeModel(pHandle, gob, 1f, 1f, 1f);
+            Examples.colorizeModel(pHandle, gob, 1f, 0f, 0f);
 
             //Console.ReadKey();
         }

@@ -22,6 +22,7 @@ namespace KotorMessageInjector
 
             {"NewCAurObject", 0x00449cc0},
             {"Gob::SetPosition", 0x0043f0c0},
+            {"Gob::SetOrientation", 0x0043f0f0},
             {"Gob::AttachToScene", 0x0044f7c0},
             {"Gob::SetColorShifting", 0x0043ee50},
             {"Gob::SetObjectScale", 0x00444d90},
@@ -46,6 +47,7 @@ namespace KotorMessageInjector
 
             {"NewCAurObject", 0x008548b0},
             {"Gob::SetPosition", 0x00853a20},
+            {"Gob::SetOrientation", 0x00853a70},
             {"Gob::AttachToScene", 0x0085f680},
             {"Gob::SetColorShifting", 0x0084ed30},
             {"Gob::SetObjectScale", 0x00855830},
@@ -67,13 +69,14 @@ namespace KotorMessageInjector
             {"CFactionManager::GetFaction", 0x00664490},
             {"CSWSFaction::AddMember", 0x006d3330},
 
-            {"NewCAurObject", 0x00000000},
-            {"Gob::SetPosition", 0x00000000},
-            {"Gob::AttachToScene", 0x00000000},
-            {"Gob::SetColorShifting", 0x00000000},
-            {"Gob::SetObjectScale", 0x00000000},
-            {"Gob::TurnOffShadows", 0x00000000},
-            {"Gob::SetIllumination", 0x00000000},
+            {"NewCAurObject", 0x00462320},
+            {"Gob::SetPosition", 0x00461490},
+            {"Gob::SetOrientation", 0x004614e0},
+            {"Gob::AttachToScene", 0x0046d440},
+            {"Gob::SetColorShifting", 0x0045c750},
+            {"Gob::SetObjectScale", 0x00463340},
+            {"Gob::TurnOffShadows", 0x00459850},
+            {"Gob::SetIllumination", 0x0045c7b0},
         };
     }
 }
