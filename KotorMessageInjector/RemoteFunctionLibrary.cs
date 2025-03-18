@@ -23,11 +23,13 @@ namespace KotorMessageInjector
         Gob_SetIllumination,
         Gob_SetObjectScale,
         Gob_SetPosition,
+        Gob_SetOrientation,
         Gob_SetScene,
         Gob_TurnOffShadows,
         NewCAurObject,
         Operator_New,
         Scene_AddObject,
+        YawPitchRoll,
     }
 
     public static class RemoteFunctionLibrary
@@ -49,6 +51,7 @@ namespace KotorMessageInjector
             {Function.NewCAurObject, 0x00449cc0},
             {Function.Scene_AddObject, 0x00458bd0},
             {Function.Gob_SetPosition, 0x0043f0c0},
+            {Function.Gob_SetOrientation, 0x0043f0f0},
             {Function.Gob_SetScene, 0x0043f200},
             {Function.Gob_AttachToScene, 0x0044f7c0},
 
@@ -58,6 +61,8 @@ namespace KotorMessageInjector
             {Function.Gob_ReplaceTexture, 0x00446520},
             {Function.Gob_TurnOffShadows, 0x00449a50},
             {Function.Gob_SetIllumination, 0x0043eea0},
+
+            {Function.YawPitchRoll, 0x004acac0},
         };
 
         public static Dictionary<string, uint> kotor1Functions = new Dictionary<string, uint>()
@@ -97,6 +102,17 @@ namespace KotorMessageInjector
             {Function.CServerExoApp_SetMoveToModulePending, 0x0064b870},
             {Function.CFactionManager_GetFaction, 0x007ef020},
             {Function.CSWSFaction_AddMember, 0x007e4850},
+
+            {Function.NewCAurObject, 0x008548b0},
+            {Function.Gob_SetPosition, 0x00853a20},
+            {Function.Gob_SetOrientation, 0x00853a70},
+            {Function.Gob_AttachToScene, 0x0085f680},
+            {Function.Gob_SetColorShifting, 0x0084ed30},
+            {Function.Gob_SetObjectScale, 0x00855830},
+            {Function.Gob_TurnOffShadows, 0x0084be30},
+            {Function.Gob_SetIllumination, 0x0084ed90},
+
+            {Function.YawPitchRoll, 0x0080d4b0},
         };
 
         public static Dictionary<string, uint> kotor2Functions = new Dictionary<string, uint>()
@@ -136,6 +152,17 @@ namespace KotorMessageInjector
             {Function.CServerExoApp_SetMoveToModulePending, 0x0051be50},
             {Function.CFactionManager_GetFaction, 0x00664490},
             {Function.CSWSFaction_AddMember, 0x006d3330},
+
+            {Function.NewCAurObject, 0x00462320},
+            {Function.Gob_SetPosition, 0x00461490},
+            {Function.Gob_SetOrientation, 0x004614e0},
+            {Function.Gob_AttachToScene, 0x0046d440},
+            {Function.Gob_SetColorShifting, 0x0045c750},
+            {Function.Gob_SetObjectScale, 0x00463340},
+            {Function.Gob_TurnOffShadows, 0x00459850},
+            {Function.Gob_SetIllumination, 0x0045c7b0},
+
+            {Function.YawPitchRoll, 0x00515620},
         };
 
         public static Dictionary<string, uint> kotor2SteamFunctions = new Dictionary<string, uint>()

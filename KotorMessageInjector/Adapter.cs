@@ -236,6 +236,47 @@ namespace KotorMessageInjector
             return gob;
         }
 
+        public static void MoveModel(IntPtr pHandle, uint gob, float x, float y, float z)
+        {
+            var om = new ObjManager(pHandle);
+            var i = new Injector(pHandle);
+            var funcLibrary = getFuncLibrary(pHandle);
+
+            _ = i.runFunction(new RemoteFunction(funcLibrary[Function.Gob_SetPosition], false)
+                .setThis(gob)
+                .addParam(om.createVector(0, 0, 0))
+                .addParam(x)
+                .addParam(y)
+                .addParam(z));
+        }
+
+        // Takes a Yaw, Pitch, and Roll in Degrees. And Converts it to Quaternion Orientation
+        // Gob_SetOrientation could theorhetically also be used for skews if you feel like doing the math
+        public static void RotateModel(IntPtr pHandle, uint gob, float yaw, float pitch, float roll)
+        {
+            var om = new ObjManager(pHandle);
+            var i = new Injector(pHandle);
+            var funcLibrary = getFuncLibrary(pHandle);
+
+            uint orientation = om.createQuaternion(0, 0, 0, 0);
+
+            _ = i.runFunction(new RemoteFunction(funcLibrary[Function.YawPitchRoll], false)
+                .addParam(orientation)
+                .addParam(yaw)
+                .addParam(pitch)
+                .addParam(roll));
+
+            var (w, x, y, z) = readQuaternion(pHandle, (IntPtr)orientation);
+
+            _ = i.runFunction(new RemoteFunction(funcLibrary[Function.Gob_SetOrientation], false)
+                .setThis(gob)
+                .addParam(om.createQuaternion(0, 0, 0, 0))
+                .addParam(w)
+                .addParam(x)
+                .addParam(y)
+                .addParam(z));
+        }
+
         public static (float, float, float) Normalize(float x, float y, float z)
         {
             var magnitude = Math.Sqrt(x * x + y * y + z * z);
@@ -267,6 +308,16 @@ namespace KotorMessageInjector
                 .addParam(0));
         }
 
+        public static void DeleteModel(IntPtr pHandle, uint gob)
+        {
+            var i = new Injector(pHandle);
+            var funcLibrary = getFuncLibrary(pHandle);
+
+            _ = i.runFunction(new RemoteFunction(funcLibrary[Function.Gob_AttachToScene], false)
+                .setThis(gob)
+                .addParam(0));
+        }
+        
         #endregion
     }
 }

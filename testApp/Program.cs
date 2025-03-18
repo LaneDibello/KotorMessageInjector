@@ -156,7 +156,19 @@ namespace testApp
             );
             Examples.colorizeModel(pHandle, gob, 1f, 0f, 0f);
 
-            //Console.ReadKey();
+            //uint gob = Examples.drawModel
+            //(
+            //    pHandle, "gi_sound_pos", 1f,
+            //    112.5f, 154.0f, 0.5f
+            //);
+
+            //Examples.colorizeModel(pHandle, gob, 0f, 1f, 0f);
+
+            Adapter.RotateModel(pHandle, gob, 0.0f, 0.0f, 0.0f);
+
+            Console.ReadKey();
+
+            Examples.deleteModel(pHandle, gob);
         }
     }
 }

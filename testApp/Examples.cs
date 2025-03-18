@@ -297,6 +297,19 @@ namespace testApp
             return gob;
         }
 
+        public static void deleteModel(IntPtr pHandle, uint gob)
+        {
+            ObjManager om = new ObjManager(pHandle);
+
+            Injector i = new Injector(pHandle);
+
+            Dictionary<string, uint> funcLibrary = getFunctionLibrary(pHandle);
+
+            RemoteFunction rf = new RemoteFunction(funcLibrary["Gob::AttachToScene"], false);
+            rf.setThis(gob);
+            rf.addParam(0);
+            i.runFunction(rf);
+        }
         public static (float, float, float) normalize(float x, float y, float z)
         {
             double magnitude = Math.Sqrt(x * x + y * y + z * z);
