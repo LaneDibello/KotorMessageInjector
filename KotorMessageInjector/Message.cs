@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using static KotorMessageInjector.KotorHelpers;
 
 namespace KotorMessageInjector
 {
@@ -115,10 +116,10 @@ namespace KotorMessageInjector
         /// <param name="playerToServer">True if this Message source is PLAYER_TO_SERVER, false for SERVER_TO_PLAYER</param>
         public Message(PlayerMessageTypes type, byte subtype, bool playerToServer = true)
         {
-            raw = new List<byte>() { 
-                (byte)(playerToServer ? MessageSources.PLAYER_TO_SERVER : MessageSources.SERVER_TO_PLAYER), 
-                (byte)type, 
-                subtype 
+            raw = new List<byte>() {
+                (byte)(playerToServer ? MessageSources.PLAYER_TO_SERVER : MessageSources.SERVER_TO_PLAYER),
+                (byte)type,
+                subtype
             };
         }
         #endregion
@@ -209,8 +210,8 @@ namespace KotorMessageInjector
                 raw[2] = value;
             }
         }
-        public byte[] message 
-        { 
+        public byte[] message
+        {
             get
             {
                 return raw.ToArray();
@@ -228,40 +229,49 @@ namespace KotorMessageInjector
         #endregion
 
         #region message writing
-        public void writeByte(byte value)
+        public Message writeByte(GAME_OBJECT_TYPES value) => writeByte((byte)value);
+
+        public Message writeByte(byte value)
         {
             raw.Add(value);
+            return this;
         }
 
-        public void writeUint(uint value)
-        {
-            raw.Add((byte)(value & 0xFF));                 
-            raw.Add((byte)((value >> 8) & 0xFF));          
-            raw.Add((byte)((value >> 16) & 0xFF));         
-            raw.Add((byte)((value >> 24) & 0xFF));         
-        }
+        public Message writeUint(CLIENT_OBJECT_UPDATE_FLAGS value) => writeUint((uint)value);
 
-        public void writeInt(int value)
+        public Message writeUint(uint value)
         {
-            raw.Add((byte)(value & 0xFF));        
-            raw.Add((byte)((value >> 8) & 0xFF)); 
+            raw.Add((byte)(value & 0xFF));
+            raw.Add((byte)((value >> 8) & 0xFF));
             raw.Add((byte)((value >> 16) & 0xFF));
             raw.Add((byte)((value >> 24) & 0xFF));
+            return this;
         }
 
-        public void writeUshort(ushort value)
+        public Message writeInt(int value)
         {
-            raw.Add((byte)(value & 0xFF));       
+            raw.Add((byte)(value & 0xFF));
             raw.Add((byte)((value >> 8) & 0xFF));
+            raw.Add((byte)((value >> 16) & 0xFF));
+            raw.Add((byte)((value >> 24) & 0xFF));
+            return this;
         }
 
-        public void writeShort(short value)
+        public Message writeUshort(ushort value)
         {
-            raw.Add((byte)(value & 0xFF));       
+            raw.Add((byte)(value & 0xFF));
             raw.Add((byte)((value >> 8) & 0xFF));
+            return this;
         }
 
-        public void writeFloat(float value)
+        public Message writeShort(short value)
+        {
+            raw.Add((byte)(value & 0xFF));
+            raw.Add((byte)((value >> 8) & 0xFF));
+            return this;
+        }
+
+        public Message writeFloat(float value)
         {
             // Convert float to its binary representation
             byte[] bytes = BitConverter.GetBytes(value);
@@ -281,6 +291,8 @@ namespace KotorMessageInjector
                 raw.Add(bytes[1]);
                 raw.Add(bytes[0]);
             }
+
+            return this;
         }
         /// <summary>
         /// Writes 3 floats, x, y, z to the message contents
@@ -288,23 +300,25 @@ namespace KotorMessageInjector
         /// <param name="x"></param>
         /// <param name="y"></param>
         /// <param name="z"></param>
-        public void writeVector(float x, float y, float z)
+        public Message writeVector(float x, float y, float z)
         {
             writeFloat(x);
             writeFloat(y);
             writeFloat(z);
+            return this;
         }
 
-        public void writeBool(bool value)
+        public Message writeBool(bool value)
         {
             writeUint(value ? (byte)1 : (byte)0);
+            return this;
         }
 
         /// <summary>
         /// Write a Bioware Aurora Style Resource Reference to the message contents
         /// </summary>
         /// <param name="resref">A 16 character or less reference to some KotOR file/resource</param>
-        public void writeCResRef(string resref)
+        public Message writeCResRef(string resref)
         {
             // 16 character resource reference
             for (int i = 0; i < 16; i++)
@@ -318,41 +332,45 @@ namespace KotorMessageInjector
                     raw.Add((byte)resref[i]);
                 }
             }
+            return this;
         }
 
         /// <summary>
         /// Write a Bioware Aurora Style string to the message contents
         /// </summary>
         /// <param name="s">The string to be written</param>
-        public void writeCExoString(string s) 
+        public Message writeCExoString(string s)
         {
             writeInt(s.Length);
             for (int i = 0; i < s.Length; i++)
             {
                 writeByte((byte)s[i]);
             }
+            return this;
         }
 
         /// <summary>
         /// Write arbitrary bytes to message contents
         /// </summary>
         /// <param name="bytes">The bytes to be written</param>
-        public void writeVoid(byte[] bytes)
+        public Message writeVoid(byte[] bytes)
         {
             foreach (byte b in bytes)
             {
                 writeByte(b);
             }
+            return this;
         }
 
         /// <summary>
         /// Write a Bioware Aurora Style custom localized string to message contents
         /// </summary>
         /// <param name="s">The custom string to be written</param>
-        public void writeCExoLocString(string s)
+        public Message writeCExoLocString(string s)
         {
             writeBool(false); // isStrRef
             writeCExoString(s);
+            return this;
         }
 
         /// <summary>
@@ -360,11 +378,12 @@ namespace KotorMessageInjector
         /// </summary>
         /// <param name="strref">A numeral reference to a particular string on the TLK table</param>
         /// <param name="language">The language to use (0 for English)</param>
-        public void writeCExoLocString(uint strref, byte language = 0)
+        public Message writeCExoLocString(uint strref, byte language = 0)
         {
             writeBool(true); // isStrRef
             writeByte(language); // Language ID
             writeUint(strref);
+            return this;
         }
 
         #endregion

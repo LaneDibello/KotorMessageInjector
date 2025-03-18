@@ -25,7 +25,7 @@ namespace KotorMessageInjector
 
 
         private static IntPtr KOTOR_1_APPMANAGER = (IntPtr)0x007a39fc;
-        private static IntPtr KOTOR_1_DEACTIVATE_RENDER_WINDOW = (IntPtr)0x00401d90; 
+        private static IntPtr KOTOR_1_DEACTIVATE_RENDER_WINDOW = (IntPtr)0x00401d90;
         private const uint KOTOR_1_GOG_MODULE_SIZE = 4640768;
         private const uint KOTOR_1_STEAM_MODULE_SIZE = 4993024;
         private const uint KOTOR_1_LOAD_DIRECTION = 0xc8;
@@ -39,40 +39,41 @@ namespace KotorMessageInjector
         private const uint KOTOR_2_LOAD_DIRECTION = 0xd0;
         private const uint KOTOR_2_GOG_OFFSET_PARTY_TABLE = 0x1f0b4;
 
-        public static class CLIENT_OBJECT_UPDATE_FLAGS
+        [Flags]
+        public enum CLIENT_OBJECT_UPDATE_FLAGS : uint
         {
-            public const uint POSITION            = 0b00000000000000000000000000000001;
-            public const uint ORIENTATION         = 0b00000000000000000000000000000010;
-            public const uint ANIMATION           = 0b00000000000000000000000000000100;
-            public const uint VFX                 = 0b00000000000000000000000000001000;
-            public const uint OBJECT_INTERACTION  = 0b00000000000000000000000000010000; //Specific to Doors, Placeables, and Triggers
-            public const uint PORTRAIT            = 0b00000000000000000000000000100000;
+            POSITION            = 0b00000000000000000000000000000001,
+            ORIENTATION         = 0b00000000000000000000000000000010,
+            ANIMATION           = 0b00000000000000000000000000000100,
+            VFX                 = 0b00000000000000000000000000001000,
+            OBJECT_INTERACTION  = 0b00000000000000000000000000010000, //Specific to Doors, Placeables, and Triggers
+            PORTRAIT            = 0b00000000000000000000000000100000,
             // Below are specific to Creatures
             // TODO: Fill these out
 
         }
 
-        public static class GAME_OBJECT_TYPES
+        public enum GAME_OBJECT_TYPES : byte
         {
-            public const byte OBJECT_0 = 0;
-            public const byte OBJECT_1 = 1;
-            public const byte OBJECT_2 = 2;
-            public const byte MODULE = 3;
-            public const byte AREA = 4;
-            public const byte CREATURE = 5;
-            public const byte ITEM = 6;
-            public const byte TRIGGER = 7;
-            public const byte PROJECTILE = 8;
-            public const byte PLACEABLE = 9;
-            public const byte DOOR = 10;
-            public const byte AREAOFEFFECT = 11;
-            public const byte WAYPOINT = 12;
-            public const byte ENCOUNTER = 13;
-            public const byte STORE = 14;
-            public const byte OBJECT_f = 15;
-            public const byte SOUND = 16; 
+            OBJECT_0      = 0,
+            OBJECT_1      = 1,
+            OBJECT_2      = 2,
+            MODULE        = 3,
+            AREA          = 4,
+            CREATURE      = 5,
+            ITEM          = 6,
+            TRIGGER       = 7,
+            PROJECTILE    = 8,
+            PLACEABLE     = 9,
+            DOOR          = 10,
+            AREAOFEFFECT  = 11,
+            WAYPOINT      = 12,
+            ENCOUNTER     = 13,
+            STORE         = 14,
+            OBJECT_f      = 15,
+            SOUND         = 16,
         }
-        
+
         public static IntPtr getRunningKotor()
         {
             IntPtr pHandle = OpenProcessByName("swkotor.exe");
@@ -91,7 +92,7 @@ namespace KotorMessageInjector
 
             throw new KotorVersionNotFoundException($"Could not find a running instance of kotor");
         }
-        
+
         public static IntPtr getGameAppmanager(int gameVersion, bool isSteam)
         {
             if (gameVersion == 1)
@@ -113,6 +114,18 @@ namespace KotorMessageInjector
             {
                 throw new ArgumentException($"Cannot find App Manager for kotor version: {gameVersion}");
             }
+        }
+
+        public static Dictionary<Function, uint> getFuncLibrary(IntPtr processHandle)
+        {
+            var version = getGameVersion(processHandle, out bool isSteam);
+            return version == 1
+                ? RemoteFunctionLibrary.k1Functions
+                : version == 2
+                    ? isSteam
+                        ? RemoteFunctionLibrary.k2SteamFunctions
+                        : RemoteFunctionLibrary.k2Functions
+                    : throw new ArgumentException($"Cannot find App Manager for kotor version: {version}");
         }
 
         public static Dictionary<string, uint> getFunctionLibrary(IntPtr processHandle)
@@ -144,7 +157,7 @@ namespace KotorMessageInjector
         public static int getGameVersion(IntPtr processHandle, out bool isSteam)
         {
             uint moduleSize = GetModuleSize(processHandle);
-            switch(moduleSize)
+            switch (moduleSize)
             {
                 case KOTOR_1_GOG_MODULE_SIZE:
                     isSteam = false;
