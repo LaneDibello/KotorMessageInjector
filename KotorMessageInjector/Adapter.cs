@@ -230,6 +230,26 @@ namespace KotorMessageInjector
             return getClientObjectGob(pHandle, targetClientObject);
         }
 
+        public static uint GetPlayerClientObject(IntPtr pHandle)
+        {
+            var i = new Injector(pHandle);
+            var funcLibrary = getFuncLibrary(pHandle);
+
+            return i.runFunction(new RemoteFunction(funcLibrary[Function.CClientExoApp_GetGameObject])
+                .setThis(getClient(pHandle))
+                .addParam(getPlayerClientID(pHandle)));
+        }
+
+        public static uint GetPlayerServerObject(IntPtr pHandle)
+        {
+            var i = new Injector(pHandle);
+            var funcLibrary = getFuncLibrary(pHandle);
+
+            return i.runFunction(new RemoteFunction(funcLibrary[Function.CServerExoApp_GetGameObject])
+                .setThis(getServer(pHandle))
+                .addParam(getPlayerServerID(pHandle)));
+        }
+
         public static uint DrawModel(IntPtr pHandle, string model, float scale, float x, float y, float z)
         {
             var om = new ObjManager(pHandle);

@@ -23,7 +23,9 @@ namespace KotorMessageInjector
         private const uint KOTOR_OFFSET_FACTION_MANAGER = 0x10054;
         private const uint KOTOR_OFFSET_CLIENT_ANIM_BASE = 0x68;
         private const uint KOTOR_OFFSET_ANIM_BASE_GOB = 0xb8;
-
+        private const uint KOTOR_OFFSET_CREATURE_STATS = 0xa74;
+        private const uint KOTOR_OFFSET_CREATURE_STATS_WALKRATE = 0x19c;
+        private const uint KOTOR_OFFSET_CREATURE_STATS_RUNRATE = 0x198;
 
         private static IntPtr KOTOR_1_APPMANAGER = (IntPtr)0x007a39fc;
         private static IntPtr KOTOR_1_DEACTIVATE_RENDER_WINDOW = (IntPtr)0x00401d90;
@@ -404,6 +406,24 @@ namespace KotorMessageInjector
 
             ReadProcessMemory(processHandle, (IntPtr)(animBase + KOTOR_OFFSET_ANIM_BASE_GOB), outBytes, 4, out _);
             return BitConverter.ToUInt32(outBytes, 0);
+        }
+
+        public static uint getCreatureStats(IntPtr processHandle, uint serverCreature)
+        {
+            byte[] outBytes = new byte[4];
+
+            ReadProcessMemory(processHandle, (IntPtr)(serverCreature + KOTOR_OFFSET_CREATURE_STATS), outBytes, 4, out _);
+            return BitConverter.ToUInt32(outBytes, 0);
+        }
+
+        // Default runrate for PCs is 5.4
+        public static void setRunrate(IntPtr processHandle, uint serverCreature, float runrate)
+        {
+            byte[] inBytes = BitConverter.GetBytes(runrate);
+
+            uint creatureStats = getCreatureStats(processHandle, serverCreature);
+
+            WriteProcessMemory(processHandle, (IntPtr)(creatureStats + KOTOR_OFFSET_CREATURE_STATS_RUNRATE), inBytes, 4, out _);
         }
     }
 }
