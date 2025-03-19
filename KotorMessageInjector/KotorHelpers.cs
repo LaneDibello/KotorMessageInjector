@@ -21,6 +21,8 @@ namespace KotorMessageInjector
         private const uint KOTOR_OFFSET_MODULE = 0x18;
         private const uint KOTOR_OFFSET_AREA = 0x48;
         private const uint KOTOR_OFFSET_FACTION_MANAGER = 0x10054;
+        private const uint KOTOR_OFFSET_CLIENT_ANIM_BASE = 0x68;
+        private const uint KOTOR_OFFSET_ANIM_BASE_GOB = 0xb8;
 
 
         private static IntPtr KOTOR_1_APPMANAGER = (IntPtr)0x007a39fc;
@@ -393,14 +395,14 @@ namespace KotorMessageInjector
             );
         }
 
-        public static uint getClientObjectGob(IntPtr processHandle, IntPtr clientObject)
+        public static uint getClientObjectGob(IntPtr processHandle, uint clientObject)
         {
             byte[] outBytes = new byte[4];
 
-            ReadProcessMemory(processHandle, clientObject + 0x68, outBytes, 4, out _);
-            IntPtr animBase = (IntPtr)BitConverter.ToUInt32(outBytes, 0);
+            ReadProcessMemory(processHandle, (IntPtr)(clientObject + KOTOR_OFFSET_CLIENT_ANIM_BASE), outBytes, 4, out _);
+            uint animBase = BitConverter.ToUInt32(outBytes, 0);
 
-            ReadProcessMemory(processHandle, animBase + 0xb8, outBytes, 4, out _);
+            ReadProcessMemory(processHandle, (IntPtr)(animBase + KOTOR_OFFSET_ANIM_BASE_GOB), outBytes, 4, out _);
             return BitConverter.ToUInt32(outBytes, 0);
         }
     }

@@ -215,7 +215,7 @@ namespace KotorMessageInjector
                 .setThis(getClient(pHandle))
                 .addParam(getPlayerClientID(pHandle)));
 
-            return getClientObjectGob(pHandle, (IntPtr)playerClientObject);
+            return getClientObjectGob(pHandle, playerClientObject);
         }
 
         public static uint GetLookingAtGob(IntPtr pHandle)
@@ -227,7 +227,7 @@ namespace KotorMessageInjector
                 .setThis(getClient(pHandle))
                 .addParam(getLookingAtClientID(pHandle)));
 
-            return getClientObjectGob(pHandle, (IntPtr)targetClientObject);
+            return getClientObjectGob(pHandle, targetClientObject);
         }
 
         public static uint DrawModel(IntPtr pHandle, string model, float scale, float x, float y, float z)
