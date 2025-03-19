@@ -404,5 +404,20 @@ namespace KotorMessageInjector
             byte[] data = new byte[4] { (byte)(value & 0xFF), (byte)((value >> 8) & 0xFF), (byte)((value >> 16) & 0xFF), (byte)((value >> 24) & 0xFF) };
             WriteProcessMemory(processHandle, addr, data, 4, out outPtr);
         }
+
+        public static (float, float, float, float) readQuaternion(IntPtr processHandle, IntPtr addr)
+        {
+            byte[] outBytes = new byte[16];
+            ReadProcessMemory(processHandle, addr, outBytes, 16, out _);
+
+            return
+            (
+                BitConverter.ToSingle(outBytes, 0),
+                BitConverter.ToSingle(outBytes, 4),
+                BitConverter.ToSingle(outBytes, 8),
+                BitConverter.ToSingle(outBytes, 12)
+            );
+        }
+
     }
 }
