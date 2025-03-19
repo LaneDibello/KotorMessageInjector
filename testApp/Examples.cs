@@ -144,16 +144,16 @@ namespace testApp
 
             int version = getGameVersion(pHandle);
 
-            Dictionary<string, uint> funcLibrary = getFunctionLibrary(pHandle);
+            var funcLibrary = getFuncLibrary(pHandle);
 
             ObjManager om = new(pHandle);
-            RemoteFunction rf_new = new RemoteFunction(funcLibrary["operator_new"]); 
+            RemoteFunction rf_new = new RemoteFunction(funcLibrary[Function.operator_new]); 
             rf_new.addParam(version == 1 ? KOTOR_1_CSWSCREATURE_SIZE : KOTOR_2_CSWSCREATURE_SIZE);
             uint creatureBuffer = i.runFunction(rf_new);
 
             Console.WriteLine("ran operator_new");
 
-            RemoteFunction rf_serverCreature = new RemoteFunction(funcLibrary["CSWSCreature::CSWSCreature"]); 
+            RemoteFunction rf_serverCreature = new RemoteFunction(funcLibrary[Function.CSWSCreature_CSWSCreature]); 
             rf_serverCreature.setThis(creatureBuffer);
             rf_serverCreature.addParam((uint)0x7f000000);
             rf_serverCreature.addParam(0);
@@ -161,7 +161,7 @@ namespace testApp
 
             Console.WriteLine("ran CSWSCreature");
 
-            RemoteFunction rf_loadTemplate = new RemoteFunction(funcLibrary["CSWSCreature::LoadFromTemplate"]); 
+            RemoteFunction rf_loadTemplate = new RemoteFunction(funcLibrary[Function.CSWSCreature_LoadFromTemplate]); 
             rf_loadTemplate.setThis(creatureBuffer);
             rf_loadTemplate.addParam(om.createCResRef(resref));
             rf_loadTemplate.addParam(0);
@@ -169,17 +169,17 @@ namespace testApp
 
             Console.WriteLine("ran LoadFromTemplate");
 
-            RemoteFunction rf_module = new RemoteFunction(funcLibrary["CServerExoAppInternal::GetModule"]); 
+            RemoteFunction rf_module = new RemoteFunction(funcLibrary[Function.CServerExoAppInternal_GetModule]); 
             rf_module.setThis(getServerInternal(pHandle));
             uint module = i.runFunction(rf_module);
 
             Console.WriteLine("ran GetModule");
 
-            RemoteFunction rf_area = new RemoteFunction(funcLibrary["CSWSModule::GetArea"]);
+            RemoteFunction rf_area = new RemoteFunction(funcLibrary[Function.CSWSModule_GetArea]);
             rf_area.setThis(module);
             uint area = i.runFunction(rf_area);
 
-            RemoteFunction rf_addToArea = new RemoteFunction(funcLibrary["CSWSCreature::AddToArea"], false); 
+            RemoteFunction rf_addToArea = new RemoteFunction(funcLibrary[Function.CSWSCreature_AddToArea], false); 
             rf_addToArea.setThis(creatureBuffer);
             rf_addToArea.addParam(area);
             rf_addToArea.addParam(x);
@@ -195,9 +195,9 @@ namespace testApp
             Injector i = new Injector(pHandle);
             ObjManager om = new(pHandle);
 
-            Dictionary<string, uint> funcLibrary = getFunctionLibrary(pHandle);
+            var funcLibrary = getFuncLibrary(pHandle);
 
-            RemoteFunction rf = new RemoteFunction(funcLibrary["CSWPartyTable::AddNPC"]);
+            RemoteFunction rf = new RemoteFunction(funcLibrary[Function.CSWPartyTable_AddNPC]);
             rf.setThis(getServerPartyTable(pHandle));
             rf.addParam(partySlot);
             rf.addParam(om.createCExoString(creatureRef));
@@ -210,16 +210,16 @@ namespace testApp
             Injector i = new Injector(pHandle);
             ObjManager om = new(pHandle);
 
-            Dictionary<string, uint> funcLibrary = getFunctionLibrary(pHandle);
+            var funcLibrary = getFuncLibrary(pHandle);
 
             uint server = getServer(pHandle);
             
-            RemoteFunction rf = new RemoteFunction(funcLibrary["CServerExoApp::SetMoveToModuleString"], false);
+            RemoteFunction rf = new RemoteFunction(funcLibrary[Function.CServerExoApp_SetMoveToModuleString], false);
             rf.setThis(server);
             rf.addParam(om.createCExoString(module));
             i.runFunction(rf);
             
-            rf = new RemoteFunction(funcLibrary["CServerExoApp::SetMoveToModulePending"], false);
+            rf = new RemoteFunction(funcLibrary[Function.CServerExoApp_SetMoveToModulePending], false);
             rf.setThis(server);
             rf.addParam(1);
             i.runFunction(rf);
@@ -229,16 +229,16 @@ namespace testApp
         {
             Injector i = new Injector(pHandle);
 
-            Dictionary<string, uint> funcLibrary = getFunctionLibrary(pHandle);
+            var funcLibrary = getFuncLibrary(pHandle);
 
             uint facManager = getFactionManager(pHandle);
 
-            RemoteFunction rf_getFac = new RemoteFunction(funcLibrary["CFactionManager::GetFaction"]);
+            RemoteFunction rf_getFac = new RemoteFunction(funcLibrary[Function.CFactionManager_GetFaction]);
             rf_getFac.setThis(facManager);
             rf_getFac.addParam(faction);
             uint fac = i.runFunction(rf_getFac);
 
-            RemoteFunction rf_addMember = new RemoteFunction(funcLibrary["CSWSFaction::AddMember"], false);
+            RemoteFunction rf_addMember = new RemoteFunction(funcLibrary[Function.CSWSFaction_AddMember], false);
             rf_addMember.setThis(fac);
             rf_addMember.addParam(target);
             rf_addMember.addParam(0);
@@ -259,16 +259,16 @@ namespace testApp
 
             Injector i = new Injector(pHandle);
 
-            Dictionary<string, uint> funcLibrary = getFunctionLibrary(pHandle);
+            var funcLibrary = getFuncLibrary(pHandle);
 
-            RemoteFunction rf = new RemoteFunction(funcLibrary["NewCAurObject"]);
+            RemoteFunction rf = new RemoteFunction(funcLibrary[Function.NewCAurObject]);
             rf.addParam(om.createCStr(model));
             rf.addParam(om.createCStr(""));
             rf.addParam(0);
             rf.addParam(0);
             uint gob = i.runFunction(rf);
 
-            rf = new RemoteFunction(funcLibrary["Gob::SetPosition"], false);
+            rf = new RemoteFunction(funcLibrary[Function.Gob_SetPosition], false);
             rf.setThis(gob);
             rf.addParam(om.createVector(0, 0, 0));
             rf.addParam(x);
@@ -278,18 +278,18 @@ namespace testApp
 
             if (disableShadows)
             {
-                rf = new RemoteFunction(funcLibrary["Gob::TurnOffShadows"], false);
+                rf = new RemoteFunction(funcLibrary[Function.Gob_TurnOffShadows], false);
                 rf.setThis(gob);
                 i.runFunction(rf);
             }
 
-            rf = new RemoteFunction(funcLibrary["Gob::SetObjectScale"], false);
+            rf = new RemoteFunction(funcLibrary[Function.Gob_SetObjectScale], false);
             rf.setThis(gob);
             rf.addParam(scale);
             rf.addParam(false);
             i.runFunction(rf);
 
-            rf = new RemoteFunction(funcLibrary["Gob::AttachToScene"], false);
+            rf = new RemoteFunction(funcLibrary[Function.Gob_AttachToScene], false);
             rf.setThis(gob);
             rf.addParam(scene);
             i.runFunction(rf);
@@ -303,9 +303,9 @@ namespace testApp
 
             Injector i = new Injector(pHandle);
 
-            Dictionary<string, uint> funcLibrary = getFunctionLibrary(pHandle);
+            var funcLibrary = getFuncLibrary(pHandle);
 
-            RemoteFunction rf = new RemoteFunction(funcLibrary["Gob::AttachToScene"], false);
+            RemoteFunction rf = new RemoteFunction(funcLibrary[Function.Gob_AttachToScene], false);
             rf.setThis(gob);
             rf.addParam(0);
             i.runFunction(rf);
@@ -324,11 +324,11 @@ namespace testApp
         {
             Injector i = new Injector(pHandle);
 
-            Dictionary<string, uint> funcLibrary = getFunctionLibrary(pHandle);
+            var funcLibrary = getFuncLibrary(pHandle);
 
             (r, g, b) = normalize(r, g, b);
 
-            RemoteFunction rf = new RemoteFunction(funcLibrary["Gob::SetColorShifting"], false);
+            RemoteFunction rf = new RemoteFunction(funcLibrary[Function.Gob_SetColorShifting], false);
             rf.setThis(gob);
             rf.addParam(r);
             rf.addParam(g);
@@ -337,7 +337,7 @@ namespace testApp
             rf.addParam(0);
             i.runFunction(rf);
 
-            rf = new RemoteFunction(funcLibrary["Gob::SetIllumination"], false);
+            rf = new RemoteFunction(funcLibrary[Function.Gob_SetIllumination], false);
             rf.setThis(gob);
             rf.addParam(r);
             rf.addParam(g);
