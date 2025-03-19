@@ -21,7 +21,8 @@ namespace KotorMessageInjector
         private const uint KOTOR_OFFSET_MODULE = 0x18;
         private const uint KOTOR_OFFSET_AREA = 0x48;
         private const uint KOTOR_OFFSET_FACTION_MANAGER = 0x10054;
-
+        private const uint KOTOR_OFFSET_CLIENT_ANIM_BASE = 0x68;
+        private const uint KOTOR_OFFSET_ANIM_BASE_GOB = 0xb8;
 
         private static IntPtr KOTOR_1_APPMANAGER = (IntPtr)0x007a39fc;
         private static IntPtr KOTOR_1_DEACTIVATE_RENDER_WINDOW = (IntPtr)0x00401d90;
@@ -30,6 +31,8 @@ namespace KotorMessageInjector
         private const uint KOTOR_1_LOAD_DIRECTION = 0xc8;
         private const uint KOTOR_1_OFFSET_PARTY_TABLE = 0x1b770;
         private const uint KOTOR_1_OFFSET_SCENE = 0x184;
+        private const uint KOTOR_1_OFFSET_CREATURE_STATS = 0xa74;
+        private const uint KOTOR_1_OFFSET_CREATURE_STATS_RUNRATE = 0x198;
 
         private static IntPtr KOTOR_2_APPMANAGER = (IntPtr)0x00a11c04;
         private static IntPtr KOTOR_2_STEAM_APPMANAGER = (IntPtr)0x00a1b4a4;
@@ -38,6 +41,8 @@ namespace KotorMessageInjector
         private const uint KOTOR_2_LOAD_DIRECTION = 0xd0;
         private const uint KOTOR_2_GOG_OFFSET_PARTY_TABLE = 0x1f0b4;
         private const uint KOTOR_2_OFFSET_SCENE = 0x188;
+        private const uint KOTOR_2_OFFSET_CREATURE_STATS = 0x1198;
+        private const uint KOTOR_2_OFFSET_CREATURE_STATS_RUNRATE = 0x1a8;
 
         [Flags]
         public enum CLIENT_OBJECT_UPDATE_FLAGS : uint
@@ -393,15 +398,39 @@ namespace KotorMessageInjector
             );
         }
 
-        public static uint getClientObjectGob(IntPtr processHandle, IntPtr clientObject)
+        public static uint getClientObjectGob(IntPtr processHandle, uint clientObject)
         {
             byte[] outBytes = new byte[4];
 
-            ReadProcessMemory(processHandle, clientObject + 0x68, outBytes, 4, out _);
-            IntPtr animBase = (IntPtr)BitConverter.ToUInt32(outBytes, 0);
+            ReadProcessMemory(processHandle, (IntPtr)(clientObject + KOTOR_OFFSET_CLIENT_ANIM_BASE), outBytes, 4, out _);
+            uint animBase = BitConverter.ToUInt32(outBytes, 0);
 
-            ReadProcessMemory(processHandle, animBase + 0xb8, outBytes, 4, out _);
+            ReadProcessMemory(processHandle, (IntPtr)(animBase + KOTOR_OFFSET_ANIM_BASE_GOB), outBytes, 4, out _);
             return BitConverter.ToUInt32(outBytes, 0);
+        }
+
+        public static uint getCreatureStats(IntPtr processHandle, uint serverCreature)
+        {
+            byte[] outBytes = new byte[4];
+
+            int version = getGameVersion(processHandle);
+            uint offset = version == 1 ? KOTOR_1_OFFSET_CREATURE_STATS : KOTOR_2_OFFSET_CREATURE_STATS;
+
+            ReadProcessMemory(processHandle, (IntPtr)(serverCreature + offset), outBytes, 4, out _);
+            return BitConverter.ToUInt32(outBytes, 0);
+        }
+
+        // Default runrate for PCs is 5.4
+        public static void setRunrate(IntPtr processHandle, uint serverCreature, float runrate)
+        {
+            byte[] inBytes = BitConverter.GetBytes(runrate);
+
+            int version = getGameVersion(processHandle);
+            uint offset = version == 1 ? KOTOR_1_OFFSET_CREATURE_STATS_RUNRATE : KOTOR_2_OFFSET_CREATURE_STATS_RUNRATE;
+
+            uint creatureStats = getCreatureStats(processHandle, serverCreature);
+
+            WriteProcessMemory(processHandle, (IntPtr)(creatureStats + offset), inBytes, 4, out _);
         }
     }
 }

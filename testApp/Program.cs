@@ -179,12 +179,16 @@ namespace testApp
             //Examples.colorizeModel(pHandle, gob, 0f, 1f, 0f);
 
 
-            uint gob = Adapter.GetLookingAtGob(pHandle);
+            //uint gob = Adapter.GetPlayerGob(pHandle);
 
-            i.runFunction(new RemoteFunction(funcLibrary[Function.Gob_SetObjectScale], false)
-                .setThis(gob)
-                .addParam(0.2f)
-                .addParam(false));
+            //i.runFunction(new RemoteFunction(funcLibrary[Function.Gob_SetObjectScale], false)
+            //    .setThis(gob)
+            //    .addParam(1.1f)
+            //    .addParam(false));
+
+            uint player = Adapter.GetPlayerServerObject(pHandle);
+
+            setRunrate(pHandle, player, 20.5f);
 
             //Adapter.ColorizeModel(pHandle, gob, 1f, 0f, 0f);
 
