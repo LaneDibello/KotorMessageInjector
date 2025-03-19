@@ -211,11 +211,11 @@ namespace KotorMessageInjector
             var i = new Injector(pHandle);
             var funcLibrary = getFuncLibrary(pHandle);
 
-            uint player = i.runFunction(new RemoteFunction(funcLibrary[Function.CClientExoApp_GetGameObject])
+            uint playerClientObject = i.runFunction(new RemoteFunction(funcLibrary[Function.CClientExoApp_GetGameObject])
                 .setThis(getClient(pHandle))
                 .addParam(getPlayerClientID(pHandle)));
 
-            return getClientObjectGob(pHandle, (IntPtr)player);
+            return getClientObjectGob(pHandle, (IntPtr)playerClientObject);
         }
 
         public static uint GetLookingAtGob(IntPtr pHandle)
@@ -223,11 +223,11 @@ namespace KotorMessageInjector
             var i = new Injector(pHandle);
             var funcLibrary = getFuncLibrary(pHandle);
 
-            uint player = i.runFunction(new RemoteFunction(funcLibrary[Function.CClientExoApp_GetGameObject])
+            uint targetClientObject = i.runFunction(new RemoteFunction(funcLibrary[Function.CClientExoApp_GetGameObject])
                 .setThis(getClient(pHandle))
                 .addParam(getLookingAtClientID(pHandle)));
 
-            return getClientObjectGob(pHandle, (IntPtr)player);
+            return getClientObjectGob(pHandle, (IntPtr)targetClientObject);
         }
 
         public static uint DrawModel(IntPtr pHandle, string model, float scale, float x, float y, float z)
