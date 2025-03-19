@@ -128,32 +128,6 @@ namespace KotorMessageInjector
                     : throw new ArgumentException($"Cannot find App Manager for kotor version: {version}");
         }
 
-        public static Dictionary<string, uint> getFunctionLibrary(IntPtr processHandle)
-        {
-            bool isSteam;
-            int version = getGameVersion(processHandle, out isSteam);
-
-            if (version == 1)
-            {
-                return RemoteFunctionLibrary.kotor1Functions;
-            }
-            else if (version == 2)
-            {
-                if (isSteam)
-                {
-                    return RemoteFunctionLibrary.kotor2SteamFunctions;
-                }
-                else
-                {
-                    return RemoteFunctionLibrary.kotor2Functions;
-                }
-            }
-            else
-            {
-                throw new ArgumentException($"Cannot find App Manager for kotor version: {version}");
-            }
-        }
-
         public static int getGameVersion(IntPtr processHandle, out bool isSteam)
         {
             uint moduleSize = GetModuleSize(processHandle);
@@ -419,5 +393,15 @@ namespace KotorMessageInjector
             );
         }
 
+        public static uint getClientObjectGob(IntPtr processHandle, IntPtr clientObject)
+        {
+            byte[] outBytes = new byte[4];
+
+            ReadProcessMemory(processHandle, clientObject + 0x68, outBytes, 4, out _);
+            IntPtr animBase = (IntPtr)BitConverter.ToUInt32(outBytes, 0);
+
+            ReadProcessMemory(processHandle, animBase + 0xb8, outBytes, 4, out _);
+            return BitConverter.ToUInt32(outBytes, 0);
+        }
     }
 }

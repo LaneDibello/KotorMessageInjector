@@ -137,7 +137,7 @@ namespace KotorMessageInjector
             var version = getGameVersion(pHandle);
             var funcLibrary = getFuncLibrary(pHandle);
 
-            var creatureBuffer = i.runFunction(new RemoteFunction(funcLibrary[Function.Operator_New])
+            var creatureBuffer = i.runFunction(new RemoteFunction(funcLibrary[Function.operator_new])
                 .addParam(version == 1 ? KOTOR_1_CSWSCREATURE_SIZE : KOTOR_2_CSWSCREATURE_SIZE));
 
             creatureBuffer = i.runFunction(new RemoteFunction(funcLibrary[Function.CSWSCreature_CSWSCreature])
@@ -204,6 +204,30 @@ namespace KotorMessageInjector
                 .setThis(fac)
                 .addParam(target)
                 .addParam(0));
+        }
+
+        public static uint GetPlayerGob(IntPtr pHandle)
+        {
+            var i = new Injector(pHandle);
+            var funcLibrary = getFuncLibrary(pHandle);
+
+            uint player = i.runFunction(new RemoteFunction(funcLibrary[Function.CClientExoApp_GetGameObject])
+                .setThis(getClient(pHandle))
+                .addParam(getPlayerClientID(pHandle)));
+
+            return getClientObjectGob(pHandle, (IntPtr)player);
+        }
+
+        public static uint GetLookingAtGob(IntPtr pHandle)
+        {
+            var i = new Injector(pHandle);
+            var funcLibrary = getFuncLibrary(pHandle);
+
+            uint player = i.runFunction(new RemoteFunction(funcLibrary[Function.CClientExoApp_GetGameObject])
+                .setThis(getClient(pHandle))
+                .addParam(getLookingAtClientID(pHandle)));
+
+            return getClientObjectGob(pHandle, (IntPtr)player);
         }
 
         public static uint DrawModel(IntPtr pHandle, string model, float scale, float x, float y, float z)
@@ -299,13 +323,13 @@ namespace KotorMessageInjector
                 .addParam(g)
                 .addParam(b)
                 .addParam(a)
-                .addParam(0));
+                .addParam(1));
             _ = i.runFunction(new RemoteFunction(funcLibrary[Function.Gob_SetIllumination], false)
                 .setThis(gob)
                 .addParam(r)
                 .addParam(g)
                 .addParam(b)
-                .addParam(0));
+                .addParam(1));
         }
 
         public static void DeleteModel(IntPtr pHandle, uint gob)

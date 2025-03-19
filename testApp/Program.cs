@@ -148,27 +148,48 @@ namespace testApp
 
             //Examples.colorizeModel(pHandle, gob, 1f, 0f, 1f);
 
-            // Exchange DLZ Marker Example
-            uint gob = Examples.drawModel
-            (
-                pHandle, "gi_sound_pos", 0.1f,
-                -12.720751f, -19.7f, 0f
-            );
-            Examples.colorizeModel(pHandle, gob, 1f, 0f, 0f);
+            //// Exchange DLZ Marker Example
+            //uint gob = Examples.drawModel
+            //(
+            //    pHandle, "gi_sound_pos", 0.1f,
+            //    -12.720751f, -19.7f, 0f
+            //);
+            //Examples.colorizeModel(pHandle, gob, 1f, 0f, 0f);
 
             //uint gob = Examples.drawModel
             //(
-            //    pHandle, "gi_sound_pos", 1f,
-            //    112.5f, 154.0f, 0.5f
+            //    pHandle, "pmbc", 1f,
+            //    112.5f, 145.0f, 0.0f
             //);
+            var funcLibrary = getFuncLibrary(pHandle);
+            //ObjManager om = new(pHandle);
+            //RemoteFunction rf = new RemoteFunction(funcLibrary[Function.Gob_ReplaceTexture], false);
+            //rf.setThis(gob);
+            //rf.addParam(om.createCStr(""));
+            //rf.addParam(om.createCStr("pmbblb"));
+            //i.runFunction(rf);
+
+            //i.runFunction(new RemoteFunction(funcLibrary[Function.Gob_SetObjectScale], false)
+            //    .setThis(0x103DCF90)
+            //    .addParam(0.5f)
+            //    .addParam(false));
+
+            //uint scene = getCurrentScene(pHandle);
 
             //Examples.colorizeModel(pHandle, gob, 0f, 1f, 0f);
 
-            Adapter.RotateModel(pHandle, gob, 0.0f, 0.0f, 0.0f);
 
-            Console.ReadKey();
+            uint gob = Adapter.GetLookingAtGob(pHandle);
 
-            Examples.deleteModel(pHandle, gob);
+            i.runFunction(new RemoteFunction(funcLibrary[Function.Gob_SetObjectScale], false)
+                .setThis(gob)
+                .addParam(0.2f)
+                .addParam(false));
+
+            //Adapter.ColorizeModel(pHandle, gob, 1f, 0f, 0f);
+
+            //Console.WriteLine();
+
         }
     }
 }
