@@ -31,6 +31,7 @@ namespace KotorMessageInjector
         Scene_AddObject,
         YawPitchRoll,
         CClientExoApp_GetGameObject,
+        CServerExoApp_GetGameObject
     }
 
     public static class RemoteFunctionLibrary
@@ -64,7 +65,8 @@ namespace KotorMessageInjector
             {Function.Gob_SetIllumination, 0x0043eea0},
 
             {Function.YawPitchRoll, 0x004acac0},
-            {Function.CClientExoApp_GetGameObject, 0x005ed580}
+            {Function.CClientExoApp_GetGameObject, 0x005ed580},
+            {Function.CServerExoApp_GetGameObject, 0x004ae750},
 
         };
 
@@ -92,6 +94,8 @@ namespace KotorMessageInjector
             {Function.Gob_SetIllumination, 0x0084ed90},
 
             {Function.YawPitchRoll, 0x0080d4b0},
+            {Function.CClientExoApp_GetGameObject, 0x0040c990},
+            {Function.CServerExoApp_GetGameObject, 0x0064bac0},
         };
 
         public static Dictionary<Function, uint> k2SteamFunctions = new Dictionary<Function, uint>()
@@ -118,6 +122,8 @@ namespace KotorMessageInjector
             {Function.Gob_SetIllumination, 0x0045c7b0},
 
             {Function.YawPitchRoll, 0x00515620},
+            {Function.CClientExoApp_GetGameObject, 0x0073f4d0},
+            {Function.CServerExoApp_GetGameObject, 0x0051c0a0},
         };
     }
 }
