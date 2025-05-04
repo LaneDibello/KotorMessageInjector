@@ -75,7 +75,7 @@ namespace KotorMessageInjector
         }
         public RemoteFunction addParam(byte value)
         {
-            parameters.Add((ToUInt32(GetBytes(value), 0), 1));
+            parameters.Add((ToUInt32([value], 0), 1));
             return this;
         }
         public RemoteFunction addParam(char value)
