@@ -41,6 +41,7 @@ namespace KotorMessageInjector
         private const uint KOTOR_2_GOG_MODULE_SIZE = 7012352;
         private const uint KOTOR_2_LOAD_DIRECTION = 0xd0;
         private const uint KOTOR_2_GOG_OFFSET_PARTY_TABLE = 0x1f0b4;
+        private const uint KOTOR_2_OFFSET_CHEAT_USED = 0x23c;
         private const uint KOTOR_2_OFFSET_SCENE = 0x188;
         private const uint KOTOR_2_OFFSET_CREATURE_STATS = 0x1198;
         private const uint KOTOR_2_OFFSET_CREATURE_STATS_RUNRATE = 0x1a8;
@@ -434,13 +435,16 @@ namespace KotorMessageInjector
             WriteProcessMemory(processHandle, (IntPtr)(creatureStats + offset), inBytes, 4, out _);
         }
 
-        public static void setCheatUsed(IntPtr pHandle, bool cheatUsed)
+        public static void setCheatUsed(IntPtr processHandle, bool cheatUsed)
         {
             byte[] inBytes = BitConverter.GetBytes(cheatUsed ? 1 : 0);
 
-            var partyTable = getServerPartyTable(pHandle);
+            int version = getGameVersion(processHandle);
+            uint offset = version == 1 ? KOTOR_1_OFFSET_CHEAT_USED : KOTOR_2_OFFSET_CHEAT_USED;
 
-            WriteProcessMemory(pHandle, (IntPtr)(partyTable + KOTOR_1_OFFSET_CHEAT_USED), inBytes, 4, out _);
+            var partyTable = getServerPartyTable(processHandle);
+
+            WriteProcessMemory(processHandle, (IntPtr)(partyTable + offset), inBytes, 4, out _);
         }
     }
 }
