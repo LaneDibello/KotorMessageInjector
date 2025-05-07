@@ -42,7 +42,9 @@ namespace KotorMessageInjector
         CSWSCreatureStats_AddFeat,
         CSWSCreatureStats_ClearFeats,
         CSWSCreatureStats_AddClass,
-        CSWSCreatureStats_AddExperience
+        CSWSCreatureStats_AddExperience,
+        CSWSCreatureStats_AddKnownSpell,
+        CSWSCreatureStats_LevelUp
     }
 
     public static class RemoteFunctionLibrary
@@ -90,7 +92,8 @@ namespace KotorMessageInjector
             {Function.CSWSCreatureStats_ClearFeats, 0x005aa8c0},
             {Function.CSWSCreatureStats_AddClass, 0x005a5d10},
             {Function.CSWSCreatureStats_AddExperience, 0x005af6a0},
-
+            {Function.CSWSCreatureStats_AddKnownSpell, 0x005aa9b0},
+            {Function.CSWSCreatureStats_LevelUp, 0x005aabf0},
         };
 
         public static Dictionary<Function, uint> k2Functions = new Dictionary<Function, uint>()
