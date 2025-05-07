@@ -39,7 +39,8 @@ namespace KotorMessageInjector
         CSWSCreatureStats_SetWISBase,
         CSWSCreatureStats_SetCHABase,
         CSWSCreatureStats_SetSkillRank,
-        CSWSCreatureStats_AddFeat
+        CSWSCreatureStats_AddFeat,
+        CSWSCreatureStats_ClearFeats
     }
 
     public static class RemoteFunctionLibrary
@@ -84,6 +85,7 @@ namespace KotorMessageInjector
             {Function.CSWSCreatureStats_SetCHABase, 0x005aa170},
             {Function.CSWSCreatureStats_SetSkillRank, 0x005a54c0},
             {Function.CSWSCreatureStats_AddFeat, 0x005aa810},
+            {Function.CSWSCreatureStats_ClearFeats, 0x005aa8c0},
 
         };
 
@@ -122,6 +124,7 @@ namespace KotorMessageInjector
             {Function.CSWSCreatureStats_SetCHABase, 0x006f2e20},
             {Function.CSWSCreatureStats_SetSkillRank, 0x006f4640},
             {Function.CSWSCreatureStats_AddFeat, 0x007f3b40},
+            {Function.CSWSCreatureStats_ClearFeats, 0x006f47f0},
 
         };
 
@@ -160,6 +163,7 @@ namespace KotorMessageInjector
             {Function.CSWSCreatureStats_SetCHABase, 0x006b69a0},
             {Function.CSWSCreatureStats_SetSkillRank, 0x006b81c0},
             {Function.CSWSCreatureStats_AddFeat, 0x006f5b40},
+            {Function.CSWSCreatureStats_ClearFeats, 0x006b8370},
         };
     }
 }
