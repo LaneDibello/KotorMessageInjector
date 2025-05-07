@@ -433,6 +433,31 @@ namespace KotorMessageInjector
                 .addParam((int)feat));
         }
 
+        public static void AddCreatureClass(IntPtr pHandle, uint serverCreature, CLASSES newClass)
+        {
+            var i = new Injector(pHandle);
+            var funcLibrary = getFuncLibrary(pHandle);
+
+            var creatureStats = getCreatureStats(pHandle, serverCreature);
+
+            _ = i.runFunction(new RemoteFunction(funcLibrary[Function.CSWSCreatureStats_AddClass], false)
+                .setThis(creatureStats)
+                .addParam((int)newClass)
+                .addParam(0));
+        }
+
+        public static void AddCreatureExp(IntPtr pHandle, uint serverCreature, uint experience)
+        {
+            var i = new Injector(pHandle);
+            var funcLibrary = getFuncLibrary(pHandle);
+
+            var creatureStats = getCreatureStats(pHandle, serverCreature);
+
+            _ = i.runFunction(new RemoteFunction(funcLibrary[Function.CSWSCreatureStats_AddExperience], false)
+                .setThis(creatureStats)
+                .addParam(experience));
+        }
+
         #endregion
     }
 }

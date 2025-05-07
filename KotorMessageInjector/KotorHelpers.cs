@@ -352,6 +352,28 @@ namespace KotorMessageInjector
 
         }
 
+        public enum CLASSES : byte
+        {
+            SOLDIER = 0,
+            SCOUT = 1,
+            SCOUNDREL = 2,
+            JEDI_GUARDIAN = 3,
+            JEDI_CONSULAR = 4,
+            JEDI_SENTINEL = 5,
+            COMBAT_DROID = 6,
+            EXPERT_DROID = 7,
+            MINION = 8,
+            // KotOR 2 Exclusive Classes
+            TECH_SPECIALIST = 9,
+            BOUNTY_HUNTER = 10,
+            JEDI_WEAPONMASTER = 11,
+            JEDI_MASTER = 12,
+            JEDI_WATCHMAN = 13,
+            SITH_MARAUDER = 14,
+            SITH_LORD = 15,
+            SITH_ASSASSIN = 16
+        }
+        
         public static IntPtr getRunningKotor()
         {
             IntPtr pHandle = OpenProcessByName("swkotor.exe");
