@@ -1,6 +1,7 @@
 ﻿using static KotorMessageInjector.KotorHelpers;
 using static KotorMessageInjector.Message;
 using System;
+using System.Runtime.InteropServices;
 
 namespace KotorMessageInjector
 {
@@ -404,6 +405,20 @@ namespace KotorMessageInjector
                         .addParam(targetValue));
                     break;
             }
+        }
+
+        public static void SetCreatureSkill(IntPtr pHandle, uint serverCreature, SKILLS skill, byte value)
+        {
+            var i = new Injector(pHandle);
+            var funcLibrary = getFuncLibrary(pHandle);
+
+            var creatureStats = getCreatureStats(pHandle, serverCreature);
+            int targetValue = (int)value;
+
+            _ = i.runFunction(new RemoteFunction(funcLibrary[Function.CSWSCreatureStats_SetSkillRank], false)
+                .setThis(creatureStats)
+                .addParam((int)skill)
+                .addParam(targetValue));
         }
 
         #endregion
