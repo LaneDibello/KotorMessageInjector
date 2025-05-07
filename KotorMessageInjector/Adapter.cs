@@ -421,6 +421,18 @@ namespace KotorMessageInjector
                 .addParam(targetValue));
         }
 
+        public static void AddCreatureFeat(IntPtr pHandle, uint serverCreature, FEATS feat)
+        {
+            var i = new Injector(pHandle);
+            var funcLibrary = getFuncLibrary(pHandle);
+
+            var creatureStats = getCreatureStats(pHandle, serverCreature);
+
+            _ = i.runFunction(new RemoteFunction(funcLibrary[Function.CSWSCreatureStats_AddFeat], false)
+                .setThis(creatureStats)
+                .addParam((int)feat));
+        }
+
         #endregion
     }
 }
