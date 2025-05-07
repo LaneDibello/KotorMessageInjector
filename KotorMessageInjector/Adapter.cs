@@ -361,7 +361,51 @@ namespace KotorMessageInjector
                 .setThis(gob)
                 .addParam(0));
         }
-        
+
+        public static void SetCreatureAttribute(IntPtr pHandle, uint serverCreature, ATTRIBUTES attribute, byte value)
+        {
+            var i = new Injector(pHandle);
+            var funcLibrary = getFuncLibrary(pHandle);
+
+            var creatureStats = getCreatureStats(pHandle, serverCreature);
+            int targetValue = (int)value;
+
+            switch (attribute)
+            {
+                case ATTRIBUTES.STR:
+                    _ = i.runFunction(new RemoteFunction(funcLibrary[Function.CSWSCreatureStats_SetSTRBase], false)
+                        .setThis(creatureStats)
+                        .addParam(targetValue));
+                    break;
+                case ATTRIBUTES.DEX:
+                    _ = i.runFunction(new RemoteFunction(funcLibrary[Function.CSWSCreatureStats_SetDEXBase], false)
+                        .setThis(creatureStats)
+                        .addParam(targetValue));
+                    break;
+                case ATTRIBUTES.CON:
+                    _ = i.runFunction(new RemoteFunction(funcLibrary[Function.CSWSCreatureStats_SetCONBase], false)
+                        .setThis(creatureStats)
+                        .addParam(targetValue)
+                        .addParam(1)); // Recalculate HP
+                    break;
+                case ATTRIBUTES.INT:
+                    _ = i.runFunction(new RemoteFunction(funcLibrary[Function.CSWSCreatureStats_SetINTBase], false)
+                        .setThis(creatureStats)
+                        .addParam(targetValue));
+                    break;
+                case ATTRIBUTES.WIS:
+                    _ = i.runFunction(new RemoteFunction(funcLibrary[Function.CSWSCreatureStats_SetWISBase], false)
+                        .setThis(creatureStats)
+                        .addParam(targetValue));
+                    break;
+                case ATTRIBUTES.CHA:
+                    _ = i.runFunction(new RemoteFunction(funcLibrary[Function.CSWSCreatureStats_SetCHABase], false)
+                        .setThis(creatureStats)
+                        .addParam(targetValue));
+                    break;
+            }
+        }
+
         #endregion
     }
 }

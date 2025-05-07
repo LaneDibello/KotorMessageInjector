@@ -31,7 +31,13 @@ namespace KotorMessageInjector
         Scene_AddObject,
         YawPitchRoll,
         CClientExoApp_GetGameObject,
-        CServerExoApp_GetGameObject
+        CServerExoApp_GetGameObject,
+        CSWSCreatureStats_SetSTRBase,
+        CSWSCreatureStats_SetDEXBase,
+        CSWSCreatureStats_SetCONBase,
+        CSWSCreatureStats_SetINTBase,
+        CSWSCreatureStats_SetWISBase,
+        CSWSCreatureStats_SetCHABase,
     }
 
     public static class RemoteFunctionLibrary
@@ -68,6 +74,13 @@ namespace KotorMessageInjector
             {Function.CClientExoApp_GetGameObject, 0x005ed580},
             {Function.CServerExoApp_GetGameObject, 0x004ae750},
 
+            {Function.CSWSCreatureStats_SetSTRBase, 0x005a9fe0},
+            {Function.CSWSCreatureStats_SetDEXBase, 0x005aa020},
+            {Function.CSWSCreatureStats_SetCONBase, 0x005aa060},
+            {Function.CSWSCreatureStats_SetINTBase, 0x005aa0f0},
+            {Function.CSWSCreatureStats_SetWISBase, 0x005aa130},
+            {Function.CSWSCreatureStats_SetCHABase, 0x005aa170},
+
         };
 
         public static Dictionary<Function, uint> k2Functions = new Dictionary<Function, uint>()
@@ -96,6 +109,14 @@ namespace KotorMessageInjector
             {Function.YawPitchRoll, 0x0080d4b0},
             {Function.CClientExoApp_GetGameObject, 0x0040c990},
             {Function.CServerExoApp_GetGameObject, 0x0064bac0},
+
+            {Function.CSWSCreatureStats_SetSTRBase, 0x006f2c50},
+            {Function.CSWSCreatureStats_SetDEXBase, 0x006f2c90},
+            {Function.CSWSCreatureStats_SetCONBase, 0x006f2cd0},
+            {Function.CSWSCreatureStats_SetINTBase, 0x006f2da0},
+            {Function.CSWSCreatureStats_SetWISBase, 0x006f2de0},
+            {Function.CSWSCreatureStats_SetCHABase, 0x006f2e20},
+
         };
 
         public static Dictionary<Function, uint> k2SteamFunctions = new Dictionary<Function, uint>()
@@ -124,6 +145,13 @@ namespace KotorMessageInjector
             {Function.YawPitchRoll, 0x00515620},
             {Function.CClientExoApp_GetGameObject, 0x0073f4d0},
             {Function.CServerExoApp_GetGameObject, 0x0051c0a0},
+
+            {Function.CSWSCreatureStats_SetSTRBase, 0x006b67d0},
+            {Function.CSWSCreatureStats_SetDEXBase, 0x006b6810},
+            {Function.CSWSCreatureStats_SetCONBase, 0x006b6850},
+            {Function.CSWSCreatureStats_SetINTBase, 0x006b6920},
+            {Function.CSWSCreatureStats_SetWISBase, 0x006b6960},
+            {Function.CSWSCreatureStats_SetCHABase, 0x006b69a0},
         };
     }
 }

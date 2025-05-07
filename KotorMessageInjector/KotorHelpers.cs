@@ -79,6 +79,16 @@ namespace KotorMessageInjector
             SOUND         = 16,
         }
 
+        public enum ATTRIBUTES
+        {
+            STR,
+            DEX,
+            CON,
+            INT,
+            WIS,
+            CHA
+        }
+
         public static IntPtr getRunningKotor()
         {
             IntPtr pHandle = OpenProcessByName("swkotor.exe");
