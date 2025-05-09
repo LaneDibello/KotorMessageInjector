@@ -433,6 +433,65 @@ namespace KotorMessageInjector
                 .addParam((int)feat));
         }
 
+        public static void AddCreatureClass(IntPtr pHandle, uint serverCreature, CLASSES newClass)
+        {
+            var i = new Injector(pHandle);
+            var funcLibrary = getFuncLibrary(pHandle);
+
+            var creatureStats = getCreatureStats(pHandle, serverCreature);
+
+            _ = i.runFunction(new RemoteFunction(funcLibrary[Function.CSWSCreatureStats_AddClass], false)
+                .setThis(creatureStats)
+                .addParam((int)newClass)
+                .addParam(0));
+        }
+
+        public static void AddCreatureExp(IntPtr pHandle, uint serverCreature, uint experience)
+        {
+            var i = new Injector(pHandle);
+            var funcLibrary = getFuncLibrary(pHandle);
+
+            var creatureStats = getCreatureStats(pHandle, serverCreature);
+
+            _ = i.runFunction(new RemoteFunction(funcLibrary[Function.CSWSCreatureStats_AddExperience], false)
+                .setThis(creatureStats)
+                .addParam(experience));
+        }
+
+        public static void AddCreatureSpell(IntPtr pHandle, uint serverCreature, byte classIndex, SPELLS spell)
+        {
+            // NOTE: If a jedi class was your first class use, then classIndex should be 0
+            // If it was your second class, the classIndex will be 1
+            // While you can apply force powers to non-jedi classes, the results are inconsistent, and not ideal
+            
+            // NOTE: Not all of the powers on the Spells list work.
+            // Item abilities largely do nothing
+            // All spells greater than 131 are kotor 2 exclusive
+
+            var i = new Injector(pHandle);
+            var funcLibrary = getFuncLibrary(pHandle);
+
+            var creatureStats = getCreatureStats(pHandle, serverCreature);
+
+            _ = i.runFunction(new RemoteFunction(funcLibrary[Function.CSWSCreatureStats_AddKnownSpell], false)
+                .setThis(creatureStats)
+                .addParam((int)classIndex)
+                .addParam((int)spell));
+        }
+
+        public static void SetCreatureCredits(IntPtr pHandle, uint serverCreature, int amount)
+        {
+            // NOTE: the game won't allow you to set a credit count above 999999999
+            // However, this does accept nagative values, which gives you effectively more credits
+
+            var i = new Injector(pHandle);
+            var funcLibrary = getFuncLibrary(pHandle);
+
+            _ = i.runFunction(new RemoteFunction(funcLibrary[Function.CSWSCreature_SetGold], false)
+                .setThis(serverCreature)
+                .addParam(amount));
+        }
+
         #endregion
     }
 }
