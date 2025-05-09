@@ -479,6 +479,19 @@ namespace KotorMessageInjector
                 .addParam((int)spell));
         }
 
+        public static void SetCreatureCredits(IntPtr pHandle, uint serverCreature, int amount)
+        {
+            // NOTE: the game won't allow you to set a credit count above 999999999
+            // However, this does accept nagative values, which gives you effectively more credits
+
+            var i = new Injector(pHandle);
+            var funcLibrary = getFuncLibrary(pHandle);
+
+            _ = i.runFunction(new RemoteFunction(funcLibrary[Function.CSWSCreature_SetGold], false)
+                .setThis(serverCreature)
+                .addParam(amount));
+        }
+
         #endregion
     }
 }
