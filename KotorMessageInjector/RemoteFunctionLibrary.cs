@@ -44,7 +44,6 @@ namespace KotorMessageInjector
         CSWSCreatureStats_AddClass,
         CSWSCreatureStats_AddExperience,
         CSWSCreatureStats_AddKnownSpell,
-        CSWSCreatureStats_LevelUp
     }
 
     public static class RemoteFunctionLibrary
@@ -93,7 +92,6 @@ namespace KotorMessageInjector
             {Function.CSWSCreatureStats_AddClass, 0x005a5d10},
             {Function.CSWSCreatureStats_AddExperience, 0x005af6a0},
             {Function.CSWSCreatureStats_AddKnownSpell, 0x005aa9b0},
-            {Function.CSWSCreatureStats_LevelUp, 0x005aabf0},
         };
 
         public static Dictionary<Function, uint> k2Functions = new Dictionary<Function, uint>()
@@ -134,6 +132,7 @@ namespace KotorMessageInjector
             {Function.CSWSCreatureStats_ClearFeats, 0x006f47f0},
             {Function.CSWSCreatureStats_AddClass, 0x006fa150},
             {Function.CSWSCreatureStats_AddExperience, 0x006f34e0},
+            {Function.CSWSCreatureStats_AddKnownSpell, 0x006f4b20},
         };
 
         public static Dictionary<Function, uint> k2SteamFunctions = new Dictionary<Function, uint>()
@@ -174,6 +173,7 @@ namespace KotorMessageInjector
             {Function.CSWSCreatureStats_ClearFeats, 0x006b8370},
             {Function.CSWSCreatureStats_AddClass, 0x006bdcd0},
             {Function.CSWSCreatureStats_AddExperience, 0x006b7060},
+            {Function.CSWSCreatureStats_AddKnownSpell, 0x006b86a0},
         };
     }
 }

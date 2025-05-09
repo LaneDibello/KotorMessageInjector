@@ -458,6 +458,19 @@ namespace KotorMessageInjector
                 .addParam(experience));
         }
 
+        public static void AddCreatureSpell(IntPtr pHandle, uint serverCreature, byte classIndex, SPELLS spell)
+        {
+            var i = new Injector(pHandle);
+            var funcLibrary = getFuncLibrary(pHandle);
+
+            var creatureStats = getCreatureStats(pHandle, serverCreature);
+
+            _ = i.runFunction(new RemoteFunction(funcLibrary[Function.CSWSCreatureStats_AddKnownSpell], false)
+                .setThis(creatureStats)
+                .addParam((int)classIndex)
+                .addParam((int)spell));
+        }
+
         #endregion
     }
 }
