@@ -460,6 +460,14 @@ namespace KotorMessageInjector
 
         public static void AddCreatureSpell(IntPtr pHandle, uint serverCreature, byte classIndex, SPELLS spell)
         {
+            // NOTE: If a jedi class was your first class use, then classIndex should be 0
+            // If it was your second class, the classIndex will be 1
+            // While you can apply force powers to non-jedi classes, the results are inconsistent, and not ideal
+            
+            // NOTE: Not all of the powers on the Spells list work.
+            // Item abilities largely do nothing
+            // All spells greater than 131 are kotor 2 exclusive
+
             var i = new Injector(pHandle);
             var funcLibrary = getFuncLibrary(pHandle);
 
