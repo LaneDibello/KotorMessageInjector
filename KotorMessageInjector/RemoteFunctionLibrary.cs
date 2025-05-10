@@ -44,7 +44,9 @@ namespace KotorMessageInjector
         CSWSCreatureStats_AddClass,
         CSWSCreatureStats_AddExperience,
         CSWSCreatureStats_AddKnownSpell,
-        CSWSCreature_SetGold
+        CSWSCreature_SetGold,
+        CSWSCreatureStats_GetExpNeededForLevelUp,
+        CSWSCreatureStats_ModifyAlignment,
     }
 
     public static class RemoteFunctionLibrary
@@ -93,6 +95,8 @@ namespace KotorMessageInjector
             {Function.CSWSCreatureStats_AddClass, 0x005a5d10},
             {Function.CSWSCreatureStats_AddExperience, 0x005af6a0},
             {Function.CSWSCreatureStats_AddKnownSpell, 0x005aa9b0},
+            {Function.CSWSCreatureStats_GetExpNeededForLevelUp, 0x005a6610},
+            {Function.CSWSCreatureStats_ModifyAlignment, 0x005ae610},
 
             {Function.CSWSCreature_SetGold, 0x004edd90},
         };
@@ -136,6 +140,8 @@ namespace KotorMessageInjector
             {Function.CSWSCreatureStats_AddClass, 0x006fa150},
             {Function.CSWSCreatureStats_AddExperience, 0x006f34e0},
             {Function.CSWSCreatureStats_AddKnownSpell, 0x006f4b20},
+            {Function.CSWSCreatureStats_GetExpNeededForLevelUp, 0x006f3760},
+            {Function.CSWSCreatureStats_ModifyAlignment, 0x006e9880},
 
             {Function.CSWSCreature_SetGold, 0x00699e60},
         };
@@ -179,6 +185,8 @@ namespace KotorMessageInjector
             {Function.CSWSCreatureStats_AddClass, 0x006bdcd0},
             {Function.CSWSCreatureStats_AddExperience, 0x006b7060},
             {Function.CSWSCreatureStats_AddKnownSpell, 0x006b86a0},
+            {Function.CSWSCreatureStats_GetExpNeededForLevelUp, 0x006b72e0},
+            {Function.CSWSCreatureStats_ModifyAlignment, 0x006ad400},
 
             {Function.CSWSCreature_SetGold, 0x00581330},
         };
