@@ -45,12 +45,12 @@ namespace KotorMessageInjector
         [Flags]
         public enum CLIENT_OBJECT_UPDATE_FLAGS : uint
         {
-            POSITION = 0b00000000000000000000000000000001,
-            ORIENTATION = 0b00000000000000000000000000000010,
-            ANIMATION = 0b00000000000000000000000000000100,
-            VFX = 0b00000000000000000000000000001000,
+            POSITION           = 0b00000000000000000000000000000001,
+            ORIENTATION        = 0b00000000000000000000000000000010,
+            ANIMATION          = 0b00000000000000000000000000000100,
+            VFX                = 0b00000000000000000000000000001000,
             OBJECT_INTERACTION = 0b00000000000000000000000000010000, //Specific to Doors, Placeables, and Triggers
-            PORTRAIT = 0b00000000000000000000000000100000,
+            PORTRAIT           = 0b00000000000000000000000000100000,
             // Below are specific to Creatures
             // TODO: Fill these out
 
@@ -58,23 +58,23 @@ namespace KotorMessageInjector
 
         public enum GAME_OBJECT_TYPES : byte
         {
-            OBJECT_0 = 0,
-            OBJECT_1 = 1,
-            OBJECT_2 = 2,
-            MODULE = 3,
-            AREA = 4,
-            CREATURE = 5,
-            ITEM = 6,
-            TRIGGER = 7,
-            PROJECTILE = 8,
-            PLACEABLE = 9,
-            DOOR = 10,
+            OBJECT_0     = 0,
+            OBJECT_1     = 1,
+            OBJECT_2     = 2,
+            MODULE       = 3,
+            AREA         = 4,
+            CREATURE     = 5,
+            ITEM         = 6,
+            TRIGGER      = 7,
+            PROJECTILE   = 8,
+            PLACEABLE    = 9,
+            DOOR         = 10,
             AREAOFEFFECT = 11,
-            WAYPOINT = 12,
-            ENCOUNTER = 13,
-            STORE = 14,
-            OBJECT_f = 15,
-            SOUND = 16,
+            WAYPOINT     = 12,
+            ENCOUNTER    = 13,
+            STORE        = 14,
+            OBJECT_f     = 15,
+            SOUND        = 16,
         }
 
         public enum ATTRIBUTES
@@ -99,6 +99,7 @@ namespace KotorMessageInjector
             TREAT_INJURY = 7,
         }
 
+        public const ushort FIRST_KOTOR_2_FEAT = 125;
         public enum FEATS : ushort
         {
             UNDEFINED = 0,
@@ -348,6 +349,7 @@ namespace KotorMessageInjector
 
         }
 
+        public const byte FIRST_KOTOR_2_CLASS = 9;
         public enum CLASSES : byte
         {
             SOLDIER = 0,
@@ -370,6 +372,7 @@ namespace KotorMessageInjector
             SITH_ASSASSIN = 16
         }
 
+        public const int FIRST_KOTOR_2_SPELL = 131;
         public enum SPELLS : int
         {
             FORCE_POWER_MASTER_ALTER_XXX = 0,

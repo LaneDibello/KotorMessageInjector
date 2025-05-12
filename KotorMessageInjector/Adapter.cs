@@ -2,6 +2,8 @@
 using static KotorMessageInjector.Message;
 using System;
 using System.Runtime.InteropServices;
+using System.Collections;
+using System.Collections.Generic;
 
 namespace KotorMessageInjector
 {
@@ -431,6 +433,34 @@ namespace KotorMessageInjector
             _ = i.runFunction(new RemoteFunction(funcLibrary[Function.CSWSCreatureStats_AddFeat], false)
                 .setThis(creatureStats)
                 .addParam((int)feat));
+        }
+
+        public static void ClearCreatureFeats(IntPtr pHandle, uint serverCreature)
+        {
+            var i = new Injector(pHandle);
+            var funcLibrary = getFuncLibrary(pHandle);
+
+            var creatureStats = getCreatureStats(pHandle, serverCreature);
+
+            _ = i.runFunction(new RemoteFunction(funcLibrary[Function.CSWSCreatureStats_ClearFeats], false)
+                .setThis(creatureStats));
+        }
+
+        public static void SetCreatureFeats(IntPtr pHandle, uint serverCreature, List<FEATS> feats)
+        {
+            var i = new Injector(pHandle);
+            var funcLibrary = getFuncLibrary(pHandle);
+            var creatureStats = getCreatureStats(pHandle, serverCreature);
+
+            _ = i.runFunction(new RemoteFunction(funcLibrary[Function.CSWSCreatureStats_ClearFeats], false)
+                .setThis(creatureStats));
+
+            foreach (var feat in feats)
+            {
+                _ = i.runFunction(new RemoteFunction(funcLibrary[Function.CSWSCreatureStats_AddFeat], false)
+                    .setThis(creatureStats)
+                    .addParam((int)feat));
+            }
         }
 
         public static void AddCreatureClass(IntPtr pHandle, uint serverCreature, CLASSES newClass)

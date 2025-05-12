@@ -335,5 +335,10 @@ namespace KotorMessageInjector
             uint dwSize,
             uint flNewProtect,
             out uint lpflOldProtect);
+
+        [DllImport("kernel32.dll", SetLastError = true)]
+        public static extern bool GetHandleInformation(
+            IntPtr hProcess,
+            out uint lpdwFlags);
     }
 }
