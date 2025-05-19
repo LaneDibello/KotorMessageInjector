@@ -231,13 +231,13 @@ namespace KotorMessageInjector
 
             {Function.CSWSCreature_SetGold, 0x00581330},
 
-            //{Function.CSWGuiMessageBox_SetMessage, },
-            //{Function.CSWGuiManager_AddPanel, },
-            //{Function.CSWGuiMessageBox_SetAllowCancel, },
-            //{Function.CSWGuiMessageBox_SetCallback, },
+            {Function.CSWGuiMessageBox_SetMessage, 0x0075bd50},
+            {Function.CSWGuiManager_AddPanel, 0x00410530},
+            {Function.CSWGuiMessageBox_SetAllowCancel, 0x0075bb00},
+            {Function.CSWGuiMessageBox_SetCallback, 0x0075ca30},
 
-            //{Function.CGuiInGame_ShowPartySelection, },
-            //{Function.CGuiInGame_ShowItemCreateMenu, },
+            {Function.CGuiInGame_ShowPartySelection, 0x007cb920},
+            {Function.CGuiInGame_ShowItemCreateMenu, 0x007caa10},
         };
     }
 }

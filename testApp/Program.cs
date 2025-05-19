@@ -183,7 +183,7 @@ namespace testApp
             //Console.WriteLine(Adapter.GetGlobalBoolean(pHandle, "202_FIRST_ENTER"));
             //Adapter.ShowItemCreateMenu(pHandle);
             //Adapter.ShowPartySelection(pHandle);
-            Adapter.CreatePopUp(pHandle, "TEST", false);
+            //Adapter.CreatePopUp(pHandle, "TEST", false);
 
             //uint gob = Adapter.GetPlayerGob(pHandle);
 
