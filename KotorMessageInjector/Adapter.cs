@@ -4,6 +4,7 @@ using System;
 using System.Runtime.InteropServices;
 using System.Collections;
 using System.Collections.Generic;
+using System.Runtime.Serialization;
 
 namespace KotorMessageInjector
 {
@@ -520,6 +521,59 @@ namespace KotorMessageInjector
             _ = i.runFunction(new RemoteFunction(funcLibrary[Function.CSWSCreature_SetGold], false)
                 .setThis(serverCreature)
                 .addParam(amount));
+        }
+
+        /// <param name="pHandle">The Hanbdle of the Kotor process</param>
+        /// <param name="text">The text to appear on the pop-up. May encounter odd behvaior if text is more than 512 characters in length</param>
+        /// <param name="cancelButton">Should this box has a "Cancel" Button?</param>
+        /// <param name="okCallback">The address of the function to run when "ok" is pressed. Must take a `CSWGuiControl *` 
+        /// parameter, though it doesn't have to use it. Theorhetically we could make our own functions to run here.</param>
+        public static void CreatePopUp(IntPtr pHandle, string text, bool cancelButton = false, uint okCallback = 0xFFFFFFFF) 
+        { 
+            var i = new Injector(pHandle);
+            var funcLibrary = getFuncLibrary(pHandle);
+
+            // Set whether there is a cancel button on the pop-up
+            uint messageBox = getMessageBox(pHandle);
+            Console.WriteLine("Starting CSWGuiMessageBox_SetAllowCancel");
+            _ = i.runFunction(new RemoteFunction(funcLibrary[Function.CSWGuiMessageBox_SetAllowCancel], false)
+                .setThis(messageBox)
+                .addParam(cancelButton ? 1 : 0));
+
+            // Set a call-back if a function was specified
+            Console.WriteLine("Starting CSWGuiMessageBox_SetCallback");
+            if (okCallback != 0xFFFFFFFF)
+            {
+                messageBox = getMessageBox(pHandle);
+                _ = i.runFunction(new RemoteFunction(funcLibrary[Function.CSWGuiMessageBox_SetCallback], false)
+                .setThis(messageBox)
+                .addParam(messageBox) // The parent GUI, can overwrite the callbacks
+                .addParam(okCallback) // The callback function, gets called when the user selects "Ok"
+                .addParam(0)); // A GUI Control poiunter that gets passed as a parameter to the callback function
+            }
+
+            // Create pop-up text string
+            Console.WriteLine("Starting operator_new");
+            uint message = i.runFunction(new RemoteFunction(funcLibrary[Function.operator_new], true)
+                .addParam(text.Length + 1));
+            writeStringToMemory(pHandle, message, text, text.Length + 1);
+
+            // Apply the text as the pop-up message 
+            Console.WriteLine("Starting CSWGuiMessageBox_SetMessage");
+            messageBox = getMessageBox(pHandle);
+            _ = i.runFunction(new RemoteFunction(funcLibrary[Function.CSWGuiMessageBox_SetMessage], false)
+                .setThis(messageBox)
+                .addParam(message) // The message to appear on the pop-up
+                .addParam(text.Length)); // The length of the text
+
+            // Add the message box to the active GUI
+            Console.WriteLine("Starting CSWGuiManager_AddPanel");
+            uint manager = getGuiManager(pHandle);
+            _ = i.runFunction(new RemoteFunction(funcLibrary[Function.CSWGuiManager_AddPanel], false)
+                .setThis(manager)
+                .addParam(messageBox)
+                .addParam(1) // Some bit flags here, seems to have some function over bits 0-4 (0-15)
+                .addParam(1)); // Controls whether the pop-up plays a sound
         }
 
         #endregion

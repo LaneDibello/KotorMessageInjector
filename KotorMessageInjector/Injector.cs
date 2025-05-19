@@ -1,8 +1,14 @@
 ﻿using System;
+using System.Threading;
 using static KotorMessageInjector.ProcessAPI;
 
 namespace KotorMessageInjector
 {
+    public class InjectedFunctionFailedException : Exception 
+    {
+        public InjectedFunctionFailedException(string message) : base(message) { }
+    }
+    
     public class Injector
     {
         private const uint MESSAGE_SPACE = 0x400; // 1 kb
@@ -68,10 +74,9 @@ namespace KotorMessageInjector
             int gameVersion = KotorHelpers.getGameVersion(processHandle, out isSteam);
 
             // Write out Message and shellcode
-            UIntPtr bytesWritten;
-            WriteProcessMemory(processHandle, remoteMessageData, msg.message, msg.length, out bytesWritten);
+            WriteProcessMemory(processHandle, remoteMessageData, msg.message, msg.length, out _);
             SendMessageShellcode shellcode = new SendMessageShellcode(msg, remoteMessageData, gameVersion, isSteam);
-            WriteProcessMemory(processHandle, remoteShellcode, shellcode.code, shellcode.length, out bytesWritten);
+            WriteProcessMemory(processHandle, remoteShellcode, shellcode.code, shellcode.length, out _);
 
             //Send Message
             uint threadId;
@@ -82,6 +87,8 @@ namespace KotorMessageInjector
 
             //Clean up
             CloseHandle(thread);
+            WriteProcessMemory(processHandle, remoteShellcode, (byte[])Array.CreateInstance(typeof(byte), shellcode.length), shellcode.length, out _);
+            WriteProcessMemory(processHandle, remoteMessageData, (byte[])Array.CreateInstance(typeof(byte), msg.length), msg.length, out _);
         }
 
         public uint runFunction(RemoteFunction func)
@@ -97,16 +104,20 @@ namespace KotorMessageInjector
             {
                 shellcode.addParam(param, size);
             }
-            UIntPtr bytesWritten;
             byte[] code = shellcode.generateShellcode();
-            WriteProcessMemory(processHandle, remoteShellcode, code, (uint)code.Length, out bytesWritten);
+            WriteProcessMemory(processHandle, remoteShellcode, code, (uint)code.Length, out _);
 
             // Run Thread
-            uint threadId;
-            IntPtr thread = CreateRemoteThread(processHandle, (IntPtr)0, 0, remoteShellcode, (IntPtr)0, 0, out threadId);
+            IntPtr thread = CreateRemoteThread(processHandle, (IntPtr)0, 0, remoteShellcode, (IntPtr)0, 0, out _);
 
             //Wait for thread to finish
-            WaitForSingleObject(thread, INFINITE);
+            uint result = WaitForSingleObject(thread, INFINITE);
+            
+            if (result == 0xFFFFFFFF)
+            {
+                Console.WriteLine($"Function failed with {GetLastError()}");
+            }
+
 
             //Clean up
             CloseHandle(thread);
@@ -115,10 +126,12 @@ namespace KotorMessageInjector
             if (func.shouldReturn)
             {
                 byte[] outBytes = new byte[4];
-                UIntPtr bytesRead;
-                ReadProcessMemory(processHandle, remoteMessageData, outBytes, 4, out bytesRead);
+                ReadProcessMemory(processHandle, remoteMessageData, outBytes, 4, out _);
                 return BitConverter.ToUInt32(outBytes, 0);
             }
+
+            Array.Clear(code, 0, code.Length);
+            WriteProcessMemory(processHandle, remoteShellcode, code, (uint)code.Length, out _);
 
             return 0;
         }

@@ -1,6 +1,8 @@
 ﻿using System;
 using static KotorMessageInjector.ProcessAPI;
 using System.Collections.Generic;
+using System.Linq;
+using System.Text;
 
 namespace KotorMessageInjector
 {
@@ -388,6 +390,41 @@ namespace KotorMessageInjector
 
             ReadProcessMemory(processHandle, (IntPtr)(clientInternal + offset), outBytes, 4, out _);
             return BitConverter.ToUInt32(outBytes, 0);
+        }
+
+        public static uint getMessageBox(IntPtr processHandle)
+        {
+            byte[] outBytes = new byte[4];
+
+            int version = getGameVersion(processHandle);
+            uint offset = KOTOR_OFFSET_MESSAGE_BOX;
+
+            uint inGameGui = getInGameGui(processHandle);
+
+            ReadProcessMemory(processHandle, (IntPtr)(inGameGui + offset), outBytes, 4, out _);
+            return BitConverter.ToUInt32(outBytes, 0);
+        }
+
+        public static uint getGuiManager(IntPtr processHandle)
+        {
+            byte[] outBytes = new byte[4];
+
+            int version = getGameVersion(processHandle);
+            uint offset = KOTOR_OFFSET_GUI_MANAGER;
+
+            uint inGameGui = getInGameGui(processHandle);
+
+            ReadProcessMemory(processHandle, (IntPtr)(inGameGui + offset), outBytes, 4, out _);
+            return BitConverter.ToUInt32(outBytes, 0);
+        }
+
+        public static void writeStringToMemory(IntPtr processHandle, uint buffer, string text, int bufferCapacity)
+        {
+            byte[] inBytes = new byte[text.Length + 1];
+            Encoding.ASCII.GetBytes(text).CopyTo(inBytes, 0);
+            inBytes[text.Length] = 0;
+
+            WriteProcessMemory(processHandle, (IntPtr)buffer, Encoding.ASCII.GetBytes(text), (uint)Math.Min(text.Length + 1, bufferCapacity), out _);
         }
     }
 }

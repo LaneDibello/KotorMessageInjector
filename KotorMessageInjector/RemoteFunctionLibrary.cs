@@ -44,7 +44,11 @@ namespace KotorMessageInjector
         CSWSCreatureStats_AddClass,
         CSWSCreatureStats_AddExperience,
         CSWSCreatureStats_AddKnownSpell,
-        CSWSCreature_SetGold
+        CSWSCreature_SetGold,
+        CSWGuiMessageBox_SetMessage,
+        CSWGuiManager_AddPanel,
+        CSWGuiMessageBox_SetAllowCancel,
+        CSWGuiMessageBox_SetCallback,
     }
 
     public static class RemoteFunctionLibrary
@@ -95,6 +99,12 @@ namespace KotorMessageInjector
             {Function.CSWSCreatureStats_AddKnownSpell, 0x005aa9b0},
 
             {Function.CSWSCreature_SetGold, 0x004edd90},
+
+            {Function.CSWGuiMessageBox_SetMessage, 0x006271a0},
+            {Function.CSWGuiManager_AddPanel, 0x0040bc70},
+            {Function.CSWGuiMessageBox_SetAllowCancel, 0x00627130},
+            {Function.CSWGuiMessageBox_SetCallback, 0x00624a40},
+
         };
 
         public static Dictionary<Function, uint> k2Functions = new Dictionary<Function, uint>()

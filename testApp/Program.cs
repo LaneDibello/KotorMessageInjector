@@ -178,6 +178,7 @@ namespace testApp
 
             //Examples.colorizeModel(pHandle, gob, 0f, 1f, 0f);
 
+            Adapter.CreatePopUp(pHandle, "00000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000");
 
             //uint gob = Adapter.GetPlayerGob(pHandle);
 
@@ -186,13 +187,14 @@ namespace testApp
             //    .addParam(1.1f)
             //    .addParam(false));
 
-            uint player = Adapter.GetPlayerServerObject(pHandle);
+            //uint player = Adapter.GetPlayerServerObject(pHandle);
 
-            setRunrate(pHandle, player, 20.5f);
+            //setRunrate(pHandle, player, 20.5f);
 
             //Adapter.ColorizeModel(pHandle, gob, 1f, 0f, 0f);
 
-            //Console.WriteLine();
+            ////Console.WriteLine();
+            //Console.ReadKey();
 
         }
     }
