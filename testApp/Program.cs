@@ -178,9 +178,10 @@ namespace testApp
 
             //Examples.colorizeModel(pHandle, gob, 0f, 1f, 0f);
 
-            //Adapter.SetGlobalNumber(pHandle, "000_RareItemChance", 69);
-            //Console.WriteLine(Adapter.GetGlobalNumber(pHandle, "000_RareItemChance"));
-            //Console.WriteLine(Adapter.GetGlobalBoolean(pHandle, "202_FIRST_ENTER"));
+            Adapter.SetGlobalNumber(pHandle, "000_RareItemChance", 69);
+            Console.WriteLine(Adapter.GetGlobalNumber(pHandle, "000_RareItemChance"));
+            Adapter.SetGlobalBoolean(pHandle, "000_PLAYER_GENDER", false);
+            Console.WriteLine(Adapter.GetGlobalBoolean(pHandle, "000_PLAYER_GENDER"));
             //Adapter.ShowItemCreateMenu(pHandle);
             //Adapter.ShowPartySelection(pHandle);
             //Adapter.CreatePopUp(pHandle, "TEST", false);
@@ -199,7 +200,7 @@ namespace testApp
             //Adapter.ColorizeModel(pHandle, gob, 1f, 0f, 0f);
 
             ////Console.WriteLine();
-            //Console.ReadKey();
+            Console.ReadKey();
 
         }
     }
