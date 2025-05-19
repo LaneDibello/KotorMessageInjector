@@ -9,6 +9,11 @@ namespace KotorMessageInjector
         CFactionManager_GetFaction,
         CServerExoApp_SetMoveToModulePending,
         CServerExoApp_SetMoveToModuleString,
+        CServerExoApp_GetGlobalVariableTable,
+        CSWGlobalVariableTable_GetValueBoolean,
+        CSWGlobalVariableTable_GetValueNumber,
+        CSWGlobalVariableTable_SetValueBoolean,
+        CSWGlobalVariableTable_SetValueNumber,
         CServerExoAppInternal_GetModule,
         CSWPartyTable_AddNPC,
         CSWSCreature_CSWSCreature,
@@ -67,6 +72,12 @@ namespace KotorMessageInjector
             {Function.CFactionManager_GetFaction, 0x0052b3b0},
             {Function.CSWSFaction_AddMember, 0x005bfa70},
 
+            {Function.CServerExoApp_GetGlobalVariableTable, 0x004aee60},
+            {Function.CSWGlobalVariableTable_GetValueBoolean, 0x00529110},
+            {Function.CSWGlobalVariableTable_GetValueNumber, 0x00529240},
+            {Function.CSWGlobalVariableTable_SetValueBoolean, 0x00529570},
+            {Function.CSWGlobalVariableTable_SetValueNumber, 0x00529680},
+
             {Function.NewCAurObject, 0x00449cc0},
             {Function.Scene_AddObject, 0x00458bd0},
             {Function.Gob_SetPosition, 0x0043f0c0},
@@ -121,6 +132,12 @@ namespace KotorMessageInjector
             {Function.CFactionManager_GetFaction, 0x007ef020},
             {Function.CSWSFaction_AddMember, 0x007e4850},
 
+            {Function.CServerExoApp_GetGlobalVariableTable, 0x0064c2b0},
+            {Function.CSWGlobalVariableTable_GetValueBoolean, 0x00651600},
+            {Function.CSWGlobalVariableTable_GetValueNumber, 0x00651720},
+            {Function.CSWGlobalVariableTable_SetValueBoolean, 0x00651a70},
+            {Function.CSWGlobalVariableTable_SetValueNumber, 0x00651b80},
+
             {Function.NewCAurObject, 0x008548b0},
             {Function.Gob_SetPosition, 0x00853a20},
             {Function.Gob_SetOrientation, 0x00853a70},
@@ -163,6 +180,12 @@ namespace KotorMessageInjector
             {Function.CServerExoApp_SetMoveToModulePending, 0x0051be50},
             {Function.CFactionManager_GetFaction, 0x00664490},
             {Function.CSWSFaction_AddMember, 0x006d3330},
+
+            {Function.CServerExoApp_GetGlobalVariableTable, 0x0051c890},
+            {Function.CSWGlobalVariableTable_GetValueBoolean, 0x00654740},
+            {Function.CSWGlobalVariableTable_GetValueNumber, 0x00654860},
+            {Function.CSWGlobalVariableTable_SetValueBoolean, 0x00654bb0},
+            {Function.CSWGlobalVariableTable_SetValueNumber, 0x00654cc0},
 
             {Function.NewCAurObject, 0x00462320},
             {Function.Gob_SetPosition, 0x00461490},
