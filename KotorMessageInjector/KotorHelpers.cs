@@ -426,5 +426,13 @@ namespace KotorMessageInjector
 
             WriteProcessMemory(processHandle, (IntPtr)buffer, Encoding.ASCII.GetBytes(text), (uint)Math.Min(text.Length + 1, bufferCapacity), out _);
         }
+
+        public static int readIntFromMemory (IntPtr processHandle, uint address)
+        {
+            byte[] outBytes = new byte[4];
+
+            ReadProcessMemory(processHandle, (IntPtr)(address), outBytes, 4, out _);
+            return BitConverter.ToInt32(outBytes, 0);
+        }
     }
 }

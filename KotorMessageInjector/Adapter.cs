@@ -523,7 +523,7 @@ namespace KotorMessageInjector
                 .addParam(amount));
         }
 
-        /// <param name="pHandle">The Hanbdle of the Kotor process</param>
+        /// <param name="pHandle">The Handle of the Kotor process</param>
         /// <param name="text">The text to appear on the pop-up. May encounter odd behvaior if text is more than 512 characters in length</param>
         /// <param name="cancelButton">Should this box has a "Cancel" Button?</param>
         /// <param name="okCallback">The address of the function to run when "ok" is pressed. Must take a `CSWGuiControl *` 
@@ -576,6 +576,28 @@ namespace KotorMessageInjector
                 .addParam(1)); // Controls whether the pop-up plays a sound
         }
 
+        public static int GetGlobalNumber(IntPtr pHandle, string global)
+        {
+            var i = new Injector(pHandle);
+            var funcLibrary = getFuncLibrary(pHandle);
+            var om = new ObjManager(pHandle);
+
+            var server = getServer(pHandle);
+
+            // Get Global Variable Table
+            uint globalTable = i.runFunction(new RemoteFunction(funcLibrary[Function.CServerExoApp_GetGlobalVariableTable], true)
+                .setThis(server));
+
+            // Get Variable Number
+            uint label = om.createCExoString(global);
+            uint output = om.createBuffer(4);
+            int test = (int)i.runFunction(new RemoteFunction(funcLibrary[Function.CSWGlobalVariableTable_GetValueNumber], false)
+                .setThis(server)
+                .addParam(label) // The CExoString label for this global
+                .addParam(output));
+
+            return test;
+        }
         #endregion
     }
 }
