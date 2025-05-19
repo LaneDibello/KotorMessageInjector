@@ -178,8 +178,12 @@ namespace testApp
 
             //Examples.colorizeModel(pHandle, gob, 0f, 1f, 0f);
 
-            //Console.WriteLine(Adapter.GetGlobalNumber(pHandle, "K_CURRENT_PLANET"));
-            Adapter.ShowItemCreateMenu(pHandle);
+            //Adapter.SetGlobalNumber(pHandle, "000_RareItemChance", 69);
+            //Console.WriteLine(Adapter.GetGlobalNumber(pHandle, "000_RareItemChance"));
+            //Console.WriteLine(Adapter.GetGlobalBoolean(pHandle, "202_FIRST_ENTER"));
+            //Adapter.ShowItemCreateMenu(pHandle);
+            //Adapter.ShowPartySelection(pHandle);
+            Adapter.CreatePopUp(pHandle, "TEST", false);
 
             //uint gob = Adapter.GetPlayerGob(pHandle);
 

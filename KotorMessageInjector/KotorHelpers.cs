@@ -397,7 +397,7 @@ namespace KotorMessageInjector
             byte[] outBytes = new byte[4];
 
             int version = getGameVersion(processHandle);
-            uint offset = KOTOR_OFFSET_MESSAGE_BOX;
+            uint offset = version == 1 ? KOTOR_1_OFFSET_MESSAGE_BOX : KOTOR_2_OFFSET_MESSAGE_BOX;
 
             uint inGameGui = getInGameGui(processHandle);
 

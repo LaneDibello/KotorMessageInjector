@@ -172,6 +172,15 @@ namespace KotorMessageInjector
             {Function.CSWSCreatureStats_AddKnownSpell, 0x006f4b20},
 
             {Function.CSWSCreature_SetGold, 0x00699e60},
+
+            {Function.CSWGuiMessageBox_SetMessage, 0x0052d2e0},
+            {Function.CSWGuiManager_AddPanel, 0x0090e9b0},
+            {Function.CSWGuiMessageBox_SetAllowCancel, 0x0052d090},
+            {Function.CSWGuiMessageBox_SetCallback, 0x0052e030},
+
+            {Function.CGuiInGame_ShowPartySelection, 0x004dc020},
+            {Function.CGuiInGame_ShowItemCreateMenu, 0x004db110},
+
         };
 
         public static Dictionary<Function, uint> k2SteamFunctions = new Dictionary<Function, uint>()
@@ -221,6 +230,14 @@ namespace KotorMessageInjector
             {Function.CSWSCreatureStats_AddKnownSpell, 0x006b86a0},
 
             {Function.CSWSCreature_SetGold, 0x00581330},
+
+            //{Function.CSWGuiMessageBox_SetMessage, },
+            //{Function.CSWGuiManager_AddPanel, },
+            //{Function.CSWGuiMessageBox_SetAllowCancel, },
+            //{Function.CSWGuiMessageBox_SetCallback, },
+
+            //{Function.CGuiInGame_ShowPartySelection, },
+            //{Function.CGuiInGame_ShowItemCreateMenu, },
         };
     }
 }
