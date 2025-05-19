@@ -54,6 +54,7 @@ namespace KotorMessageInjector
         CSWGuiManager_AddPanel,
         CSWGuiMessageBox_SetAllowCancel,
         CSWGuiMessageBox_SetCallback,
+        CGuiInGame_ShowPartySelection,
     }
 
     public static class RemoteFunctionLibrary
@@ -115,6 +116,9 @@ namespace KotorMessageInjector
             {Function.CSWGuiManager_AddPanel, 0x0040bc70},
             {Function.CSWGuiMessageBox_SetAllowCancel, 0x00627130},
             {Function.CSWGuiMessageBox_SetCallback, 0x00624a40},
+
+            {Function.CGuiInGame_ShowPartySelection, 0x0062dd20},
+
 
         };
 

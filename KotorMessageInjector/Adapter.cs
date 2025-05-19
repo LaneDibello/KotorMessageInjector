@@ -681,6 +681,30 @@ namespace KotorMessageInjector
                 .addParam(label) // The CExoString label for this global
                 .addParam(value ? 1 : 0));
         }
+
+        /// <summary>
+        /// Opens the party selection GUI
+        /// </summary>
+        /// <param name="pHandle">The Handle of the Kotor process</param>
+        /// <param name="forceNpc1">Forces this NPC (if available) into your party, -1 for open choice</param>
+        /// <param name="forceNpc2">Forces this NPC into your party, -1 for open choice</param>
+        /// <param name="exitScript">NCS script to be run when the menu closes</param>
+        public static void ShowPartySelection(IntPtr pHandle, int forceNpc1 = -1, int forceNpc2 = -1, string exitScript = "")
+        {
+            var i = new Injector(pHandle);
+            var funcLibrary = getFuncLibrary(pHandle);
+            var om = new ObjManager(pHandle);
+
+            var guiInGame = getInGameGui(pHandle);
+
+            uint script = om.createCExoString(exitScript);
+            _ = i.runFunction(new RemoteFunction(funcLibrary[Function.CGuiInGame_ShowPartySelection], false)
+                .setThis(guiInGame)
+                .addParam(script) // Script to be run when the menu is closed
+                .addParam(1) // Requires the user select 'Ok', must be set to 1 to work everywhere
+                .addParam(forceNpc1)
+                .addParam(forceNpc2));
+        }
         #endregion
     }
 }

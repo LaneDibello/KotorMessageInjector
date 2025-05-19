@@ -179,7 +179,7 @@ namespace testApp
             //Examples.colorizeModel(pHandle, gob, 0f, 1f, 0f);
 
             //Console.WriteLine(Adapter.GetGlobalNumber(pHandle, "K_CURRENT_PLANET"));
-            Adapter.SetGlobalNumber(pHandle, "K_CURRENT_PLANET", 45);
+            Adapter.ShowPartySelection(pHandle);
 
             //uint gob = Adapter.GetPlayerGob(pHandle);
 
@@ -195,7 +195,7 @@ namespace testApp
             //Adapter.ColorizeModel(pHandle, gob, 1f, 0f, 0f);
 
             ////Console.WriteLine();
-            Console.ReadKey();
+            //Console.ReadKey();
 
         }
     }
