@@ -584,6 +584,11 @@ namespace KotorMessageInjector
 
             var server = getServer(pHandle);
 
+            if (server == 0)
+            {
+                return -1;
+            }
+
             // Get Global Variable Table
             uint globalTable = i.runFunction(new RemoteFunction(funcLibrary[Function.CServerExoApp_GetGlobalVariableTable], true)
                 .setThis(server));
@@ -591,12 +596,12 @@ namespace KotorMessageInjector
             // Get Variable Number
             uint label = om.createCExoString(global);
             uint output = om.createBuffer(4);
-            int test = (int)i.runFunction(new RemoteFunction(funcLibrary[Function.CSWGlobalVariableTable_GetValueNumber], false)
-                .setThis(server)
+            _ = (int)i.runFunction(new RemoteFunction(funcLibrary[Function.CSWGlobalVariableTable_GetValueNumber], false)
+                .setThis(globalTable)
                 .addParam(label) // The CExoString label for this global
                 .addParam(output));
 
-            return test;
+            return readIntFromMemory(pHandle, output);
         }
         #endregion
     }

@@ -178,7 +178,7 @@ namespace testApp
 
             //Examples.colorizeModel(pHandle, gob, 0f, 1f, 0f);
 
-            Console.WriteLine(Adapter.GetGlobalNumber(pHandle, "K_CURRENT_PLANET\0"));
+            Console.WriteLine(Adapter.GetGlobalNumber(pHandle, "K_CURRENT_PLANET"));
 
             //uint gob = Adapter.GetPlayerGob(pHandle);
 
