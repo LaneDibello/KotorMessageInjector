@@ -603,6 +603,84 @@ namespace KotorMessageInjector
 
             return readIntFromMemory(pHandle, output);
         }
+
+        public static void SetGlobalNumber(IntPtr pHandle, string global, byte value)
+        {
+            var i = new Injector(pHandle);
+            var funcLibrary = getFuncLibrary(pHandle);
+            var om = new ObjManager(pHandle);
+
+            var server = getServer(pHandle);
+
+            if (server == 0)
+            {
+                return;
+            }
+
+            // Get Global Variable Table
+            uint globalTable = i.runFunction(new RemoteFunction(funcLibrary[Function.CServerExoApp_GetGlobalVariableTable], true)
+                .setThis(server));
+
+            // Get Variable Number
+            uint label = om.createCExoString(global);
+            _ = (int)i.runFunction(new RemoteFunction(funcLibrary[Function.CSWGlobalVariableTable_SetValueNumber], false)
+                .setThis(globalTable)
+                .addParam(label) // The CExoString label for this global
+                .addParam((int)value));
+        }
+
+        public static bool? GetGlobalBoolean(IntPtr pHandle, string global)
+        {
+            var i = new Injector(pHandle);
+            var funcLibrary = getFuncLibrary(pHandle);
+            var om = new ObjManager(pHandle);
+
+            var server = getServer(pHandle);
+
+            if (server == 0)
+            {
+                return null;
+            }
+
+            // Get Global Variable Table
+            uint globalTable = i.runFunction(new RemoteFunction(funcLibrary[Function.CServerExoApp_GetGlobalVariableTable], true)
+                .setThis(server));
+
+            // Get Variable Number
+            uint label = om.createCExoString(global);
+            uint output = om.createBuffer(4);
+            _ = (int)i.runFunction(new RemoteFunction(funcLibrary[Function.CSWGlobalVariableTable_GetValueBoolean], false)
+                .setThis(globalTable)
+                .addParam(label) // The CExoString label for this global
+                .addParam(output));
+
+            return readIntFromMemory(pHandle, output) == 1;
+        }
+
+        public static void SetGlobalBoolean(IntPtr pHandle, string global, bool value)
+        {
+            var i = new Injector(pHandle);
+            var funcLibrary = getFuncLibrary(pHandle);
+            var om = new ObjManager(pHandle);
+
+            var server = getServer(pHandle);
+
+            if (server == 0)
+            {
+                return;
+            }
+
+            // Get Global Variable Table
+            uint globalTable = i.runFunction(new RemoteFunction(funcLibrary[Function.CServerExoApp_GetGlobalVariableTable], true)
+                .setThis(server));
+
+            // Get Variable Number
+            uint label = om.createCExoString(global);
+            _ = (int)i.runFunction(new RemoteFunction(funcLibrary[Function.CSWGlobalVariableTable_SetValueBoolean], false)
+                .setThis(globalTable)
+                .addParam(label) // The CExoString label for this global
+                .addParam(value ? 1 : 0));
+        }
         #endregion
     }
 }
