@@ -179,7 +179,7 @@ namespace testApp
             //Examples.colorizeModel(pHandle, gob, 0f, 1f, 0f);
 
             //Console.WriteLine(Adapter.GetGlobalNumber(pHandle, "K_CURRENT_PLANET"));
-            Adapter.ShowPartySelection(pHandle);
+            Adapter.ShowItemCreateMenu(pHandle);
 
             //uint gob = Adapter.GetPlayerGob(pHandle);
 

@@ -705,6 +705,17 @@ namespace KotorMessageInjector
                 .addParam(forceNpc1)
                 .addParam(forceNpc2));
         }
+
+        public static void ShowItemCreateMenu(IntPtr pHandle)
+        {
+            var i = new Injector(pHandle);
+            var funcLibrary = getFuncLibrary(pHandle);
+
+            var guiInGame = getInGameGui(pHandle);
+
+            _ = i.runFunction(new RemoteFunction(funcLibrary[Function.CGuiInGame_ShowItemCreateMenu], false)
+                .setThis(guiInGame));
+        }
         #endregion
     }
 }
