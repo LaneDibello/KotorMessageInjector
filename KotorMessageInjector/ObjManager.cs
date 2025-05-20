@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Runtime.Serialization;
 using System.Text;
 using static KotorMessageInjector.ProcessAPI;
@@ -102,6 +103,23 @@ namespace KotorMessageInjector
             List<byte> data = new List<byte>();
             data.AddRange(Encoding.ASCII.GetBytes(s));
             data.Add(0); //null terminator
+
+            remoteSize += (uint)data.Count;
+            checkForOverflow();
+
+            UIntPtr bytesWritten;
+            WriteProcessMemory(processHandle, remoteIndex, data.ToArray(), (uint)data.Count, out bytesWritten);
+            remoteIndex += data.Count;
+
+            return dataPointer;
+        }
+
+        public uint createBuffer(int size, byte fill = 0)
+        {
+            uint dataPointer = (uint)remoteIndex;
+
+            List<byte> data = new List<byte>();
+            for (int i = 0; i < size; i++) data.Add(fill);
 
             remoteSize += (uint)data.Count;
             checkForOverflow();

@@ -19,6 +19,7 @@ namespace KotorMessageInjector
         private const uint KOTOR_OFFSET_CLIENT_ANIM_BASE = 0x68;
         private const uint KOTOR_OFFSET_ANIM_BASE_GOB = 0xb8;
         private const uint KOTOR_OFFSET_GUI_IN_GAME = 0x40;
+        private const uint KOTOR_OFFSET_GUI_MANAGER = 0x38;
 
         private static IntPtr KOTOR_1_APPMANAGER = (IntPtr)0x007a39fc;
         private static IntPtr KOTOR_1_DEACTIVATE_RENDER_WINDOW = (IntPtr)0x00401d90;
@@ -29,6 +30,7 @@ namespace KotorMessageInjector
         private const uint KOTOR_1_OFFSET_CHEAT_USED = 0x194;
         private const uint KOTOR_1_OFFSET_SCENE = 0x184;
         private const uint KOTOR_1_OFFSET_CREATURE_STATS = 0xa74;
+        private const uint KOTOR_1_OFFSET_MESSAGE_BOX = 0x98;
         private const uint KOTOR_1_OFFSET_CREATURE_STATS_RUNRATE = 0x198;
 
         private static IntPtr KOTOR_2_APPMANAGER = (IntPtr)0x00a11c04;
@@ -41,6 +43,7 @@ namespace KotorMessageInjector
         private const uint KOTOR_2_OFFSET_SCENE = 0x188;
         private const uint KOTOR_2_OFFSET_CREATURE_STATS = 0x1198;
         private const uint KOTOR_2_OFFSET_CREATURE_STATS_RUNRATE = 0x1a8;
+        private const uint KOTOR_2_OFFSET_MESSAGE_BOX = 0xa0;
 
         [Flags]
         public enum CLIENT_OBJECT_UPDATE_FLAGS : uint

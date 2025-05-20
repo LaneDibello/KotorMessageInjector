@@ -4,6 +4,7 @@ using System;
 using System.Runtime.InteropServices;
 using System.Collections;
 using System.Collections.Generic;
+using System.Runtime.Serialization;
 
 namespace KotorMessageInjector
 {
@@ -522,6 +523,199 @@ namespace KotorMessageInjector
                 .addParam(amount));
         }
 
+        /// <param name="pHandle">The Handle of the Kotor process</param>
+        /// <param name="text">The text to appear on the pop-up. May encounter odd behvaior if text is more than 512 characters in length</param>
+        /// <param name="cancelButton">Should this box has a "Cancel" Button?</param>
+        /// <param name="okCallback">The address of the function to run when "ok" is pressed. Must take a `CSWGuiControl *` 
+        /// parameter, though it doesn't have to use it. Theorhetically we could make our own functions to run here.</param>
+        public static void CreatePopUp(IntPtr pHandle, string text, bool cancelButton = false, uint okCallback = 0xFFFFFFFF) 
+        { 
+            var i = new Injector(pHandle);
+            var funcLibrary = getFuncLibrary(pHandle);
+
+            // Set whether there is a cancel button on the pop-up
+            uint messageBox = getMessageBox(pHandle);
+            Console.WriteLine("Starting CSWGuiMessageBox_SetAllowCancel");
+            _ = i.runFunction(new RemoteFunction(funcLibrary[Function.CSWGuiMessageBox_SetAllowCancel], false)
+                .setThis(messageBox)
+                .addParam(cancelButton ? 1 : 0));
+
+            // Set a call-back if a function was specified
+            Console.WriteLine("Starting CSWGuiMessageBox_SetCallback");
+            if (okCallback != 0xFFFFFFFF)
+            {
+                messageBox = getMessageBox(pHandle);
+                _ = i.runFunction(new RemoteFunction(funcLibrary[Function.CSWGuiMessageBox_SetCallback], false)
+                .setThis(messageBox)
+                .addParam(messageBox) // The parent GUI, can overwrite the callbacks
+                .addParam(okCallback) // The callback function, gets called when the user selects "Ok"
+                .addParam(0)); // A GUI Control poiunter that gets passed as a parameter to the callback function
+            }
+
+            // Create pop-up text string
+            Console.WriteLine("Starting operator_new");
+            uint message = i.runFunction(new RemoteFunction(funcLibrary[Function.operator_new], true)
+                .addParam(text.Length + 1));
+            writeStringToMemory(pHandle, message, text, text.Length + 1);
+
+            // Apply the text as the pop-up message 
+            Console.WriteLine("Starting CSWGuiMessageBox_SetMessage");
+            messageBox = getMessageBox(pHandle);
+            _ = i.runFunction(new RemoteFunction(funcLibrary[Function.CSWGuiMessageBox_SetMessage], false)
+                .setThis(messageBox)
+                .addParam(message) // The message to appear on the pop-up
+                .addParam(text.Length)); // The length of the text
+
+            // Add the message box to the active GUI
+            Console.WriteLine("Starting CSWGuiManager_AddPanel");
+            uint manager = getGuiManager(pHandle);
+            _ = i.runFunction(new RemoteFunction(funcLibrary[Function.CSWGuiManager_AddPanel], false)
+                .setThis(manager)
+                .addParam(messageBox)
+                .addParam(1) // Some bit flags here, seems to have some function over bits 0-4 (0-15)
+                .addParam(1)); // Controls whether the pop-up plays a sound
+        }
+
+        public static int GetGlobalNumber(IntPtr pHandle, string global)
+        {
+            var i = new Injector(pHandle);
+            var funcLibrary = getFuncLibrary(pHandle);
+            var om = new ObjManager(pHandle);
+
+            var server = getServer(pHandle);
+
+            if (server == 0)
+            {
+                return -1;
+            }
+
+            // Get Global Variable Table
+            uint globalTable = i.runFunction(new RemoteFunction(funcLibrary[Function.CServerExoApp_GetGlobalVariableTable], true)
+                .setThis(server));
+
+            // Get Variable Number
+            uint label = om.createCExoString(global);
+            uint output = om.createBuffer(4);
+            _ = (int)i.runFunction(new RemoteFunction(funcLibrary[Function.CSWGlobalVariableTable_GetValueNumber], false)
+                .setThis(globalTable)
+                .addParam(label) // The CExoString label for this global
+                .addParam(output));
+
+            return readIntFromMemory(pHandle, output);
+        }
+
+        public static void SetGlobalNumber(IntPtr pHandle, string global, byte value)
+        {
+            var i = new Injector(pHandle);
+            var funcLibrary = getFuncLibrary(pHandle);
+            var om = new ObjManager(pHandle);
+
+            var server = getServer(pHandle);
+
+            if (server == 0)
+            {
+                return;
+            }
+
+            // Get Global Variable Table
+            uint globalTable = i.runFunction(new RemoteFunction(funcLibrary[Function.CServerExoApp_GetGlobalVariableTable], true)
+                .setThis(server));
+
+            // Get Variable Number
+            uint label = om.createCExoString(global);
+            _ = (int)i.runFunction(new RemoteFunction(funcLibrary[Function.CSWGlobalVariableTable_SetValueNumber], false)
+                .setThis(globalTable)
+                .addParam(label) // The CExoString label for this global
+                .addParam((int)value));
+        }
+
+        public static bool? GetGlobalBoolean(IntPtr pHandle, string global)
+        {
+            var i = new Injector(pHandle);
+            var funcLibrary = getFuncLibrary(pHandle);
+            var om = new ObjManager(pHandle);
+
+            var server = getServer(pHandle);
+
+            if (server == 0)
+            {
+                return null;
+            }
+
+            // Get Global Variable Table
+            uint globalTable = i.runFunction(new RemoteFunction(funcLibrary[Function.CServerExoApp_GetGlobalVariableTable], true)
+                .setThis(server));
+
+            // Get Variable Number
+            uint label = om.createCExoString(global);
+            uint output = om.createBuffer(4);
+            _ = (int)i.runFunction(new RemoteFunction(funcLibrary[Function.CSWGlobalVariableTable_GetValueBoolean], false)
+                .setThis(globalTable)
+                .addParam(label) // The CExoString label for this global
+                .addParam(output));
+
+            return readIntFromMemory(pHandle, output) == 1;
+        }
+
+        public static void SetGlobalBoolean(IntPtr pHandle, string global, bool value)
+        {
+            var i = new Injector(pHandle);
+            var funcLibrary = getFuncLibrary(pHandle);
+            var om = new ObjManager(pHandle);
+
+            var server = getServer(pHandle);
+
+            if (server == 0)
+            {
+                return;
+            }
+
+            // Get Global Variable Table
+            uint globalTable = i.runFunction(new RemoteFunction(funcLibrary[Function.CServerExoApp_GetGlobalVariableTable], true)
+                .setThis(server));
+
+            // Get Variable Number
+            uint label = om.createCExoString(global);
+            _ = (int)i.runFunction(new RemoteFunction(funcLibrary[Function.CSWGlobalVariableTable_SetValueBoolean], false)
+                .setThis(globalTable)
+                .addParam(label) // The CExoString label for this global
+                .addParam(value ? 1 : 0));
+        }
+
+        /// <summary>
+        /// Opens the party selection GUI
+        /// </summary>
+        /// <param name="pHandle">The Handle of the Kotor process</param>
+        /// <param name="forceNpc1">Forces this NPC (if available) into your party, -1 for open choice</param>
+        /// <param name="forceNpc2">Forces this NPC into your party, -1 for open choice</param>
+        /// <param name="exitScript">NCS script to be run when the menu closes</param>
+        public static void ShowPartySelection(IntPtr pHandle, int forceNpc1 = -1, int forceNpc2 = -1, string exitScript = "")
+        {
+            var i = new Injector(pHandle);
+            var funcLibrary = getFuncLibrary(pHandle);
+            var om = new ObjManager(pHandle);
+
+            var guiInGame = getInGameGui(pHandle);
+
+            uint script = om.createCExoString(exitScript);
+            _ = i.runFunction(new RemoteFunction(funcLibrary[Function.CGuiInGame_ShowPartySelection], false)
+                .setThis(guiInGame)
+                .addParam(script) // Script to be run when the menu is closed
+                .addParam(1) // Requires the user select 'Ok', must be set to 1 to work everywhere
+                .addParam(forceNpc1)
+                .addParam(forceNpc2));
+        }
+
+        public static void ShowItemCreateMenu(IntPtr pHandle)
+        {
+            var i = new Injector(pHandle);
+            var funcLibrary = getFuncLibrary(pHandle);
+
+            var guiInGame = getInGameGui(pHandle);
+
+            _ = i.runFunction(new RemoteFunction(funcLibrary[Function.CGuiInGame_ShowItemCreateMenu], false)
+                .setThis(guiInGame));
+        }
         #endregion
     }
 }
