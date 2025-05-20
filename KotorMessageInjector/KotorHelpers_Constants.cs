@@ -664,5 +664,23 @@ namespace KotorMessageInjector
             DROID_ITEM_BIO_ASSAULT_SPRAY = 280,
             DROID_ITEM_MULTI_SPECTRAL_EMITTER = 281
         }
+    
+        public enum PARTY_NPCS_K2 : int
+        {
+            NPC_PLAYER = -1,
+            NPC_ATTON = 0,
+            NPC_BAO_DUR = 1,
+            NPC_CANDEROUS = 2,
+            NPC_G0T0 = 3,
+            NPC_HANDMAIDEN = 4,
+            NPC_HK_47 = 5,
+            NPC_KREIA = 6,
+            NPC_MIRA = 7,
+            NPC_T3_M4 = 8,
+            NPC_VISAS = 9,
+            NPC_HANHARR = 10,
+            NPC_DISCIPLE = 11,
+
+        }
     }
 }

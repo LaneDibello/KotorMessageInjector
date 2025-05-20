@@ -750,7 +750,7 @@ namespace KotorMessageInjector
                 .setThis(guiInGame));
         }
 
-        public static int GetPCInfluenceKotor2(IntPtr pHandle, int npc)
+        public static int GetPCInfluenceKotor2(IntPtr pHandle, PARTY_NPCS_K2 npc)
         {
             var i = new Injector(pHandle);
             var funcLibrary = getFuncLibrary(pHandle);
@@ -764,10 +764,10 @@ namespace KotorMessageInjector
 
             return (int)i.runFunction(new RemoteFunction(funcLibrary[Function.CSWPartyTable_GetInfluence], true)
                 .setThis(partyTable)
-                .addParam(npc));
+                .addParam((int)npc));
         }
 
-        public static void SetPCInfluenceKotor2(IntPtr pHandle, int npc, int influence)
+        public static void SetPCInfluenceKotor2(IntPtr pHandle, PARTY_NPCS_K2 npc, int influence)
         {
             var i = new Injector(pHandle);
             var funcLibrary = getFuncLibrary(pHandle);
@@ -781,7 +781,7 @@ namespace KotorMessageInjector
 
             _ = i.runFunction(new RemoteFunction(funcLibrary[Function.CSWPartyTable_SetInfluence], false)
                 .setThis(partyTable)
-                .addParam(npc)
+                .addParam((int)npc)
                 .addParam(influence));
         }
         #endregion
