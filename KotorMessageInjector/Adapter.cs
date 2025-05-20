@@ -255,10 +255,7 @@ namespace KotorMessageInjector
             var funcLibrary = getFuncLibrary(pHandle);
 
             var server = getServer(pHandle);
-            if (server == 0)
-            {
-                return 0;
-            }
+            if (server == 0) { return 0; }
 
             return i.runFunction(new RemoteFunction(funcLibrary[Function.CServerExoApp_GetGameObject])
                 .setThis(server)
@@ -382,10 +379,7 @@ namespace KotorMessageInjector
             var i = new Injector(pHandle);
             var funcLibrary = getFuncLibrary(pHandle);
 
-            if (serverCreature == 0)
-            {
-                return;
-            }
+            if (serverCreature == 0) { return; }
 
             var creatureStats = getCreatureStats(pHandle, serverCreature);
             int targetValue = (int)value;
@@ -645,10 +639,7 @@ namespace KotorMessageInjector
 
             var server = getServer(pHandle);
 
-            if (server == 0)
-            {
-                return;
-            }
+            if (server == 0) { return; }
 
             // Get Global Variable Table
             uint globalTable = i.runFunction(new RemoteFunction(funcLibrary[Function.CServerExoApp_GetGlobalVariableTable], true)
