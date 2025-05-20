@@ -178,13 +178,23 @@ namespace testApp
 
             //Examples.colorizeModel(pHandle, gob, 0f, 1f, 0f);
 
-            Adapter.SetGlobalNumber(pHandle, "000_RareItemChance", 69);
-            Console.WriteLine(Adapter.GetGlobalNumber(pHandle, "000_RareItemChance"));
-            Adapter.SetGlobalBoolean(pHandle, "000_PLAYER_GENDER", false);
-            Console.WriteLine(Adapter.GetGlobalBoolean(pHandle, "000_PLAYER_GENDER"));
+            //Adapter.SetGlobalNumber(pHandle, "000_RareItemChance", 69);
+            //Console.WriteLine(Adapter.GetGlobalNumber(pHandle, "000_RareItemChance"));
+            //Adapter.SetGlobalBoolean(pHandle, "000_PLAYER_GENDER", false);
+            //Console.WriteLine(Adapter.GetGlobalBoolean(pHandle, "000_PLAYER_GENDER"));
             //Adapter.ShowItemCreateMenu(pHandle);
             //Adapter.ShowPartySelection(pHandle);
             //Adapter.CreatePopUp(pHandle, "TEST", false);
+
+            uint player = Adapter.GetPlayerServerObject(pHandle);
+
+            Console.WriteLine(GetAlignment(pHandle, player));
+            SetAlignment(pHandle, player, 10);
+            Console.WriteLine(GetAlignment(pHandle, player));
+            SetAlignment(pHandle, player, 69);
+            Console.WriteLine(GetAlignment(pHandle, player));
+            SetAlignment(pHandle, player, 20);
+
 
             //uint gob = Adapter.GetPlayerGob(pHandle);
 

@@ -249,8 +249,14 @@ namespace KotorMessageInjector
             var i = new Injector(pHandle);
             var funcLibrary = getFuncLibrary(pHandle);
 
+            var server = getServer(pHandle);
+            if (server == 0)
+            {
+                return 0;
+            }
+
             return i.runFunction(new RemoteFunction(funcLibrary[Function.CServerExoApp_GetGameObject])
-                .setThis(getServer(pHandle))
+                .setThis(server)
                 .addParam(getPlayerServerID(pHandle)));
         }
 
@@ -371,6 +377,11 @@ namespace KotorMessageInjector
             var i = new Injector(pHandle);
             var funcLibrary = getFuncLibrary(pHandle);
 
+            if (serverCreature == 0)
+            {
+                return;
+            }
+
             var creatureStats = getCreatureStats(pHandle, serverCreature);
             int targetValue = (int)value;
 
@@ -415,6 +426,8 @@ namespace KotorMessageInjector
             var i = new Injector(pHandle);
             var funcLibrary = getFuncLibrary(pHandle);
 
+            if (serverCreature == 0) { return; }
+
             var creatureStats = getCreatureStats(pHandle, serverCreature);
             int targetValue = (int)value;
 
@@ -428,6 +441,8 @@ namespace KotorMessageInjector
         {
             var i = new Injector(pHandle);
             var funcLibrary = getFuncLibrary(pHandle);
+            
+            if (serverCreature == 0) { return; }
 
             var creatureStats = getCreatureStats(pHandle, serverCreature);
 
@@ -441,6 +456,8 @@ namespace KotorMessageInjector
             var i = new Injector(pHandle);
             var funcLibrary = getFuncLibrary(pHandle);
 
+            if (serverCreature == 0) { return; }
+
             var creatureStats = getCreatureStats(pHandle, serverCreature);
 
             _ = i.runFunction(new RemoteFunction(funcLibrary[Function.CSWSCreatureStats_ClearFeats], false)
@@ -451,6 +468,9 @@ namespace KotorMessageInjector
         {
             var i = new Injector(pHandle);
             var funcLibrary = getFuncLibrary(pHandle);
+
+            if (serverCreature == 0) { return; }
+
             var creatureStats = getCreatureStats(pHandle, serverCreature);
 
             _ = i.runFunction(new RemoteFunction(funcLibrary[Function.CSWSCreatureStats_ClearFeats], false)
@@ -469,6 +489,8 @@ namespace KotorMessageInjector
             var i = new Injector(pHandle);
             var funcLibrary = getFuncLibrary(pHandle);
 
+            if (serverCreature == 0) { return; }
+
             var creatureStats = getCreatureStats(pHandle, serverCreature);
 
             _ = i.runFunction(new RemoteFunction(funcLibrary[Function.CSWSCreatureStats_AddClass], false)
@@ -481,6 +503,8 @@ namespace KotorMessageInjector
         {
             var i = new Injector(pHandle);
             var funcLibrary = getFuncLibrary(pHandle);
+
+            if (serverCreature == 0) { return; }
 
             var creatureStats = getCreatureStats(pHandle, serverCreature);
 
@@ -502,6 +526,8 @@ namespace KotorMessageInjector
             var i = new Injector(pHandle);
             var funcLibrary = getFuncLibrary(pHandle);
 
+            if (serverCreature == 0) { return; }
+
             var creatureStats = getCreatureStats(pHandle, serverCreature);
 
             _ = i.runFunction(new RemoteFunction(funcLibrary[Function.CSWSCreatureStats_AddKnownSpell], false)
@@ -517,6 +543,8 @@ namespace KotorMessageInjector
 
             var i = new Injector(pHandle);
             var funcLibrary = getFuncLibrary(pHandle);
+
+            if (serverCreature == 0) { return; }
 
             _ = i.runFunction(new RemoteFunction(funcLibrary[Function.CSWSCreature_SetGold], false)
                 .setThis(serverCreature)

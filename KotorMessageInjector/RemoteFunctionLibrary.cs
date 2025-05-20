@@ -121,8 +121,6 @@ namespace KotorMessageInjector
             {Function.CGuiInGame_ShowPartySelection, 0x0062dd20},
             {Function.CGuiInGame_ShowItemCreateMenu, 0x0062d280},
 
-
-
         };
 
         public static Dictionary<Function, uint> k2Functions = new Dictionary<Function, uint>()
