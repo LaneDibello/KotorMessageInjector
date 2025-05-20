@@ -8,6 +8,11 @@ using System.Runtime.Serialization;
 
 namespace KotorMessageInjector
 {
+    public class AdapterNotImplementedForGameError : Exception
+    {
+        public AdapterNotImplementedForGameError(string message) : base(message) { }
+    }
+
     public static class Adapter
     {
         private const uint KOTOR_1_CSWSCREATURE_SIZE = 0xac8;
@@ -743,6 +748,41 @@ namespace KotorMessageInjector
 
             _ = i.runFunction(new RemoteFunction(funcLibrary[Function.CGuiInGame_ShowItemCreateMenu], false)
                 .setThis(guiInGame));
+        }
+
+        public static int GetPCInfluenceKotor2(IntPtr pHandle, int npc)
+        {
+            var i = new Injector(pHandle);
+            var funcLibrary = getFuncLibrary(pHandle);
+
+            var partyTable = getServerPartyTable(pHandle);
+
+            if (getGameVersion(pHandle) == 1)
+            {
+                throw new AdapterNotImplementedForGameError("Tried to get Party Influence in Kotor 1. Kotor 1 does not have an influence system");
+            }
+
+            return (int)i.runFunction(new RemoteFunction(funcLibrary[Function.CSWPartyTable_GetInfluence], true)
+                .setThis(partyTable)
+                .addParam(npc));
+        }
+
+        public static void SetPCInfluenceKotor2(IntPtr pHandle, int npc, int influence)
+        {
+            var i = new Injector(pHandle);
+            var funcLibrary = getFuncLibrary(pHandle);
+
+            var partyTable = getServerPartyTable(pHandle);
+
+            if (getGameVersion(pHandle) == 1)
+            {
+                throw new AdapterNotImplementedForGameError("Tried to set Party Influence in Kotor 1. Kotor 1 does not have an influence system");
+            }
+
+            _ = i.runFunction(new RemoteFunction(funcLibrary[Function.CSWPartyTable_SetInfluence], false)
+                .setThis(partyTable)
+                .addParam(npc)
+                .addParam(influence));
         }
         #endregion
     }

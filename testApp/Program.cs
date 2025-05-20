@@ -186,14 +186,10 @@ namespace testApp
             //Adapter.ShowPartySelection(pHandle);
             //Adapter.CreatePopUp(pHandle, "TEST", false);
 
-            uint player = Adapter.GetPlayerServerObject(pHandle);
 
-            Console.WriteLine(GetAlignment(pHandle, player));
-            SetAlignment(pHandle, player, 10);
-            Console.WriteLine(GetAlignment(pHandle, player));
-            SetAlignment(pHandle, player, 69);
-            Console.WriteLine(GetAlignment(pHandle, player));
-            SetAlignment(pHandle, player, 20);
+            //Adapter.SetPCInfluenceKotor2(pHandle, 6, 40);
+            Console.WriteLine(Adapter.GetPCInfluenceKotor2(pHandle, 6));
+
 
 
             //uint gob = Adapter.GetPlayerGob(pHandle);
