@@ -178,15 +178,23 @@ namespace testApp
 
             //Examples.colorizeModel(pHandle, gob, 0f, 1f, 0f);
 
-            Adapter.SetGlobalNumber(pHandle, "000_RareItemChance", 69);
-            Console.WriteLine(Adapter.GetGlobalNumber(pHandle, "000_RareItemChance"));
-            Adapter.SetGlobalBoolean(pHandle, "000_PLAYER_GENDER", false);
-            Console.WriteLine(Adapter.GetGlobalBoolean(pHandle, "000_PLAYER_GENDER"));
+            //Adapter.SetGlobalNumber(pHandle, "000_RareItemChance", 69);
+            //Console.WriteLine(Adapter.GetGlobalNumber(pHandle, "000_RareItemChance"));
+            //Adapter.SetGlobalBoolean(pHandle, "000_PLAYER_GENDER", false);
+            //Console.WriteLine(Adapter.GetGlobalBoolean(pHandle, "000_PLAYER_GENDER"));
             //Adapter.ShowItemCreateMenu(pHandle);
             //Adapter.ShowPartySelection(pHandle);
             //Adapter.CreatePopUp(pHandle, "TEST", false);
 
             //uint gob = Adapter.GetPlayerGob(pHandle);
+
+            //Console.WriteLine($"Name: {Adapter.GetClientObjectName(pHandle, lookingAtClientId)}");
+
+            //uint obj = Adapter.GetServerObject(pHandle, lookingAtServerId);
+            //Console.WriteLine($"Server Tag: {getServerObjectTag(pHandle, obj)}");
+
+            uint obj = Adapter.GetClientObject(pHandle, lookingAtClientId);
+            Console.WriteLine($"Client Tag: {getClientObjectTag(pHandle, obj)}");
 
             //i.runFunction(new RemoteFunction(funcLibrary[Function.Gob_SetObjectScale], false)
             //    .setThis(gob)

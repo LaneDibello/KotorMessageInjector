@@ -3,6 +3,8 @@ using static KotorMessageInjector.ProcessAPI;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.IO;
+using System.Net;
 
 namespace KotorMessageInjector
 {
@@ -433,6 +435,37 @@ namespace KotorMessageInjector
 
             ReadProcessMemory(processHandle, (IntPtr)(address), outBytes, 4, out _);
             return BitConverter.ToInt32(outBytes, 0);
+        }
+
+        public static string readCExoStringFromMemory(IntPtr processHandle, uint address)
+        {
+            byte[] outBytes = new byte[4];
+
+            ReadProcessMemory(processHandle, (IntPtr)(address), outBytes, 4, out _);
+            uint cString = BitConverter.ToUInt32(outBytes, 0);
+
+            ReadProcessMemory(processHandle, (IntPtr)(address + 4), outBytes, 4, out _);
+            uint length = BitConverter.ToUInt32(outBytes, 0);
+
+            byte[] outString = new byte[length];
+
+            ReadProcessMemory(processHandle, (IntPtr)(cString), outString, length, out _);
+            return Encoding.ASCII.GetString(outString);
+        }
+
+        public static string getServerObjectTag(IntPtr processHandle, uint serverObject)
+        {
+            return readCExoStringFromMemory(processHandle, serverObject + KOTOR_OFFSET_SERVER_OBJECT_TAG);
+        }
+
+        public static string getClientObjectTag(IntPtr processHandle, uint clientObject)
+        {
+            byte[] outBytes = new byte[4];
+
+            ReadProcessMemory(processHandle, (IntPtr)(clientObject + KOTOR_OFFSET_CLIENT_OBJECT_SERVER_OBJECT), outBytes, 4, out _);
+            uint serverObject = BitConverter.ToUInt32(outBytes, 0);
+
+            return getServerObjectTag(processHandle, serverObject);
         }
     }
 }

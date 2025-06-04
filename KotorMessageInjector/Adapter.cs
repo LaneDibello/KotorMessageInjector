@@ -236,22 +236,32 @@ namespace KotorMessageInjector
 
         public static uint GetPlayerClientObject(IntPtr pHandle)
         {
+            return GetClientObject(pHandle, getPlayerClientID(pHandle));
+        }
+
+        public static uint GetPlayerServerObject(IntPtr pHandle)
+        {
+            return GetServerObject(pHandle, getPlayerServerID(pHandle));
+        }
+
+        public static uint GetClientObject(IntPtr pHandle, uint clientId)
+        {
             var i = new Injector(pHandle);
             var funcLibrary = getFuncLibrary(pHandle);
 
             return i.runFunction(new RemoteFunction(funcLibrary[Function.CClientExoApp_GetGameObject])
                 .setThis(getClient(pHandle))
-                .addParam(getPlayerClientID(pHandle)));
+                .addParam(clientId));
         }
 
-        public static uint GetPlayerServerObject(IntPtr pHandle)
+        public static uint GetServerObject(IntPtr pHandle, uint serverId)
         {
             var i = new Injector(pHandle);
             var funcLibrary = getFuncLibrary(pHandle);
 
             return i.runFunction(new RemoteFunction(funcLibrary[Function.CServerExoApp_GetGameObject])
                 .setThis(getServer(pHandle))
-                .addParam(getPlayerServerID(pHandle)));
+                .addParam(serverId));
         }
 
         public static uint DrawModel(IntPtr pHandle, string model, float scale, float x, float y, float z)
@@ -715,6 +725,30 @@ namespace KotorMessageInjector
 
             _ = i.runFunction(new RemoteFunction(funcLibrary[Function.CGuiInGame_ShowItemCreateMenu], false)
                 .setThis(guiInGame));
+        }
+
+
+        public static string GetClientObjectName(IntPtr pHandle, uint clientId)
+        {
+            var i = new Injector(pHandle);
+            var funcLibrary = getFuncLibrary(pHandle);
+            var om = new ObjManager(pHandle);
+
+            var client = getClient(pHandle);
+
+            uint name = om.createCExoString("");
+            _ = i.runFunction(new RemoteFunction(funcLibrary[Function.CClientExoApp_GetObjectName], false)
+                .setThis(client)
+                .addParam(clientId)
+                .addParam(name));
+
+            return readCExoStringFromMemory(pHandle, name);
+        }
+
+        public static string GetServerObjectName(IntPtr pHandle, uint serverId)
+        {
+            uint clientId = serverToClientId(serverId);
+            return GetClientObjectName(pHandle, clientId);
         }
         #endregion
     }
