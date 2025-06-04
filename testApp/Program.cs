@@ -190,11 +190,11 @@ namespace testApp
 
             //Console.WriteLine($"Name: {Adapter.GetClientObjectName(pHandle, lookingAtClientId)}");
 
-            //uint obj = Adapter.GetServerObject(pHandle, lookingAtServerId);
-            //Console.WriteLine($"Server Tag: {getServerObjectTag(pHandle, obj)}");
+            uint obj = Adapter.GetServerObject(pHandle, lookingAtServerId);
+            Console.WriteLine($"Server Tag: {getServerObjectTag(pHandle, obj)}");
 
-            uint obj = Adapter.GetClientObject(pHandle, lookingAtClientId);
-            Console.WriteLine($"Client Tag: {getClientObjectTag(pHandle, obj)}");
+            //uint obj = Adapter.GetClientObject(pHandle, lookingAtClientId);
+            //Console.WriteLine($"Client Tag: {getClientObjectTag(pHandle, obj)}");
 
             //i.runFunction(new RemoteFunction(funcLibrary[Function.Gob_SetObjectScale], false)
             //    .setThis(gob)
