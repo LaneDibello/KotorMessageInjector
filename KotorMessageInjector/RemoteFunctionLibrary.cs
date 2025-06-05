@@ -57,6 +57,8 @@ namespace KotorMessageInjector
         CGuiInGame_ShowPartySelection,
         CGuiInGame_ShowItemCreateMenu,
         CClientExoApp_GetObjectName,
+        CSWPartyTable_GetInfluence,
+        CSWPartyTable_SetInfluence,
     }
 
     public static class RemoteFunctionLibrary
@@ -181,8 +183,11 @@ namespace KotorMessageInjector
 
             {Function.CGuiInGame_ShowPartySelection, 0x004dc020},
             {Function.CGuiInGame_ShowItemCreateMenu, 0x004db110},
-
+          
             {Function.CClientExoApp_GetObjectName, 0x0040c5a0},
+          
+            {Function.CSWPartyTable_GetInfluence, 0x00700530},
+            {Function.CSWPartyTable_SetInfluence, 0x00700560},
 
         };
 
@@ -244,6 +249,8 @@ namespace KotorMessageInjector
 
             {Function.CClientExoApp_GetObjectName, 0x0073f0e0},
 
+            {Function.CSWPartyTable_GetInfluence, 0x005fa9c0},
+            {Function.CSWPartyTable_SetInfluence, 0x005fa9f0},
         };
     }
 }

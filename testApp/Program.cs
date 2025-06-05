@@ -186,6 +186,20 @@ namespace testApp
             //Adapter.ShowPartySelection(pHandle);
             //Adapter.CreatePopUp(pHandle, "TEST", false);
 
+
+            //Adapter.SetPCInfluenceKotor2(pHandle, 6, 40);
+
+            //Adapter.ShowPartySelection(pHandle, (int)PARTY_NPCS_K2.NPC_ATTON);
+
+            var player = Adapter.GetPlayerServerObject(pHandle);
+
+            SetAlignment(pHandle, player, 99);
+
+            //Adapter.SetPCInfluenceKotor2(pHandle, PARTY_NPCS_K2.NPC_ATTON, 0);
+            //Console.WriteLine(Adapter.GetPCInfluenceKotor2(pHandle, PARTY_NPCS_K2.NPC_ATTON));
+
+
+
             //uint gob = Adapter.GetPlayerGob(pHandle);
 
             //Console.WriteLine($"Name: {Adapter.GetClientObjectName(pHandle, lookingAtClientId)}");

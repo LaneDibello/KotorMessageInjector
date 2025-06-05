@@ -436,7 +436,7 @@ namespace KotorMessageInjector
             ReadProcessMemory(processHandle, (IntPtr)(address), outBytes, 4, out _);
             return BitConverter.ToInt32(outBytes, 0);
         }
-
+      
         public static string readCExoStringFromMemory(IntPtr processHandle, uint address)
         {
             byte[] outBytes = new byte[4];
@@ -470,6 +470,31 @@ namespace KotorMessageInjector
         public static string getClientObjectTag(IntPtr processHandle, uint clientObject)
         {
             return getServerObjectTag(processHandle, clientObjectToServerObject(processHandle, clientObject));
+        }
+      
+        public static short GetAlignment(IntPtr processHandle, uint serverCreature)
+        {
+            byte[] outBytes = new byte[4];
+
+            int version = getGameVersion(processHandle);
+            uint offset = version == 1 ? KOTOR_1_OFFSET_CREATURE_STATS_GOOD_EVIL : KOTOR_2_OFFSET_CREATURE_STATS_GOOD_EVIL;
+
+            uint creatureStats = getCreatureStats(processHandle, serverCreature);
+
+            ReadProcessMemory(processHandle, (IntPtr)(creatureStats + offset), outBytes, 2, out _);
+            return BitConverter.ToInt16(outBytes, 0);
+        }
+
+        public static void SetAlignment(IntPtr processHandle, uint serverCreature, short alignment)
+        {
+            byte[] inBytes = BitConverter.GetBytes(alignment);
+
+            int version = getGameVersion(processHandle);
+            uint offset = version == 1 ? KOTOR_1_OFFSET_CREATURE_STATS_GOOD_EVIL : KOTOR_2_OFFSET_CREATURE_STATS_GOOD_EVIL;
+
+            uint creatureStats = getCreatureStats(processHandle, serverCreature);
+
+            WriteProcessMemory(processHandle, (IntPtr)(creatureStats + offset), inBytes, 4, out _);
         }
     }
 }

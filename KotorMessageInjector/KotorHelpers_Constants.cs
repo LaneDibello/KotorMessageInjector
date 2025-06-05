@@ -34,6 +34,7 @@ namespace KotorMessageInjector
         private const uint KOTOR_1_OFFSET_CREATURE_STATS = 0xa74;
         private const uint KOTOR_1_OFFSET_MESSAGE_BOX = 0x98;
         private const uint KOTOR_1_OFFSET_CREATURE_STATS_RUNRATE = 0x198;
+        private const uint KOTOR_1_OFFSET_CREATURE_STATS_GOOD_EVIL = 0x17e;
 
         private static IntPtr KOTOR_2_APPMANAGER = (IntPtr)0x00a11c04;
         private static IntPtr KOTOR_2_STEAM_APPMANAGER = (IntPtr)0x00a1b4a4;
@@ -46,6 +47,7 @@ namespace KotorMessageInjector
         private const uint KOTOR_2_OFFSET_CREATURE_STATS = 0x1198;
         private const uint KOTOR_2_OFFSET_CREATURE_STATS_RUNRATE = 0x1a8;
         private const uint KOTOR_2_OFFSET_MESSAGE_BOX = 0xa0;
+        private const uint KOTOR_2_OFFSET_CREATURE_STATS_GOOD_EVIL = 0x18a;
 
         [Flags]
         public enum CLIENT_OBJECT_UPDATE_FLAGS : uint
@@ -663,6 +665,24 @@ namespace KotorMessageInjector
             DROID_ITEM_TOXIN_EMITTER = 279,
             DROID_ITEM_BIO_ASSAULT_SPRAY = 280,
             DROID_ITEM_MULTI_SPECTRAL_EMITTER = 281
+        }
+    
+        public enum PARTY_NPCS_K2 : int
+        {
+            NPC_PLAYER = -1,
+            NPC_ATTON = 0,
+            NPC_BAO_DUR = 1,
+            NPC_CANDEROUS = 2,
+            NPC_G0T0 = 3,
+            NPC_HANDMAIDEN = 4,
+            NPC_HK_47 = 5,
+            NPC_KREIA = 6,
+            NPC_MIRA = 7,
+            NPC_T3_M4 = 8,
+            NPC_VISAS = 9,
+            NPC_HANHARR = 10,
+            NPC_DISCIPLE = 11,
+
         }
     }
 }
