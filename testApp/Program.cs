@@ -178,13 +178,27 @@ namespace testApp
 
             //Examples.colorizeModel(pHandle, gob, 0f, 1f, 0f);
 
-            Adapter.SetGlobalNumber(pHandle, "000_RareItemChance", 69);
-            Console.WriteLine(Adapter.GetGlobalNumber(pHandle, "000_RareItemChance"));
-            Adapter.SetGlobalBoolean(pHandle, "000_PLAYER_GENDER", false);
-            Console.WriteLine(Adapter.GetGlobalBoolean(pHandle, "000_PLAYER_GENDER"));
+            //Adapter.SetGlobalNumber(pHandle, "000_RareItemChance", 69);
+            //Console.WriteLine(Adapter.GetGlobalNumber(pHandle, "000_RareItemChance"));
+            //Adapter.SetGlobalBoolean(pHandle, "000_PLAYER_GENDER", false);
+            //Console.WriteLine(Adapter.GetGlobalBoolean(pHandle, "000_PLAYER_GENDER"));
             //Adapter.ShowItemCreateMenu(pHandle);
             //Adapter.ShowPartySelection(pHandle);
             //Adapter.CreatePopUp(pHandle, "TEST", false);
+
+
+            //Adapter.SetPCInfluenceKotor2(pHandle, 6, 40);
+
+            //Adapter.ShowPartySelection(pHandle, (int)PARTY_NPCS_K2.NPC_ATTON);
+
+            var player = Adapter.GetPlayerServerObject(pHandle);
+
+            SetAlignment(pHandle, player, 99);
+
+            //Adapter.SetPCInfluenceKotor2(pHandle, PARTY_NPCS_K2.NPC_ATTON, 0);
+            //Console.WriteLine(Adapter.GetPCInfluenceKotor2(pHandle, PARTY_NPCS_K2.NPC_ATTON));
+
+
 
             //uint gob = Adapter.GetPlayerGob(pHandle);
 

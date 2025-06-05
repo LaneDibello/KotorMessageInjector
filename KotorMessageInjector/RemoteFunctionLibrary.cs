@@ -56,6 +56,8 @@ namespace KotorMessageInjector
         CSWGuiMessageBox_SetCallback,
         CGuiInGame_ShowPartySelection,
         CGuiInGame_ShowItemCreateMenu,
+        CSWPartyTable_GetInfluence,
+        CSWPartyTable_SetInfluence,
     }
 
     public static class RemoteFunctionLibrary
@@ -121,8 +123,6 @@ namespace KotorMessageInjector
             {Function.CGuiInGame_ShowPartySelection, 0x0062dd20},
             {Function.CGuiInGame_ShowItemCreateMenu, 0x0062d280},
 
-
-
         };
 
         public static Dictionary<Function, uint> k2Functions = new Dictionary<Function, uint>()
@@ -181,6 +181,9 @@ namespace KotorMessageInjector
             {Function.CGuiInGame_ShowPartySelection, 0x004dc020},
             {Function.CGuiInGame_ShowItemCreateMenu, 0x004db110},
 
+            {Function.CSWPartyTable_GetInfluence, 0x00700530},
+            {Function.CSWPartyTable_SetInfluence, 0x00700560},
+
         };
 
         public static Dictionary<Function, uint> k2SteamFunctions = new Dictionary<Function, uint>()
@@ -238,6 +241,9 @@ namespace KotorMessageInjector
 
             {Function.CGuiInGame_ShowPartySelection, 0x007cb920},
             {Function.CGuiInGame_ShowItemCreateMenu, 0x007caa10},
+
+            {Function.CSWPartyTable_GetInfluence, 0x005fa9c0},
+            {Function.CSWPartyTable_SetInfluence, 0x005fa9f0},
         };
     }
 }

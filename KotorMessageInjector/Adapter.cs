@@ -8,6 +8,11 @@ using System.Runtime.Serialization;
 
 namespace KotorMessageInjector
 {
+    public class AdapterNotImplementedForGameError : Exception
+    {
+        public AdapterNotImplementedForGameError(string message) : base(message) { }
+    }
+
     public static class Adapter
     {
         private const uint KOTOR_1_CSWSCREATURE_SIZE = 0xac8;
@@ -249,8 +254,11 @@ namespace KotorMessageInjector
             var i = new Injector(pHandle);
             var funcLibrary = getFuncLibrary(pHandle);
 
+            var server = getServer(pHandle);
+            if (server == 0) { return 0; }
+
             return i.runFunction(new RemoteFunction(funcLibrary[Function.CServerExoApp_GetGameObject])
-                .setThis(getServer(pHandle))
+                .setThis(server)
                 .addParam(getPlayerServerID(pHandle)));
         }
 
@@ -371,6 +379,8 @@ namespace KotorMessageInjector
             var i = new Injector(pHandle);
             var funcLibrary = getFuncLibrary(pHandle);
 
+            if (serverCreature == 0) { return; }
+
             var creatureStats = getCreatureStats(pHandle, serverCreature);
             int targetValue = (int)value;
 
@@ -415,6 +425,8 @@ namespace KotorMessageInjector
             var i = new Injector(pHandle);
             var funcLibrary = getFuncLibrary(pHandle);
 
+            if (serverCreature == 0) { return; }
+
             var creatureStats = getCreatureStats(pHandle, serverCreature);
             int targetValue = (int)value;
 
@@ -428,6 +440,8 @@ namespace KotorMessageInjector
         {
             var i = new Injector(pHandle);
             var funcLibrary = getFuncLibrary(pHandle);
+            
+            if (serverCreature == 0) { return; }
 
             var creatureStats = getCreatureStats(pHandle, serverCreature);
 
@@ -441,6 +455,8 @@ namespace KotorMessageInjector
             var i = new Injector(pHandle);
             var funcLibrary = getFuncLibrary(pHandle);
 
+            if (serverCreature == 0) { return; }
+
             var creatureStats = getCreatureStats(pHandle, serverCreature);
 
             _ = i.runFunction(new RemoteFunction(funcLibrary[Function.CSWSCreatureStats_ClearFeats], false)
@@ -451,6 +467,9 @@ namespace KotorMessageInjector
         {
             var i = new Injector(pHandle);
             var funcLibrary = getFuncLibrary(pHandle);
+
+            if (serverCreature == 0) { return; }
+
             var creatureStats = getCreatureStats(pHandle, serverCreature);
 
             _ = i.runFunction(new RemoteFunction(funcLibrary[Function.CSWSCreatureStats_ClearFeats], false)
@@ -469,6 +488,8 @@ namespace KotorMessageInjector
             var i = new Injector(pHandle);
             var funcLibrary = getFuncLibrary(pHandle);
 
+            if (serverCreature == 0) { return; }
+
             var creatureStats = getCreatureStats(pHandle, serverCreature);
 
             _ = i.runFunction(new RemoteFunction(funcLibrary[Function.CSWSCreatureStats_AddClass], false)
@@ -481,6 +502,8 @@ namespace KotorMessageInjector
         {
             var i = new Injector(pHandle);
             var funcLibrary = getFuncLibrary(pHandle);
+
+            if (serverCreature == 0) { return; }
 
             var creatureStats = getCreatureStats(pHandle, serverCreature);
 
@@ -502,6 +525,8 @@ namespace KotorMessageInjector
             var i = new Injector(pHandle);
             var funcLibrary = getFuncLibrary(pHandle);
 
+            if (serverCreature == 0) { return; }
+
             var creatureStats = getCreatureStats(pHandle, serverCreature);
 
             _ = i.runFunction(new RemoteFunction(funcLibrary[Function.CSWSCreatureStats_AddKnownSpell], false)
@@ -517,6 +542,8 @@ namespace KotorMessageInjector
 
             var i = new Injector(pHandle);
             var funcLibrary = getFuncLibrary(pHandle);
+
+            if (serverCreature == 0) { return; }
 
             _ = i.runFunction(new RemoteFunction(funcLibrary[Function.CSWSCreature_SetGold], false)
                 .setThis(serverCreature)
@@ -612,10 +639,7 @@ namespace KotorMessageInjector
 
             var server = getServer(pHandle);
 
-            if (server == 0)
-            {
-                return;
-            }
+            if (server == 0) { return; }
 
             // Get Global Variable Table
             uint globalTable = i.runFunction(new RemoteFunction(funcLibrary[Function.CServerExoApp_GetGlobalVariableTable], true)
@@ -715,6 +739,41 @@ namespace KotorMessageInjector
 
             _ = i.runFunction(new RemoteFunction(funcLibrary[Function.CGuiInGame_ShowItemCreateMenu], false)
                 .setThis(guiInGame));
+        }
+
+        public static int GetPCInfluenceKotor2(IntPtr pHandle, PARTY_NPCS_K2 npc)
+        {
+            var i = new Injector(pHandle);
+            var funcLibrary = getFuncLibrary(pHandle);
+
+            var partyTable = getServerPartyTable(pHandle);
+
+            if (getGameVersion(pHandle) == 1)
+            {
+                throw new AdapterNotImplementedForGameError("Tried to get Party Influence in Kotor 1. Kotor 1 does not have an influence system");
+            }
+
+            return (int)i.runFunction(new RemoteFunction(funcLibrary[Function.CSWPartyTable_GetInfluence], true)
+                .setThis(partyTable)
+                .addParam((int)npc));
+        }
+
+        public static void SetPCInfluenceKotor2(IntPtr pHandle, PARTY_NPCS_K2 npc, int influence)
+        {
+            var i = new Injector(pHandle);
+            var funcLibrary = getFuncLibrary(pHandle);
+
+            var partyTable = getServerPartyTable(pHandle);
+
+            if (getGameVersion(pHandle) == 1)
+            {
+                throw new AdapterNotImplementedForGameError("Tried to set Party Influence in Kotor 1. Kotor 1 does not have an influence system");
+            }
+
+            _ = i.runFunction(new RemoteFunction(funcLibrary[Function.CSWPartyTable_SetInfluence], false)
+                .setThis(partyTable)
+                .addParam((int)npc)
+                .addParam(influence));
         }
         #endregion
     }
