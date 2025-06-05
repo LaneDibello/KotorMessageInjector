@@ -20,6 +20,8 @@ namespace KotorMessageInjector
         private const uint KOTOR_OFFSET_ANIM_BASE_GOB = 0xb8;
         private const uint KOTOR_OFFSET_GUI_IN_GAME = 0x40;
         private const uint KOTOR_OFFSET_GUI_MANAGER = 0x38;
+        private const uint KOTOR_OFFSET_SERVER_OBJECT_TAG = 0x18;
+        private const uint KOTOR_OFFSET_CLIENT_OBJECT_SERVER_OBJECT = 0xf8;
 
         private static IntPtr KOTOR_1_APPMANAGER = (IntPtr)0x007a39fc;
         private static IntPtr KOTOR_1_DEACTIVATE_RENDER_WINDOW = (IntPtr)0x00401d90;

@@ -56,6 +56,7 @@ namespace KotorMessageInjector
         CSWGuiMessageBox_SetCallback,
         CGuiInGame_ShowPartySelection,
         CGuiInGame_ShowItemCreateMenu,
+        CClientExoApp_GetObjectName,
         CSWPartyTable_GetInfluence,
         CSWPartyTable_SetInfluence,
     }
@@ -123,6 +124,8 @@ namespace KotorMessageInjector
             {Function.CGuiInGame_ShowPartySelection, 0x0062dd20},
             {Function.CGuiInGame_ShowItemCreateMenu, 0x0062d280},
 
+            {Function.CClientExoApp_GetObjectName, 0x005ed350},
+
         };
 
         public static Dictionary<Function, uint> k2Functions = new Dictionary<Function, uint>()
@@ -180,7 +183,9 @@ namespace KotorMessageInjector
 
             {Function.CGuiInGame_ShowPartySelection, 0x004dc020},
             {Function.CGuiInGame_ShowItemCreateMenu, 0x004db110},
-
+          
+            {Function.CClientExoApp_GetObjectName, 0x0040c5a0},
+          
             {Function.CSWPartyTable_GetInfluence, 0x00700530},
             {Function.CSWPartyTable_SetInfluence, 0x00700560},
 
@@ -241,6 +246,8 @@ namespace KotorMessageInjector
 
             {Function.CGuiInGame_ShowPartySelection, 0x007cb920},
             {Function.CGuiInGame_ShowItemCreateMenu, 0x007caa10},
+
+            {Function.CClientExoApp_GetObjectName, 0x0073f0e0},
 
             {Function.CSWPartyTable_GetInfluence, 0x005fa9c0},
             {Function.CSWPartyTable_SetInfluence, 0x005fa9f0},
