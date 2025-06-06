@@ -59,6 +59,15 @@ namespace KotorMessageInjector
         CClientExoApp_GetObjectName,
         CSWPartyTable_GetInfluence,
         CSWPartyTable_SetInfluence,
+        Scene_SetBlindLights,
+        Scene_SetFog,
+        Scene_SetFogColor,
+        Scene_SetFogRange,
+        Scene_SetSceneFocus,
+        Scene_EnableVisibilityGraph,
+        Scene_DisableVisibilityGraph,
+        Scene_EnableAnimations,
+        Scene_DisableAnimations
     }
 
     public static class RemoteFunctionLibrary
@@ -125,6 +134,16 @@ namespace KotorMessageInjector
             {Function.CGuiInGame_ShowItemCreateMenu, 0x0062d280},
 
             {Function.CClientExoApp_GetObjectName, 0x005ed350},
+
+            {Function.Scene_SetBlindLights, 0x0044fd50},
+            {Function.Scene_SetFog, 0x00458b30},
+            {Function.Scene_SetFogColor, 0x00458b40},
+            {Function.Scene_SetFogRange, 0x00458b80},
+            {Function.Scene_SetSceneFocus, 0x00458ba0},
+            {Function.Scene_EnableVisibilityGraph, 0x0044f7e0}, //Room Culling
+            {Function.Scene_DisableVisibilityGraph, 0x0044f800},
+            {Function.Scene_EnableAnimations, 0x0044f3a0}, //Animations when the game is/isn't in focus
+            {Function.Scene_DisableAnimations, 0x0044f3b0},
 
         };
 
