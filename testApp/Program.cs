@@ -234,14 +234,6 @@ namespace testApp
             //float fogStart = 10.0f;
             //float fogEnd = 60.0f;
 
-            //Thread.Sleep(7000);
-
-            //_ = i.runFunction(new RemoteFunction(funcLibrary[Function.Scene_DisableAnimations])
-            //    .setThis(scene));
-
-            //_ = i.runFunction(new RemoteFunction(funcLibrary[Function.Scene_EnableAnimations])
-            //    .setThis(scene));
-
             //i.runFunction(new RemoteFunction(funcLibrary[Function.Scene_SetFog])
             //    .setThis(scene)
             //    .addParam(1));
@@ -255,7 +247,7 @@ namespace testApp
             //{
             //    Thread.Sleep(30);
 
-            //    colorHsb.h += 0.05f;
+            //    colorHsb.h += 0.01f;
             //    colorRgb = HsbToRgb(colorHsb.h, colorHsb.s, colorHsb.b);
             //    om.setVector((IntPtr)color, colorRgb.r, colorRgb.g, colorRgb.b);
 
@@ -272,11 +264,6 @@ namespace testApp
 
             //i.sendMessage(Examples.freeCam());
 
-            i.runFunction(new RemoteFunction(funcLibrary[Function.Scene_SetSceneFocus])
-               .setThis(scene)
-               .addParam(175f)
-               .addParam(96f)
-               .addParam(0f));
 
             ////Console.WriteLine();
             //Console.ReadKey();
