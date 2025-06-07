@@ -150,6 +150,16 @@ namespace KotorMessageInjector
             return dataPointer;
         }
 
+        public void setVector(IntPtr dataPointer, float x, float y, float z)
+        {
+            List<byte> data = new List<byte>();
+            data.AddRange(GetBytes(x));
+            data.AddRange(GetBytes(y));
+            data.AddRange(GetBytes(z));
+
+            WriteProcessMemory(processHandle, dataPointer, data.ToArray(), (uint)data.Count, out _);
+        }
+
         public uint createQuaternion(float w, float x, float y, float z)
         {
             uint dataPointer = (uint)remoteIndex;

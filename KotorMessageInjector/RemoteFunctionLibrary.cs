@@ -59,6 +59,11 @@ namespace KotorMessageInjector
         CClientExoApp_GetObjectName,
         CSWPartyTable_GetInfluence,
         CSWPartyTable_SetInfluence,
+        Scene_SetFog,
+        Scene_SetFogColor,
+        Scene_SetFogRange,
+        Scene_EnableVisibilityGraph,
+        Scene_DisableVisibilityGraph,
     }
 
     public static class RemoteFunctionLibrary
@@ -126,6 +131,12 @@ namespace KotorMessageInjector
 
             {Function.CClientExoApp_GetObjectName, 0x005ed350},
 
+            {Function.Scene_SetFog, 0x00458b30},
+            {Function.Scene_SetFogColor, 0x00458b40},
+            {Function.Scene_SetFogRange, 0x00458b80},
+            {Function.Scene_EnableVisibilityGraph, 0x0044f7e0}, //Room Culling
+            {Function.Scene_DisableVisibilityGraph, 0x0044f800},
+
         };
 
         public static Dictionary<Function, uint> k2Functions = new Dictionary<Function, uint>()
@@ -189,6 +200,12 @@ namespace KotorMessageInjector
             {Function.CSWPartyTable_GetInfluence, 0x00700530},
             {Function.CSWPartyTable_SetInfluence, 0x00700560},
 
+            {Function.Scene_SetFog, 0x00857010},
+            {Function.Scene_SetFogColor, 0x00856850},
+            {Function.Scene_SetFogRange, 0x00857060},
+            {Function.Scene_EnableVisibilityGraph, 0x00861d50}, //Room Culling
+            {Function.Scene_DisableVisibilityGraph, 0x00861d80},
+
         };
 
         public static Dictionary<Function, uint> k2SteamFunctions = new Dictionary<Function, uint>()
@@ -251,6 +268,12 @@ namespace KotorMessageInjector
 
             {Function.CSWPartyTable_GetInfluence, 0x005fa9c0},
             {Function.CSWPartyTable_SetInfluence, 0x005fa9f0},
+
+            {Function.Scene_SetFog, 0x00464c30},
+            {Function.Scene_SetFogColor, 0x00464470},
+            {Function.Scene_SetFogRange, 0x00464c80},
+            {Function.Scene_EnableVisibilityGraph, 0x0046fb10}, //Room Culling
+            {Function.Scene_DisableVisibilityGraph, 0x0046fb40},
         };
     }
 }

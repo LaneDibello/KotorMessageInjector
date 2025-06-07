@@ -21,6 +21,8 @@ namespace testApp
 
             Injector i = new Injector(pHandle);
 
+            ObjManager om = new ObjManager(pHandle);
+
             uint playerServerId = getPlayerServerID(pHandle);
             uint playerClientId = getPlayerClientID(pHandle);
             uint lookingAtServerId = getLookingAtServerID(pHandle);
@@ -191,9 +193,9 @@ namespace testApp
 
             //Adapter.ShowPartySelection(pHandle, (int)PARTY_NPCS_K2.NPC_ATTON);
 
-            var player = Adapter.GetPlayerServerObject(pHandle);
+            //var player = Adapter.GetPlayerServerObject(pHandle);
 
-            SetAlignment(pHandle, player, 99);
+            //SetAlignment(pHandle, player, 99);
 
             //Adapter.SetPCInfluenceKotor2(pHandle, PARTY_NPCS_K2.NPC_ATTON, 0);
             //Console.WriteLine(Adapter.GetPCInfluenceKotor2(pHandle, PARTY_NPCS_K2.NPC_ATTON));
@@ -204,8 +206,8 @@ namespace testApp
 
             //Console.WriteLine($"Name: {Adapter.GetClientObjectName(pHandle, lookingAtClientId)}");
 
-            uint obj = Adapter.GetServerObject(pHandle, lookingAtServerId);
-            Console.WriteLine($"Server Tag: {getServerObjectTag(pHandle, obj)}");
+            //uint obj = Adapter.GetServerObject(pHandle, lookingAtServerId);
+            //Console.WriteLine($"Server Tag: {getServerObjectTag(pHandle, obj)}");
 
             //uint obj = Adapter.GetClientObject(pHandle, lookingAtClientId);
             //Console.WriteLine($"Client Tag: {getClientObjectTag(pHandle, obj)}");
@@ -221,8 +223,50 @@ namespace testApp
 
             //Adapter.ColorizeModel(pHandle, gob, 1f, 0f, 0f);
 
+            uint scene = getCurrentScene(pHandle);
+
+            //(float h, float s, float b) colorHsb = (0.0f, 0.5f, 1.0f);
+
+            //var colorRgb = HsbToRgb(colorHsb.h, colorHsb.s, colorHsb.b);
+
+            //uint color = om.createVector(colorRgb.r, colorRgb.g, colorRgb.b);
+
+            //float fogStart = 10.0f;
+            //float fogEnd = 60.0f;
+
+            //i.runFunction(new RemoteFunction(funcLibrary[Function.Scene_SetFog])
+            //    .setThis(scene)
+            //    .addParam(1));
+
+            //i.runFunction(new RemoteFunction(funcLibrary[Function.Scene_SetFogRange])
+            //   .setThis(scene)
+            //   .addParam(fogStart)
+            //   .addParam(fogEnd));
+
+            //while (true)
+            //{
+            //    Thread.Sleep(30);
+
+            //    colorHsb.h += 0.01f;
+            //    colorRgb = HsbToRgb(colorHsb.h, colorHsb.s, colorHsb.b);
+            //    om.setVector((IntPtr)color, colorRgb.r, colorRgb.g, colorRgb.b);
+
+            //    i.runFunction(new RemoteFunction(funcLibrary[Function.Scene_SetFogColor])
+            //   .setThis(scene)
+            //   .addParam(color));
+            //}
+
+            //i.runFunction(new RemoteFunction(funcLibrary[Function.Scene_DisableVisibilityGraph])
+            //   .setThis(scene));
+
+            //i.runFunction(new RemoteFunction(funcLibrary[Function.Scene_EnableVisibilityGraph])
+            //   .setThis(scene));
+
+            //i.sendMessage(Examples.freeCam());
+
+
             ////Console.WriteLine();
-            Console.ReadKey();
+            //Console.ReadKey();
 
         }
     }

@@ -808,6 +808,74 @@ namespace KotorMessageInjector
                 .addParam((int)npc)
                 .addParam(influence));
         }
+
+        /// <summary>
+        /// Enables Fog in the current scene.
+        /// </summary>
+        /// <param name="pHandle">The running kotor process</param>
+        /// <param name="rangeStart">The distance from the camera the Fog gradient will start</param>
+        /// <param name="rangeEnd">The distance fromt the camera the Fog gradient will end</param>
+        /// <param name="colorR">Red component of the fog color</param>
+        /// <param name="colorG">Green Component of the fog color</param>
+        /// <param name="colorB">Blue component of the fog color</param>
+        /// <remarks>
+        /// The fog is fully transparent at `rangeStart` from the camera, and opaque at `rangeEnd` from the camera.
+        /// If `rangeEnd` < `rangeStart`, the fog will be dense near the camera, and fade out at further distances.
+        /// If `rangeEnd` = `rangeStart`, the behavior is undefined, and graphical bugs may occur
+        /// </remarks>
+        public static void SetSceneFogOn(IntPtr pHandle, float rangeStart, float rangeEnd, float colorR = 0.5f, float colorG = 0.5f, float colorB = 0.5f)
+        {
+            var i = new Injector(pHandle);
+            var funcLibrary = getFuncLibrary(pHandle);
+            var om = new ObjManager(pHandle);
+
+            uint scene = getCurrentScene(pHandle);
+            var color = om.createVector(colorR, colorG, colorB);
+
+            i.runFunction(new RemoteFunction(funcLibrary[Function.Scene_SetFog])
+                .setThis(scene)
+                .addParam(1));
+
+            i.runFunction(new RemoteFunction(funcLibrary[Function.Scene_SetFogRange])
+               .setThis(scene)
+               .addParam(rangeStart)
+               .addParam(rangeEnd));
+
+            i.runFunction(new RemoteFunction(funcLibrary[Function.Scene_SetFogColor])
+               .setThis(scene)
+               .addParam(color));
+        }
+
+        public static void SetSceneFogOff(IntPtr pHandle)
+        {
+            var i = new Injector(pHandle);
+            var funcLibrary = getFuncLibrary(pHandle);
+
+            uint scene = getCurrentScene(pHandle);
+
+            i.runFunction(new RemoteFunction(funcLibrary[Function.Scene_SetFog])
+                .setThis(scene)
+                .addParam(0));
+        }
+
+        public static void SetVisibilityGraph(IntPtr pHandle, bool on) 
+        {
+            var i = new Injector(pHandle);
+            var funcLibrary = getFuncLibrary(pHandle);
+
+            uint scene = getCurrentScene(pHandle);
+
+            if (on)
+            {
+                i.runFunction(new RemoteFunction(funcLibrary[Function.Scene_EnableVisibilityGraph])
+                    .setThis(scene));
+            }
+            else
+            {
+                i.runFunction(new RemoteFunction(funcLibrary[Function.Scene_DisableVisibilityGraph])
+                   .setThis(scene));
+            }
+        }
         #endregion
     }
 }
