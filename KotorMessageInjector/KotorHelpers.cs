@@ -496,5 +496,87 @@ namespace KotorMessageInjector
 
             WriteProcessMemory(processHandle, (IntPtr)(creatureStats + offset), inBytes, 4, out _);
         }
+
+        public static (float h, float s, float b) RgbToHsb(float r, float g, float b)
+        {
+            float max = Math.Max(r, Math.Max(g, b));
+            float min = Math.Min(r, Math.Min(g, b));
+            float delta = max - min;
+
+            // Calculate Brightness (Value)
+            float brightness = max;
+
+            // Calculate Saturation
+            float saturation = max == 0 ? 0 : delta / max;
+
+            // Calculate Hue
+            float hue = 0;
+            if (delta != 0)
+            {
+                if (max == r)
+                    hue = ((g - b) / delta) % 6;
+                else if (max == g)
+                    hue = (b - r) / delta + 2;
+                else if (max == b)
+                    hue = (r - g) / delta + 4;
+
+                hue *= 60; // Convert to degrees (0-360)
+
+                if (hue < 0)
+                    hue += 360;
+            }
+
+            // Normalize hue to 0-1 range
+            hue = hue / 360.0f;
+
+            return (hue, saturation, brightness);
+        }
+
+        public static (float r, float g, float b) HsbToRgb(float h, float s, float b)
+        {
+            // Convert hue from 0-1 to 0-360 for calculations
+            float hue = h * 360.0f;
+
+            // Normalize hue to 0-360 range
+            hue = hue % 360;
+            if (hue < 0) hue += 360;
+
+            float c = b * s; // Chroma
+            float x = c * (1 - Math.Abs((hue / 60) % 2 - 1));
+            float m = b - c;
+
+            float r1, g1, b1;
+
+            if (hue >= 0 && hue < 60)
+            {
+                r1 = c; g1 = x; b1 = 0;
+            }
+            else if (hue >= 60 && hue < 120)
+            {
+                r1 = x; g1 = c; b1 = 0;
+            }
+            else if (hue >= 120 && hue < 180)
+            {
+                r1 = 0; g1 = c; b1 = x;
+            }
+            else if (hue >= 180 && hue < 240)
+            {
+                r1 = 0; g1 = x; b1 = c;
+            }
+            else if (hue >= 240 && hue < 300)
+            {
+                r1 = x; g1 = 0; b1 = c;
+            }
+            else // hue >= 300 && hue < 360
+            {
+                r1 = c; g1 = 0; b1 = x;
+            }
+
+            float r = r1 + m;
+            float g = g1 + m;
+            float b_final = b1 + m;
+
+            return (r, g, b_final);
+        }
     }
 }
